@@ -6,6 +6,7 @@ from matplotlib import cm
 from matplotlib.tri import Triangulation
 import numpy as np
 import matplotlib.pyplot as plt
+import sys
 
 @deterministic
 def coulomb_matrix(n):
@@ -58,11 +59,12 @@ def hermite_functions(x, n):
         psi[:, k + 1] = (x * psi[:, k] - a[k] * psi[:, k - 1]) / a[k + 1]
     return psi
 if __name__ == '__main__':
+    N = int(sys.argv[1])
 
     @initialize_speedupy
-    def main():
-        x = np.linspace(-10, 10, 100)
-        (yy, xx) = np.meshgrid(x, x)
+    def main(N):
+        x = np.linspace(-10, 10, N)
+        yy, xx = np.meshgrid(x, x)
         Q1 = (xx + yy) / np.sqrt(2)
         Q2 = (xx - yy) / np.sqrt(2)
         n = 16
@@ -71,7 +73,7 @@ if __name__ == '__main__':
         H0 = np.diag((3 + 4 * np.arange(n)) / 2)
         C = coulomb_matrix(n)
         H = H0 + C
-        (nu, Vhat) = eigh(H)
+        nu, Vhat = eigh(H)
         V = np.dot(phi, Vhat)
         Psi = np.outer(hf[:, 0], V[:, 0])
         psi = Psi.flatten()
@@ -85,4 +87,4 @@ if __name__ == '__main__':
         ax.set_xlabel('$q_1$', fontsize=18)
         ax.set_ylabel('$q_2$', fontsize=18)
         plt.show(block=False)
-    main()
+    main(N)
