@@ -4,9 +4,12 @@
 START_TIME=$(date +%s)
 echo "Start time: $(date '+%H:%M:%S')"
 
-source speedupy_experiments_venv/bin/activate
+#source speedupy_experiments_venv/bin/activate
 
 pip install -r speedupy/requirements.txt
+
+chmod +x dnacc_prepare.sh
+./dnacc_prepare.sh
 
 # Define the common root path / Define o caminho raiz comum
 ROOT_PATH="."
@@ -19,7 +22,7 @@ SOURCE_DIR="$ROOT_PATH/speedupy"
 
 # DESTINATIONS=("$ROOT_PATH/speedupy_experiments/01pilots/01pilots_exp03_quicksort/quicksort.py")
 
-DESTINATIONS=("$ROOT_PATH/speedupy_experiments/01pilots/01pilots_exp03_quicksort/quicksort.py" "$ROOT_PATH/speedupy_experiments/04benchproglangs/04benchpl_exp02_look_and_say_OK/look_and_say.py" "$ROOT_PATH/speedupy_experiments/04benchproglangs/04benchpl_exp11_gauss_legendre_quadrature_OK/test_gauss_legendre_quadrature.py" "$ROOT_PATH/speedupy_experiments/01pilots/01pilots_exp04_heat_distribution_lu/adapted_for_speedupy/__main__.py" "$ROOT_PATH/speedupy_experiments/04benchproglangs/04benchpl_exp08_fft_OK/test_compute_FFT_speedupy.py" "$ROOT_PATH/speedupy_experiments/05msrgithubexps/05msrgithubexps_exp04_curves/curves_speedupy.py" "$ROOT_PATH/speedupy_experiments/04benchproglangs/04benchpl_exp14_pernicious_numbers_OK/test_pernicious_numbers.py" "$ROOT_PATH/speedupy_experiments/05msrgithubexps/05msrgithubexps_exp02_cvar/cvar_speedupy.py" "$ROOT_PATH/speedupy_experiments/04benchproglangs/04benchpl_exp06_belief_propagation_OK/test_belief_propagation_speedupy.py")
+DESTINATIONS=("$ROOT_PATH/speedupy_experiments/01pilots/01pilots_exp03_quicksort/quicksort.py" "$ROOT_PATH/speedupy_experiments/04benchproglangs/04benchpl_exp02_look_and_say_OK/look_and_say.py" "$ROOT_PATH/speedupy_experiments/04benchproglangs/04benchpl_exp11_gauss_legendre_quadrature_OK/test_gauss_legendre_quadrature.py" "$ROOT_PATH/speedupy_experiments/01pilots/01pilots_exp04_heat_distribution_lu/adapted_for_speedupy/__main__.py" "$ROOT_PATH/speedupy_experiments/04benchproglangs/04benchpl_exp08_fft_OK/test_compute_FFT_speedupy.py" "$ROOT_PATH/speedupy_experiments/05msrgithubexps/05msrgithubexps_exp04_curves/curves_speedupy.py" "$ROOT_PATH/speedupy_experiments/04benchproglangs/04benchpl_exp14_pernicious_numbers_OK/test_pernicious_numbers.py" "$ROOT_PATH/speedupy_experiments/05msrgithubexps/05msrgithubexps_exp02_cvar/cvar_speedupy.py" "$ROOT_PATH/speedupy_experiments/04benchproglangs/04benchpl_exp06_belief_propagation_OK/test_belief_propagation_speedupy.py" "$ROOT_PATH/DNACC-with-speedupy/adapted_for_speedupy/examples/basic/basic_spheres.py" "$ROOT_PATH/DNACC-with-speedupy/adapted_for_speedupy/examples/walking_colloid/walking_colloid.py")
 
 # Define the list of arguments for each destination path / Define a lista de argumentos para cada caminho de destino
 # ARGUMENTS_0=("1e1")
@@ -32,6 +35,8 @@ ARGUMENTS_5=("1576862 -8567453 1648423 542312 512 -20135 1455678 52349" "4341212
 ARGUMENTS_6=("20000" "25000" "30000" "35000" "39000")
 ARGUMENTS_7=("1e6" "5e6" "10e6" "50e6" "100e6")
 ARGUMENTS_8=("1000" "2000" "3000" "4000" "5000")
+ARGUMENTS_9=("40" "1000" "10000" "100000" "1000000")
+ARGUMENTS_10=("-10" "-20" "-30" "-40" "-50")
 
 # Copy the source directory to each destination directory / Copia o diretório de origem para cada diretório de destino
 for i in "${!DESTINATIONS[@]}"; do
@@ -44,6 +49,7 @@ done
 # Execute Python commands for each file in each destination / Executa comandos Python para cada arquivo em cada destino
 for i in "${!DESTINATIONS[@]}"; do
     DEST="${DESTINATIONS[i]}"
+    DEST_DIR=$(dirname "$DEST")
     
     # Define the Python file to be executed
     PYTHON_FILE="$DEST" 
@@ -56,7 +62,7 @@ for i in "${!DESTINATIONS[@]}"; do
     OUTPUT_FILE_NO_CACHE="$ROOT_PATH/$(basename "${PYTHON_FILE}_output_no_cache.txt")"
     OUTPUT_FILE_MANUAL="$ROOT_PATH/$(basename "${PYTHON_FILE}_output_manual.txt")"
 
-
+    cd "$DEST_DIR"
     echo "Running $PYTHON_FILE with different arguments..."
 
     # Run the script with each argument
@@ -65,7 +71,7 @@ for i in "${!DESTINATIONS[@]}"; do
         #Run setup.py before executing the Python script
         echo "Running setup.py for $PYTHON_FILE..."
         # python3.12 "$ROOT_PATH/speedupy/setup_exp/setup.py" "$PYTHON_FILE"
-        python3.12 "$DEST_DIR/speedupy/setup_exp/setup.py" "$PYTHON_FILE"
+        python3.12 "speedupy/setup_exp/setup.py" "$PYTHON_FILE"
         
         echo "-Execution mode: no-cache"
 
