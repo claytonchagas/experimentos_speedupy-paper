@@ -1,0 +1,7 @@
+__pycache__/
+env/
+DNACC-with-speedupy/
+speedupy_experiments/
+.speedupy/
+examples/
+venv_test/
