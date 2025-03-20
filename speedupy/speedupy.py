@@ -115,7 +115,13 @@ check_python_version()
 
 if SpeeduPySettings().exec_mode == ['no-cache']:
     def initialize_speedupy(f):
-        return f
+        @wraps(f)
+        def wrapper(*method_args, **method_kwargs):
+            start = time.perf_counter()            
+            f(*method_args, **method_kwargs)            
+            end = time.perf_counter()
+            print(f"TOTAL EXECUTION TIME: {end - start}")
+        return wrapper
 
     def deterministic(f):
         return f
