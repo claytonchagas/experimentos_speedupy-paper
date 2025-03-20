@@ -12,7 +12,7 @@ chmod +x dnacc_prepare.sh
 ./dnacc_prepare.sh
 
 # Define the common root path / Define o caminho raiz comum
-ROOT_PATH="."
+ROOT_PATH="$(pwd)"
 
 # Define the source directory
 SOURCE_DIR="$ROOT_PATH/speedupy"
@@ -20,9 +20,9 @@ SOURCE_DIR="$ROOT_PATH/speedupy"
 # Define the list of destination paths / Define a lista de caminhos de destino
 # DESTINATIONS=("$ROOT_PATH/speedupy_experiments/01pilots/01pilots_exp03_quicksort/quicksort.py" "$ROOT_PATH/speedupy_experiments/04benchproglangs/04benchpl_exp02_look_and_say_OK/look_and_say.py" "$ROOT_PATH/speedupy_experiments/04benchproglangs/04benchpl_exp11_gauss_legendre_quadrature_OK/test_gauss_legendre_quadrature.py" "$ROOT_PATH/Tiny-GSGP-with-speedupy/adapted_for_speedupy/TINY_GSGP.py" "$ROOT_PATH/qho-with-speedupy/qho2_speedupy.py")
 
-# DESTINATIONS=("$ROOT_PATH/speedupy_experiments/01pilots/01pilots_exp03_quicksort/quicksort.py")
+DESTINATIONS=("$ROOT_PATH/speedupy_experiments/01pilots/01pilots_exp03_quicksort/quicksort.py")
 
-DESTINATIONS=("$ROOT_PATH/speedupy_experiments/01pilots/01pilots_exp03_quicksort/quicksort.py" "$ROOT_PATH/speedupy_experiments/04benchproglangs/04benchpl_exp02_look_and_say_OK/look_and_say.py" "$ROOT_PATH/speedupy_experiments/04benchproglangs/04benchpl_exp11_gauss_legendre_quadrature_OK/test_gauss_legendre_quadrature.py" "$ROOT_PATH/speedupy_experiments/01pilots/01pilots_exp04_heat_distribution_lu/adapted_for_speedupy/__main__.py" "$ROOT_PATH/speedupy_experiments/04benchproglangs/04benchpl_exp08_fft_OK/test_compute_FFT_speedupy.py" "$ROOT_PATH/speedupy_experiments/05msrgithubexps/05msrgithubexps_exp04_curves/curves_speedupy.py" "$ROOT_PATH/speedupy_experiments/04benchproglangs/04benchpl_exp14_pernicious_numbers_OK/test_pernicious_numbers.py" "$ROOT_PATH/speedupy_experiments/05msrgithubexps/05msrgithubexps_exp02_cvar/cvar_speedupy.py" "$ROOT_PATH/speedupy_experiments/04benchproglangs/04benchpl_exp06_belief_propagation_OK/test_belief_propagation_speedupy.py" "$ROOT_PATH/DNACC-with-speedupy/adapted_for_speedupy/examples/basic/basic_spheres.py" "$ROOT_PATH/DNACC-with-speedupy/adapted_for_speedupy/examples/walking_colloid/walking_colloid.py")
+# DESTINATIONS=("$ROOT_PATH/speedupy_experiments/01pilots/01pilots_exp03_quicksort/quicksort.py" "$ROOT_PATH/speedupy_experiments/04benchproglangs/04benchpl_exp02_look_and_say_OK/look_and_say.py" "$ROOT_PATH/speedupy_experiments/04benchproglangs/04benchpl_exp11_gauss_legendre_quadrature_OK/test_gauss_legendre_quadrature.py" "$ROOT_PATH/speedupy_experiments/01pilots/01pilots_exp04_heat_distribution_lu/adapted_for_speedupy/__main__.py" "$ROOT_PATH/speedupy_experiments/04benchproglangs/04benchpl_exp08_fft_OK/test_compute_FFT_speedupy.py" "$ROOT_PATH/speedupy_experiments/05msrgithubexps/05msrgithubexps_exp04_curves/curves_speedupy.py" "$ROOT_PATH/speedupy_experiments/04benchproglangs/04benchpl_exp14_pernicious_numbers_OK/test_pernicious_numbers.py" "$ROOT_PATH/speedupy_experiments/05msrgithubexps/05msrgithubexps_exp02_cvar/cvar_speedupy.py" "$ROOT_PATH/speedupy_experiments/04benchproglangs/04benchpl_exp06_belief_propagation_OK/test_belief_propagation_speedupy.py" "$ROOT_PATH/DNACC-with-speedupy/adapted_for_speedupy/examples/basic/basic_spheres.py" "$ROOT_PATH/DNACC-with-speedupy/adapted_for_speedupy/examples/walking_colloid/walking_colloid.py")
 
 # Define the list of arguments for each destination path / Define a lista de argumentos para cada caminho de destino
 # ARGUMENTS_0=("1e1")
@@ -72,7 +72,6 @@ for i in "${!DESTINATIONS[@]}"; do
         echo "Running setup.py for $PYTHON_FILE..."
         # python3.12 "$ROOT_PATH/speedupy/setup_exp/setup.py" "$PYTHON_FILE"
         python3.12 "speedupy/setup_exp/setup.py" "$PYTHON_FILE"
-        
         echo "-Execution mode: no-cache"
 
         # Execute the Python script with the argument in 'no-cache' mode
@@ -86,7 +85,7 @@ for i in "${!DESTINATIONS[@]}"; do
         for j in {1..10}; do
             python3.12 $PYTHON_FILE $ARG --exec-mode manual | tail -n 1 >> $OUTPUT_FILE_MANUAL
         done
-
+        echo done manual mode
        # Delete the .speedupy folder after each argument / Deleta a pasta .speedupy após cada argumento
 		rm -rf "$DEST_DIR/.speedupy/"
     done
