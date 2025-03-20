@@ -1,0 +1,176 @@
+Tracy Widom on CENTC distance matrix
+========================================================
+
+load("~/PCoA_x.RData")
+
+
+
+x$values[,1]
+eigenvalues <- x$values[,1]
+plot(x$values)
+
+summary(x$vectors)
+plot(x$vectors[,1],x$vectors[,2],ylim=c(-.08,.1),xlim=c(-.1,.1))
+plot(x$vectors[,1],x$vectors[,2],pch=16,col=rgb(0,0,0,.3),cex=0.4,ylim=c(-.1,.1),xlim=c(-.1,.1),xlab="PCoA 1",ylab="PCoA 2")
+
+length(x$vectors[,1])
+##Vince says use library instead, read up on the differences
+
+## Require stuff
+```{r}
+require("mclust")
+require("ape")
+require("RMTstat")
+```
+
+## New Tracy Widom Plan - PCoA and then TW
+## Add into the PCoA,
+
+```{r}
+data <- read.csv("Original_centc_DNADIST.csv",row.names=1)
+x <- pcoa(data)
+x$values[,1]
+eigenvalues <- x$values[,1]
+biplot(eigenvalues,plot.axes = c(1,2), dir.axis1=1, dir.axis2=1, rn=NULL,)
+plot(eigenvalues)
+par(mfrow=c(2,2))
+plot(ptw(eigenvalues), main="distribution function")
+plot(dtw(eigenvalues), main="Density")
+plot(qtw(eigenvalues), main="Quantile")
+plot(rtw(eigenvalues), main="Randomly Devious")
+
+
+made_data <- Mmake(data)
+TW<-TWcalc(made_data,150) 
+km<-which(TW[[2]]>0.05)[1]
+
+```
+
+Cluster individuals based on first km significant principle coordinates
+```{r}
+pcx<-Mclust(pc$x[,1:km],G=(km+1)) # originally used VVI model
+mainC<-pcx$classification
+```
+
+Plot stuff (if we can)
+```{r}
+col.regions=rainbow(km+1)
+require(rgl)
+plot3d(pc$x[,1],pc$x[,2],pc$x[,3],xlab="PC1",ylab="PC2",zlab="PC3",col=col.regions[mainC],type="s",radius=0.1) 
+plot(pc$x[,1]~pc$x[,3])
+```
+
+
+## Below Here is Jeff work from before
+
+## Functions needed for Tracy Widom
+
+### Mmake function (only needed for non-distance data)
+```{r}
+Mmake<-function(data){
+  pcdat<-data
+  mv<-apply(pcdat,2,mean,na.rm=TRUE)
+	#make vector of sqrt(p*(1-p))
+	vv<-mv/2
+	vv<-sqrt(vv*(1-vv))  # need to use sd of data, not p(1-p)
+	#redo data and vectors to take out monomophic sites
+	#dat<-pcdat[,vv>0&is.na(vv)==FALSE] #don't need either but need something named dat below
+	#mv<-mv[vv>0&is.na(vv)==FALSE] #we don't need?
+	#vv<-vv[vv>0&is.na(vv)==FALSE] #we don't need?
+	M<-t((t(pcdat)-mv)/vv)
+	M[is.na(M)]<-0
+	return(M)	
+}
+```
+
+### TWcalc function (SM says ignore, as this is specific for SNP data)
+```{r}
+TWcalc<-function(dat,k){
+  x<-dat
+	y<-x%*%t(x)
+	eig<-eigen(y)
+	eig<-eig$values
+	#eig<-eig[1:(length(eig))]  #Why do this?
+  #n<-ncol(x)  # UNUSED?
+	m0=nrow(x)
+  
+  #I think this is TW residuals
+	TWres_<-c()
+	for (i in 1:k){
+		m=(m0)-i+1
+		#m=m
+		eiv<-eig[i:(m-1)]
+		#n_=n
+		n_=((m+1)*sum(eiv)^2)/((m-1)*sum(eiv^2)-sum(eiv)^2)
+		S=((sqrt(n_-1)+sqrt(m)))/n_*(1/sqrt(n_-1)+1/sqrt(m))^(1/3)
+		u_=(sqrt(n_-1)+sqrt(m))^2/n_
+		L1<-(m-1)*eiv[1]/sum(eiv)
+		TW_<-(L1-u_)/S
+		TWres_<-c(TWres_,TW_) # why cat these? 
+	}
+	
+	#TWres_
+	pres<-c()
+	for (i in 1:length(TWres_)){
+		TW<-TWres_[i]
+		dif<-abs(test[,1]-TW)
+		p<-test[dif==min(dif),2]
+		pres<-c(pres,p)  # why cat these? 
+	}
+	#pres
+	res<-list(TWres_,pres)
+	return(res)
+}
+```
+
+### Do some test data
+
+Read in some test data: JC distance matrix original 218 CENTC from genbank and Tracy-Widom table
+(need to fix this so don't have to specify path)
+```{r}
+#read in table
+dist_mat<-read.csv("~/src/tw_centc/test_matrix.csv",row.names=1,header=T)
+test<-read.table("twtable.txt", header=FALSE)
+```
+
+Standardize matrix and do PC <- don't do this for distance matrix, only for individual observations (i.e. SNP data, phenotypes, environments, etc.)
+```{r}
+made_x<-Mmake(dist_mat)
+```
+
+PCOA from ape package. Check to make sure this is giving us eigenvalues 
+```{r}
+#pc<-prcomp(made_x) # for nondistance data  
+pc<-pcoa(dist_mat) # get details on how this works
+```
+
+Skree plot (check to make sure in order)
+```{r}
+plot(pc$values[,1])
+```
+
+Do Tracy Widom. k is number of PCs to evaluate. Here, trying 150.
+This TW is specific for SNP data from Patterson et al. 2006 (according to SM).  Need to redo using TracyWidom distribution from RMTstat package. Check details. 
+```{r}
+TW<-TWcalc(made_x,150) 
+km<-which(TW[[2]]>0.05)[1]
+```
+
+Cluster individuals based on first km significant principle coordinates
+```{r}
+pcx<-Mclust(pc$x[,1:km],G=(km+1)) # originally used VVI model
+mainC<-pcx$classification
+```
+
+Plot stuff (if we can)
+```{r}
+col.regions=rainbow(km+1)
+require(rgl)
+plot3d(pc$x[,1],pc$x[,2],pc$x[,3],xlab="PC1",ylab="PC2",zlab="PC3",col=col.regions[mainC],type="s",radius=0.1) 
+plot(pc$x[,1]~pc$x[,3])
+
+#the below fails w/o column names correctly
+#dim<-1:3
+#text3d(pc$x[,dim],text=rownames(M),col=cols,cex=0.6)
+```
+

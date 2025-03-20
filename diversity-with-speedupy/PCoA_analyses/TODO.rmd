@@ -1,0 +1,10 @@
+###Paul
+
+add file descriptions to README.rmd
+check on using eignvalues from PCOA in TW -- We should be just fine.
+check on how to calculate TW from eigenvalues (pop off largest and redo? or something else requireing rescaling)
+-- I think this is fine too, no need for rescaling.
+make stab at new TW function  -- poke.
+
+###JRI
+
