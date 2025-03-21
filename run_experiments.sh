@@ -85,14 +85,14 @@ for i in "${!DESTINATIONS[@]}"; do
         echo "-Execution mode: no-cache"
 
         # Execute the Python script with the argument in 'no-cache' mode
-        for j in {1..1}; do
+        for j in {1..10}; do
             python3 $PYTHON_FILE $ARG --exec-mode no-cache | tail -n 1 | cut -d':' -f2 >> $OUTPUT_FILE_NO_CACHE
         done
         
         echo "-Execution mode: manual"
         
         # Execute the Python script with the argument in 'manual' mode
-        for j in {1..1}; do
+        for j in {1..10}; do
             python3 $PYTHON_FILE $ARG --exec-mode manual | tail -n 1 | cut -d':' -f2 >> $OUTPUT_FILE_MANUAL
         done        
        # Delete the .speedupy folder after each argument / Deleta a pasta .speedupy após cada argumento
@@ -129,7 +129,7 @@ for i in "${!DESTINATIONS[@]}"; do
         echo "-Execution mode: manual"
         
         # Execute the Python script with the argument in 'manual' mode
-        for j in {1..1}; do
+        for j in {1..10}; do
             python3 "speedupy/setup_exp/setup.py" "$PYTHON_FILE"        
             python3 $PYTHON_FILE $ARG --exec-mode manual | tail -n 1 | cut -d':' -f2 >> $OUTPUT_FILE_MANUAL
             rm -rf "$DEST_DIR/.speedupy/"
@@ -168,7 +168,7 @@ for i in "${!DESTINATIONS[@]}"; do
         echo "-Execution mode: manual"
         
         # Execute the Python script with the argument in 'manual' mode
-        for j in {1..1}; do
+        for j in {1..10}; do
             python3 $PYTHON_FILE $ARG --exec-mode manual | tail -n 1 | cut -d':' -f2 >> $OUTPUT_FILE_MANUAL
         done        
        # Delete the .speedupy folder after each argument / Deleta a pasta .speedupy após cada argumento
