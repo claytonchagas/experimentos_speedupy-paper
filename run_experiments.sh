@@ -101,7 +101,7 @@ for i in "${!DESTINATIONS[@]}"; do
         done        
        # Delete the .speedupy folder after each argument / Deleta a pasta .speedupy após cada argumento
 		rm -rf "$DEST_DIR/.speedupy/"
-    done
+    done    
 done
 
 cd $ROOT_PATH
@@ -139,7 +139,7 @@ for i in "${!DESTINATIONS[@]}"; do
             rm -rf "$DEST_DIR/.speedupy/"
         done        
        # Delete the .speedupy folder after each argument / Deleta a pasta .speedupy após cada argumento		
-    done
+    done    
 done
 
 cd $ROOT_PATH
@@ -177,7 +177,8 @@ for i in "${!DESTINATIONS[@]}"; do
         done        
        # Delete the .speedupy folder after each argument / Deleta a pasta .speedupy após cada argumento
     done
-    rm -rf "$DEST_DIR/.speedupy/"
+    # Deleta os diretórios do speedupy copiados previamente
+    rm -rf "$DEST_DIR/.speedupy/" "$DEST_DIR/speedupy/"
 done
 
 # Movendo saida para um diretório
