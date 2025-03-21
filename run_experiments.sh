@@ -4,6 +4,8 @@
 START_TIME=$(date +%s)
 echo "Start time: $(date '+%H:%M:%S')"
 
+# Apaga os outputs antigos, se existirem
+rm outputs/*
 #source speedupy_experiments_venv/bin/activate
 
 pip install -r speedupy/requirements.txt
@@ -52,8 +54,10 @@ ARGUMENTS_14=("100" "500" "1000" "5000" "10000")
 for i in "${!DESTINATIONS[@]}"; do
     DEST="${DESTINATIONS[i]}"
     DEST_DIR=$(dirname "$DEST")  # Extract the directory path from the destination path
-    cp -r "$SOURCE_DIR" "$DEST_DIR"
-    echo "Copied $SOURCE_DIR to $DEST_DIR"
+    if [ ! -d "$DEST_DIR/speedupy"]; then # speedupy não está no diretório
+        cp -r "$SOURCE_DIR" "$DEST_DIR"
+        echo "Copied $SOURCE_DIR to $DEST_DIR"
+    fi
 done
 
 # Modo 1 - apaga o .speedupy entre cada argumento e executa sem cache
