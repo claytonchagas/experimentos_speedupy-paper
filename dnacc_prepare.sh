@@ -32,3 +32,5 @@ else
     echo "Erro ao copiar a pasta 2."
     exit 1
 fi
+
+cd $ROOT_PATH
