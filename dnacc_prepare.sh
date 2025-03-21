@@ -15,8 +15,7 @@ elif [[ -d "$DESTINO/dnacc" && -d "$DESTINO2/dnacc" ]]; then
     echo "Aviso: Os diretórios já estão configurados"
     exit 0
 fi
-echo não tá
-read name
+
 # Copia e renomeia a pasta
 cp -r "$ORIGEM" "$DESTINO/dnacc"
 
