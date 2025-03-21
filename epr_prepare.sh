@@ -2,6 +2,7 @@
 ROOT_PATH="$(pwd)"
 
 cd "$ROOT_PATH/epr-with-speedupy/"
+find . -type f ! -name "*.py" -delete
 
 pip install matplotlib
 python3 source.py 60 0.5
