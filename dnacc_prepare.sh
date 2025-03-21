@@ -1,6 +1,6 @@
 #!/bin/bash
 
-ROOT_PATH="."
+ROOT_PATH="$(pwd)"
 
 # Define origem e destino
 ORIGEM="$ROOT_PATH/DNACC-with-speedupy/adapted_for_speedupy/dnacc_speedupy"
