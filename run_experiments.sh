@@ -86,14 +86,14 @@ for i in "${!DESTINATIONS[@]}"; do
         echo "Running setup.py for $PYTHON_FILE..."
         # python3 "$ROOT_PATH/speedupy/setup_exp/setup.py" "$PYTHON_FILE"
         python3 "speedupy/setup_exp/setup.py" "$PYTHON_FILE"
-        echo "-Execution mode: no-cache"
+        echo "-Execution mode: no-cache with $ARG"
 
         # Execute the Python script with the argument in 'no-cache' mode
         for j in {1..10}; do
             python3 $PYTHON_FILE $ARG --exec-mode no-cache | tail -n 1 | cut -d':' -f2 >> $OUTPUT_FILE_NO_CACHE
         done
         
-        echo "-Execution mode: manual"
+        echo "-Execution mode: manual with $ARG"
         
         # Execute the Python script with the argument in 'manual' mode
         for j in {1..10}; do
