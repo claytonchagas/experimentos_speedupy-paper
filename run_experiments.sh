@@ -54,7 +54,7 @@ ARGUMENTS_14=("100" "500" "1000" "5000" "10000")
 for i in "${!DESTINATIONS[@]}"; do
     DEST="${DESTINATIONS[i]}"
     DEST_DIR=$(dirname "$DEST")  # Extract the directory path from the destination path
-    if [ ! -d "$DEST_DIR/speedupy"]; then # speedupy não está no diretório
+    if [ ! -d "$DEST_DIR/speedupy" ]; then # speedupy não está no diretório
         cp -r "$SOURCE_DIR" "$DEST_DIR"
         echo "Copied $SOURCE_DIR to $DEST_DIR"
     fi
@@ -84,20 +84,20 @@ for i in "${!DESTINATIONS[@]}"; do
     
         #Run setup.py before executing the Python script
         echo "Running setup.py for $PYTHON_FILE..."
-        # python3 "$ROOT_PATH/speedupy/setup_exp/setup.py" "$PYTHON_FILE"
-        python3 "speedupy/setup_exp/setup.py" "$PYTHON_FILE"
+        # python3.12 "$ROOT_PATH/speedupy/setup_exp/setup.py" "$PYTHON_FILE"
+        python3.12 "speedupy/setup_exp/setup.py" "$PYTHON_FILE"
         echo "-Execution mode: no-cache with $ARG"
 
         # Execute the Python script with the argument in 'no-cache' mode
         for j in {1..10}; do
-            python3 $PYTHON_FILE $ARG --exec-mode no-cache | tail -n 1 | cut -d':' -f2 >> $OUTPUT_FILE_NO_CACHE
+            python3.12 $PYTHON_FILE $ARG --exec-mode no-cache | tail -n 1 | cut -d':' -f2 >> $OUTPUT_FILE_NO_CACHE
         done
         
         echo "-Execution mode: manual with $ARG"
         
         # Execute the Python script with the argument in 'manual' mode
         for j in {1..10}; do
-            python3 $PYTHON_FILE $ARG --exec-mode manual | tail -n 1 | cut -d':' -f2 >> $OUTPUT_FILE_MANUAL
+            python3.12 $PYTHON_FILE $ARG --exec-mode manual | tail -n 1 | cut -d':' -f2 >> $OUTPUT_FILE_MANUAL
         done        
        # Delete the .speedupy folder after each argument / Deleta a pasta .speedupy após cada argumento
 		rm -rf "$DEST_DIR/.speedupy/"
@@ -129,13 +129,13 @@ for i in "${!DESTINATIONS[@]}"; do
     
         #Run setup.py before executing the Python script
         echo "Running setup.py for $PYTHON_FILE..."
-        # python3 "$ROOT_PATH/speedupy/setup_exp/setup.py" "$PYTHON_FILE"
+        # python3.12 "$ROOT_PATH/speedupy/setup_exp/setup.py" "$PYTHON_FILE"
         echo "-Execution mode: manual"
         
         # Execute the Python script with the argument in 'manual' mode
         for j in {1..10}; do
-            python3 "speedupy/setup_exp/setup.py" "$PYTHON_FILE"        
-            python3 $PYTHON_FILE $ARG --exec-mode manual | tail -n 1 | cut -d':' -f2 >> $OUTPUT_FILE_MANUAL
+            python3.12 "speedupy/setup_exp/setup.py" "$PYTHON_FILE"        
+            python3.12 $PYTHON_FILE $ARG --exec-mode manual | tail -n 1 | cut -d':' -f2 >> $OUTPUT_FILE_MANUAL
             rm -rf "$DEST_DIR/.speedupy/"
         done        
        # Delete the .speedupy folder after each argument / Deleta a pasta .speedupy após cada argumento		
@@ -167,13 +167,13 @@ for i in "${!DESTINATIONS[@]}"; do
     
         #Run setup.py before executing the Python script
         echo "Running setup.py for $PYTHON_FILE..."
-        # python3 "$ROOT_PATH/speedupy/setup_exp/setup.py" "$PYTHON_FILE"
-        python3 "speedupy/setup_exp/setup.py" "$PYTHON_FILE"
+        # python3.12 "$ROOT_PATH/speedupy/setup_exp/setup.py" "$PYTHON_FILE"
+        python3.12 "speedupy/setup_exp/setup.py" "$PYTHON_FILE"
         echo "-Execution mode: manual"
         
         # Execute the Python script with the argument in 'manual' mode
         for j in {1..10}; do
-            python3 $PYTHON_FILE $ARG --exec-mode manual | tail -n 1 | cut -d':' -f2 >> $OUTPUT_FILE_MANUAL
+            python3.12 $PYTHON_FILE $ARG --exec-mode manual | tail -n 1 | cut -d':' -f2 >> $OUTPUT_FILE_MANUAL
         done        
        # Delete the .speedupy folder after each argument / Deleta a pasta .speedupy após cada argumento
     done
