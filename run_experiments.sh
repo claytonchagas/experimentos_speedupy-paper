@@ -16,6 +16,7 @@ chmod +x epr_prepare.sh
 
 chmod +x qho2_prepare.sh
 ./qho2_prepare.sh
+
 # Define the common root path / Define o caminho raiz comum
 ROOT_PATH="$(pwd)"
 
@@ -26,7 +27,7 @@ SOURCE_DIR="$ROOT_PATH/speedupy"
 
 # DESTINATIONS=("$ROOT_PATH/speedupy_experiments/01pilots/01pilots_exp03_quicksort/quicksort.py")
 
-# DESTINATIONS=("$ROOT_PATH/speedupy_experiments/01pilots/01pilots_exp03_quicksort/quicksort.py" "$ROOT_PATH/speedupy_experiments/04benchproglangs/04benchpl_exp02_look_and_say_OK/look_and_say.py" "$ROOT_PATH/speedupy_experiments/04benchproglangs/04benchpl_exp11_gauss_legendre_quadrature_OK/test_gauss_legendre_quadrature.py" "$ROOT_PATH/speedupy_experiments/01pilots/01pilots_exp04_heat_distribution_lu/adapted_for_speedupy/__main__.py" "$ROOT_PATH/speedupy_experiments/04benchproglangs/04benchpl_exp08_fft_OK/test_compute_FFT_speedupy.py" "$ROOT_PATH/speedupy_experiments/05msrgithubexps/05msrgithubexps_exp04_curves/curves_speedupy.py" "$ROOT_PATH/speedupy_experiments/04benchproglangs/04benchpl_exp14_pernicious_numbers_OK/test_pernicious_numbers.py" "$ROOT_PATH/speedupy_experiments/05msrgithubexps/05msrgithubexps_exp02_cvar/cvar_speedupy.py" "$ROOT_PATH/speedupy_experiments/04benchproglangs/04benchpl_exp06_belief_propagation_OK/test_belief_propagation_speedupy.py" "$ROOT_PATH/DNACC-with-speedupy/adapted_for_speedupy/examples/basic/basic_spheres.py" "$ROOT_PATH/DNACC-with-speedupy/adapted_for_speedupy/examples/walking_colloid/walking_colloid.py" "$ROOT_PATH/diversity-with-speedupy/Diversity_sims/vince_sim_speedupy.py" "$ROOT_PATH/Tiny-GSGP-with-speedupy/adapted_for_speedupy/TINY_GSHCGP.py" "$ROOT_PATH/epr-with-speedupy/analyse_speedupy.py" "$ROOT_PATH/qho-with-speedupy/qho2_speedupy.py")
+DESTINATIONS=("$ROOT_PATH/speedupy_experiments/01pilots/01pilots_exp03_quicksort/quicksort.py" "$ROOT_PATH/speedupy_experiments/04benchproglangs/04benchpl_exp02_look_and_say_OK/look_and_say.py" "$ROOT_PATH/speedupy_experiments/04benchproglangs/04benchpl_exp11_gauss_legendre_quadrature_OK/test_gauss_legendre_quadrature.py" "$ROOT_PATH/speedupy_experiments/01pilots/01pilots_exp04_heat_distribution_lu/adapted_for_speedupy/__main__.py" "$ROOT_PATH/speedupy_experiments/04benchproglangs/04benchpl_exp08_fft_OK/test_compute_FFT_speedupy.py" "$ROOT_PATH/speedupy_experiments/05msrgithubexps/05msrgithubexps_exp04_curves/curves_speedupy.py" "$ROOT_PATH/speedupy_experiments/04benchproglangs/04benchpl_exp14_pernicious_numbers_OK/test_pernicious_numbers.py" "$ROOT_PATH/speedupy_experiments/05msrgithubexps/05msrgithubexps_exp02_cvar/cvar_speedupy.py" "$ROOT_PATH/speedupy_experiments/04benchproglangs/04benchpl_exp06_belief_propagation_OK/test_belief_propagation_speedupy.py" "$ROOT_PATH/DNACC-with-speedupy/adapted_for_speedupy/examples/basic/basic_spheres.py" "$ROOT_PATH/DNACC-with-speedupy/adapted_for_speedupy/examples/walking_colloid/walking_colloid.py" "$ROOT_PATH/diversity-with-speedupy/Diversity_sims/vince_sim_speedupy.py" "$ROOT_PATH/Tiny-GSGP-with-speedupy/adapted_for_speedupy/TINY_GSHCGP.py" "$ROOT_PATH/epr-with-speedupy/analyse_speedupy.py" "$ROOT_PATH/qho-with-speedupy/qho2_speedupy.py")
 
 # Define the list of arguments for each destination path / Define a lista de argumentos para cada caminho de destino
 # ARGUMENTS_0=("1e1")
@@ -46,7 +47,6 @@ ARGUMENTS_12=("1" "3" "5" "7" "9")
 ARGUMENTS_13=("100" "200" "300" "400" "500")
 ARGUMENTS_14=("100" "500" "1000" "5000" "10000")
 
-
 # Copy the source directory to each destination directory / Copia o diretório de origem para cada diretório de destino
 for i in "${!DESTINATIONS[@]}"; do
     DEST="${DESTINATIONS[i]}"
@@ -55,7 +55,7 @@ for i in "${!DESTINATIONS[@]}"; do
     echo "Copied $SOURCE_DIR to $DEST_DIR"
 done
 
-# Modo 1 - apaga o .speedupy entre cada argumento
+# Modo 1 - apaga o .speedupy entre cada argumento e executa sem cache
 for i in "${!DESTINATIONS[@]}"; do
     DEST="${DESTINATIONS[i]}"
     DEST_DIR=$(dirname "$DEST")
@@ -68,8 +68,8 @@ for i in "${!DESTINATIONS[@]}"; do
     ARGUMENTS=("${!ARGUMENTS_VAR}")
     
     # Define the output file name based on the Python file name
-    OUTPUT_FILE_NO_CACHE="$ROOT_PATH/$(basename "intra_args_${PYTHON_FILE}_output_no_cache.txt")"
-    OUTPUT_FILE_MANUAL="$ROOT_PATH/$(basename "intra_args_${PYTHON_FILE}_output_manual.txt")"
+    OUTPUT_FILE_NO_CACHE="$ROOT_PATH/$(basename "${PYTHON_FILE}_output_no_cache.txt")"
+    OUTPUT_FILE_MANUAL="$ROOT_PATH/intra_args_$(basename "${PYTHON_FILE}_output_manual.txt")"
 
     cd "$DEST_DIR"
     echo "Running $PYTHON_FILE with different arguments..."
@@ -79,28 +79,27 @@ for i in "${!DESTINATIONS[@]}"; do
     
         #Run setup.py before executing the Python script
         echo "Running setup.py for $PYTHON_FILE..."
-        # python3.12 "$ROOT_PATH/speedupy/setup_exp/setup.py" "$PYTHON_FILE"
-        python3.12 "speedupy/setup_exp/setup.py" "$PYTHON_FILE"
+        # python3 "$ROOT_PATH/speedupy/setup_exp/setup.py" "$PYTHON_FILE"
+        python3 "speedupy/setup_exp/setup.py" "$PYTHON_FILE"
         echo "-Execution mode: no-cache"
 
         # Execute the Python script with the argument in 'no-cache' mode
         for j in {1..10}; do
-            python3.12 $PYTHON_FILE $ARG --exec-mode no-cache | tail -n 1 >> $OUTPUT_FILE_NO_CACHE
+            python3 $PYTHON_FILE $ARG --exec-mode no-cache | tail -n 1 >> $OUTPUT_FILE_NO_CACHE
         done
         
         echo "-Execution mode: manual"
         
         # Execute the Python script with the argument in 'manual' mode
         for j in {1..10}; do
-            python3.12 $PYTHON_FILE $ARG --exec-mode manual | tail -n 1 >> $OUTPUT_FILE_MANUAL
+            python3 $PYTHON_FILE $ARG --exec-mode manual | tail -n 1 >> $OUTPUT_FILE_MANUAL
         done        
        # Delete the .speedupy folder after each argument / Deleta a pasta .speedupy após cada argumento
 		rm -rf "$DEST_DIR/.speedupy/"
     done
-
-    # Clean up any .py files that might have been generated in the root directory / Limpa qualquer arquivo .py que possa ter sido gerado no diretório raiz
-    find "$ROOT_PATH" -maxdepth 1 -name "*.py" -exec rm -f {} \;
 done
+
+cd $ROOT_PATH
 
 # Modo 2 - apaga o .speedupy entre cada execução
 for i in "${!DESTINATIONS[@]}"; do
@@ -114,9 +113,8 @@ for i in "${!DESTINATIONS[@]}"; do
     ARGUMENTS_VAR="ARGUMENTS_$i[@]"
     ARGUMENTS=("${!ARGUMENTS_VAR}")
     
-    # Define the output file name based on the Python file name
-    OUTPUT_FILE_NO_CACHE="$ROOT_PATH/$(basename "intra_exec_only_${PYTHON_FILE}_output_no_cache.txt")"
-    OUTPUT_FILE_MANUAL="$ROOT_PATH/$(basename "intra_exec_only_${PYTHON_FILE}_output_manual.txt")"
+    # Define the output file name based on the Python file name    
+    OUTPUT_FILE_MANUAL="$ROOT_PATH/intra_exec_only_$(basename "${PYTHON_FILE}_output_manual.txt")"
 
     cd "$DEST_DIR"
     echo "Running $PYTHON_FILE with different arguments..."
@@ -126,30 +124,20 @@ for i in "${!DESTINATIONS[@]}"; do
     
         #Run setup.py before executing the Python script
         echo "Running setup.py for $PYTHON_FILE..."
-        # python3.12 "$ROOT_PATH/speedupy/setup_exp/setup.py" "$PYTHON_FILE"
-        python3.12 "speedupy/setup_exp/setup.py" "$PYTHON_FILE"
-        echo "-Execution mode: no-cache"
-
-        # Execute the Python script with the argument in 'no-cache' mode
-        for j in {1..10}; do
-            python3.12 $PYTHON_FILE $ARG --exec-mode no-cache | tail -n 1 >> $OUTPUT_FILE_NO_CACHE
-            rm -rf "$DEST_DIR/.speedupy/"
-        done
-        
+        # python3 "$ROOT_PATH/speedupy/setup_exp/setup.py" "$PYTHON_FILE"
         echo "-Execution mode: manual"
         
         # Execute the Python script with the argument in 'manual' mode
         for j in {1..10}; do
-            python3.12 $PYTHON_FILE $ARG --exec-mode manual | tail -n 1 >> $OUTPUT_FILE_MANUAL
+            python3 "speedupy/setup_exp/setup.py" "$PYTHON_FILE"        
+            python3 $PYTHON_FILE $ARG --exec-mode manual | tail -n 1 >> $OUTPUT_FILE_MANUAL
             rm -rf "$DEST_DIR/.speedupy/"
         done        
        # Delete the .speedupy folder after each argument / Deleta a pasta .speedupy após cada argumento		
     done
-
-    # Clean up any .py files that might have been generated in the root directory / Limpa qualquer arquivo .py que possa ter sido gerado no diretório raiz
-    find "$ROOT_PATH" -maxdepth 1 -name "*.py" -exec rm -f {} \;
 done
 
+cd $ROOT_PATH
 
 # Modo 3 - apaga o .speedupy ao final de todos os argumentos
 for i in "${!DESTINATIONS[@]}"; do
@@ -163,8 +151,7 @@ for i in "${!DESTINATIONS[@]}"; do
     ARGUMENTS_VAR="ARGUMENTS_$i[@]"
     ARGUMENTS=("${!ARGUMENTS_VAR}")
     
-    # Define the output file name based on the Python file name
-    OUTPUT_FILE_NO_CACHE="$ROOT_PATH/$(basename "intra_experiment_${PYTHON_FILE}_output_no_cache.txt")"
+    # Define the output file name based on the Python file name    
     OUTPUT_FILE_MANUAL="$ROOT_PATH/$(basename "intra_experiment_${PYTHON_FILE}_output_manual.txt")"
 
     cd "$DEST_DIR"
@@ -175,27 +162,17 @@ for i in "${!DESTINATIONS[@]}"; do
     
         #Run setup.py before executing the Python script
         echo "Running setup.py for $PYTHON_FILE..."
-        # python3.12 "$ROOT_PATH/speedupy/setup_exp/setup.py" "$PYTHON_FILE"
-        python3.12 "speedupy/setup_exp/setup.py" "$PYTHON_FILE"
-        echo "-Execution mode: no-cache"
-
-        # Execute the Python script with the argument in 'no-cache' mode
-        for j in {1..10}; do
-            python3.12 $PYTHON_FILE $ARG --exec-mode no-cache | tail -n 1 >> $OUTPUT_FILE_NO_CACHE
-        done
-        
+        # python3 "$ROOT_PATH/speedupy/setup_exp/setup.py" "$PYTHON_FILE"
+        python3 "speedupy/setup_exp/setup.py" "$PYTHON_FILE"
         echo "-Execution mode: manual"
         
         # Execute the Python script with the argument in 'manual' mode
         for j in {1..10}; do
-            python3.12 $PYTHON_FILE $ARG --exec-mode manual | tail -n 1 >> $OUTPUT_FILE_MANUAL
+            python3 $PYTHON_FILE $ARG --exec-mode manual | tail -n 1 >> $OUTPUT_FILE_MANUAL
         done        
        # Delete the .speedupy folder after each argument / Deleta a pasta .speedupy após cada argumento
     done
     rm -rf "$DEST_DIR/.speedupy/"
-
-    # Clean up any .py files that might have been generated in the root directory / Limpa qualquer arquivo .py que possa ter sido gerado no diretório raiz
-    find "$ROOT_PATH" -maxdepth 1 -name "*.py" -exec rm -f {} \;
 done
 
 
