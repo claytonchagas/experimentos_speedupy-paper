@@ -16,7 +16,7 @@ def compute_quadrature(n):
     """
     a = -3.0
     b = 3.0
-    (x, w) = np.polynomial.legendre.leggauss(n)
+    x, w = np.polynomial.legendre.leggauss(n)
     t = 0.5 * (x + 1) * (b - a) + a
     return sum(w * integrand(t)) * 0.5 * (b - a)
 

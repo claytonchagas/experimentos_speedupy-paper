@@ -43,7 +43,9 @@ def do_it(beta_DeltaG0Mid):
                     f.write('%.2f\t%.4f\t%.4f\n' % (c, minBetaF + offset, minH / nm))
 
 @initialize_speedupy
-def main():
-    for beta_DeltaG0Mid in range(-20, 1):
+def main(n):
+    for beta_DeltaG0Mid in range(n, 1):
         do_it(beta_DeltaG0Mid)
-main()
+if __name__ == '__main__':
+    n = int(sys.argv[1])
+    main(n)

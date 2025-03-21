@@ -5,3 +5,5 @@ speedupy_experiments/
 .speedupy/
 examples/
 venv_test/
+outputs
+*.npy.gz

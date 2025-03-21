@@ -20,7 +20,7 @@ rcParams['figure.edgecolor'] = 'white'
 PARTICLE_SPIN = 1.0
 
 @maybe_deterministic
-def analyse(spin=PARTICLE_SPIN, PARAM = 0):
+def analyse(spin=PARTICLE_SPIN, PARAM=0):
     """Perform analysis on saved output files after the simulation is done"""
     alice_raw = numpy.load(gzip.open('Alice.npy.gz'))
     bob_raw = numpy.load(gzip.open('Bob.npy.gz'))
@@ -63,8 +63,6 @@ def display_results(abdeg, adeg, bdeg, alice, bob, angles, o_angles, Eab, Corr, 
             setting_pairs = [(0, 22.5), (0, 67.5), (45, 22.5), (45, 67.5)]
         else:
             setting_pairs = setting_pairs[:PARAM]
-            
-            	
     CHSH = []
     QM = []
     print('\nExpectation values')
@@ -126,15 +124,25 @@ def val(x):
     ANGLE_RESOLUTION = 3.75
     return numpy.round(x / ANGLE_RESOLUTION) * ANGLE_RESOLUTION
 
-if __name__ == '__main__':
-    if len(sys.argv) >= 2:
-        PARTICLE_SPIN = float(sys.argv[1])
-        PARAM = int(sys.argv[2])
-    else:
-        PARTICLE_SPIN = 1.0
-        PARAM = 0
+# Jeito que tava antes, tive que mudar pra ficar de acordo com os parâmetros da tabela
 
-    @initialize_speedupy
-    def main():
-        analyse(PARTICLE_SPIN, PARAM)
-    main()
+# if __name__ == '__main__':
+#     if len(sys.argv) >= 2:
+#         PARTICLE_SPIN = float(sys.argv[1])
+#         PARAM = int(sys.argv[2])
+#     else:
+#         PARTICLE_SPIN = 1.0
+#         PARAM = 0
+
+#     @initialize_speedupy
+#     def main():
+#         analyse(PARTICLE_SPIN, PARAM)
+#     main()
+
+
+@initialize_speedupy
+def main(PARAM):
+    analyse(PARTICLE_SPIN, PARAM)
+if __name__ == '__main__':
+    PARAM = int(sys.argv[1])
+    main(PARAM)

@@ -33,16 +33,16 @@ def count_shared_mutations(sims):
         num_shared = len(temp1.intersection(set(p2)))
         counts[num_shared] += num_shared
     return counts
+
+@initialize_speedupy
+def main(N):
+    x = repeat_mutation_sim(N, 12162, 156)
+    t1 = dt.datetime.now()
+    shared_counts = count_shared_mutations(x)
+    t2 = dt.datetime.now()
+    temp2 = t2 - t1
+    print('took', temp2.seconds, 'seconds to do pairwise comparisons')
+    print(shared_counts)
 if __name__ == '__main__':
     N = float(sys.argv[1])
-
-    @initialize_speedupy
-    def main(N):
-        x = repeat_mutation_sim(N, 12162, 156)
-        t1 = dt.datetime.now()
-        shared_counts = count_shared_mutations(x)
-        t2 = dt.datetime.now()
-        temp2 = t2 - t1
-        print('took', temp2.seconds, 'seconds to do pairwise comparisons')
-        print(shared_counts)
-main(N)
+    main(N)
