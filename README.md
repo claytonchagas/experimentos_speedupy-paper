@@ -1,2 +1,1 @@
-# experimentos_speedupy_mar25
-experimentos_speedupy_mar25
+# speedupy_experiments-paper
