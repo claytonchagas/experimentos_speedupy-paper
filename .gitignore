@@ -7,3 +7,4 @@ examples/
 venv_test/
 outputs
 *.npy.gz
+.venv/
