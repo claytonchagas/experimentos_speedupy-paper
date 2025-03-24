@@ -13,7 +13,7 @@ experiments = [
     "quicksort.py",
     "look_and_say.py",
     "test_gauss_legendre_quadrature.py",
-    "__main__.py",
+    "heat_distribution_lu",
     "test_compute_FFT_speedupy.py",
     "curves_speedupy.py",
     "test_pernicious_numbers.py",
