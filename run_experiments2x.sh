@@ -87,7 +87,8 @@ for i in "${!DESTINATIONS[@]}"; do
     
     # Define the output file name based on the Python file name
     OUTPUT_FILE_NO_CACHE="$ROOT_PATH/$(basename "${PYTHON_FILE}_output_no_cache.txt")"
-    OUTPUT_FILE_MANUAL="$ROOT_PATH/intra_args_$(basename "${PYTHON_FILE}_output_manual.txt")"
+    # OUTPUT_FILE_MANUAL="$ROOT_PATH/intra_args_$(basename "${PYTHON_FILE}_output_manual.txt")"
+    OUTPUT_FILE_MANUAL="$ROOT_PATH/$(basename "${PYTHON_FILE}_output_spdpy_intra_args.txt")"
 
     cd "$DEST_DIR"
     echo "Running $PYTHON_FILE with different arguments..."
@@ -132,7 +133,8 @@ for i in "${!DESTINATIONS[@]}"; do
     ARGUMENTS=("${!ARGUMENTS_VAR}")
     
     # Define the output file name based on the Python file name    
-    OUTPUT_FILE_MANUAL="$ROOT_PATH/intra_exec_only_$(basename "${PYTHON_FILE}_output_manual.txt")"
+    # OUTPUT_FILE_MANUAL="$ROOT_PATH/intra_exec_only_$(basename "${PYTHON_FILE}_output_manual.txt")"
+    OUTPUT_FILE_MANUAL="$ROOT_PATH/$(basename "${PYTHON_FILE}_output_spdpy_intra_exec.txt")"
 
     cd "$DEST_DIR"
     echo "Running $PYTHON_FILE with different arguments..."
@@ -149,9 +151,10 @@ for i in "${!DESTINATIONS[@]}"; do
         for j in {1..2}; do
             python3.12 "speedupy/setup_exp/setup.py" "$PYTHON_FILE"        
             python3.12 $PYTHON_FILE $ARG --exec-mode manual | tail -n 1 | cut -d':' -f2 >> $OUTPUT_FILE_MANUAL
+            # Delete the .speedupy folder after each execution / Deleta a pasta .speedupy após cada execução
             rm -rf "$DEST_DIR/.speedupy/"
         done        
-       # Delete the .speedupy folder after each argument / Deleta a pasta .speedupy após cada argumento		
+       		
     done    
 done
 
@@ -170,25 +173,31 @@ for i in "${!DESTINATIONS[@]}"; do
     ARGUMENTS=("${!ARGUMENTS_VAR}")
     
     # Define the output file name based on the Python file name    
-    OUTPUT_FILE_MANUAL="$ROOT_PATH/$(basename "intra_experiment_${PYTHON_FILE}_output_manual.txt")"
+    # OUTPUT_FILE_MANUAL="$ROOT_PATH/$(basename "intra_experiment_${PYTHON_FILE}_output_manual.txt")"
+    OUTPUT_FILE_MANUAL="$ROOT_PATH/$(basename ${PYTHON_FILE}_output_spdpy_intra_exp.txt")"
 
     cd "$DEST_DIR"
     echo "Running $PYTHON_FILE with different arguments..."
+    
+    #Run setup.py before executing the Python script
+    echo "Running setup.py for $PYTHON_FILE..."
+    # python3.12 "$ROOT_PATH/speedupy/setup_exp/setup.py" "$PYTHON_FILE"
+    python3.12 "speedupy/setup_exp/setup.py" "$PYTHON_FILE"
+    echo "-Execution mode: manual"
 
     # Run the script with each argument
     for ARG in "${ARGUMENTS[@]}"; do
     
         #Run setup.py before executing the Python script
-        echo "Running setup.py for $PYTHON_FILE..."
+        # echo "Running setup.py for $PYTHON_FILE..."
         # python3.12 "$ROOT_PATH/speedupy/setup_exp/setup.py" "$PYTHON_FILE"
-        python3.12 "speedupy/setup_exp/setup.py" "$PYTHON_FILE"
-        echo "-Execution mode: manual"
+        # python3.12 "speedupy/setup_exp/setup.py" "$PYTHON_FILE"
+        # echo "-Execution mode: manual"
         
         # Execute the Python script with the argument in 'manual' mode
         for j in {1..2}; do
             python3.12 $PYTHON_FILE $ARG --exec-mode manual | tail -n 1 | cut -d':' -f2 >> $OUTPUT_FILE_MANUAL
         done        
-       # Delete the .speedupy folder after each argument / Deleta a pasta .speedupy após cada argumento
     done
     # Deleta os diretórios do speedupy copiados previamente
     rm -rf "$DEST_DIR/.speedupy/" "$DEST_DIR/speedupy/"
