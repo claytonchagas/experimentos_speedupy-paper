@@ -1,9 +1,7 @@
 __pycache__/
 env/
-DNACC-with-speedupy/
-speedupy_experiments/
+DNACC-with-speedupy/adapted_for_speedupy/examples/walking_colloid/*.dat
 .speedupy/
-examples/
 venv_test/
 outputs
 *.npy.gz
