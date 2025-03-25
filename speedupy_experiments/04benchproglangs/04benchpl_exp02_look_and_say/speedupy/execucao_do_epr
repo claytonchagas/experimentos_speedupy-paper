@@ -1,5 +1,0 @@
-epr:
-1o rodar: python3.12 source.py "parametro" para gerar os números aleatórios (cria "SrcLeft.npy.gz" e "SrcRight.npy.gz"); Depois vou calibrar e enviar o melhor parâmetro para rodar;
-2o rodar: python3.12 station_py39.py SrcLeft.npy.gz para gerar Alice.npy.gz
-3o rodar: python3.12 station_py39.py SrcRight.npy.gz para gerar Bob.npy.gz
-4o rodar: 
