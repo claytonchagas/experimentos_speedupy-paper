@@ -7,20 +7,20 @@ ORIGEM="$ROOT_PATH/DNACC-with-speedupy/adapted_for_speedupy/dnacc_speedupy"
 DESTINO="$ROOT_PATH/DNACC-with-speedupy/adapted_for_speedupy/examples/basic"
 DESTINO2="$ROOT_PATH/DNACC-with-speedupy/adapted_for_speedupy/examples/walking_colloid"
 
-# Verifica se a pasta de origem existe
+# Apaga arquivos gerados pela execução do experimento
+find $DESTINO2 -type f -name "*.dat" -delete
+
+# Verifica se a pasta de origem existe ou se os diretórios já foram configurados
 if [ ! -d "$ORIGEM" ]; then
     echo "Erro: A pasta de origem '$ORIGEM' não existe."
     exit 1
-elif [[ -d "$DESTINO/dnacc" && -d "$DESTINO2/dnacc" ]]; then
-    echo "Aviso: Os diretórios já estão configurados"
+elif [[ -d "$DESTINO/dnacc" && -d "$DESTINO2/dnacc" ]]; then    
     exit 0
 fi
 
 # Copia e renomeia a pasta
 cp -r "$ORIGEM" "$DESTINO/dnacc"
 
-# Apaga arquivos gerados pela execução do experimento
-find $DESTINO2 -type f -name "*.dat" -delete
 
 # Verifica se a cópia foi bem-sucedida
 if [ $? -eq 0 ]; then

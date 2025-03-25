@@ -27,7 +27,7 @@ An ``tether_statistics`` object *must* implement the following methods:
 
 .. function:: calc_boltz_exclusion(system, tether_info_i)
 
-  Return :math:`\exp( -\\beta G^{(rep)}_i )`, i.e., the Boltzmann factor
+  Return :math:`\\exp( -\\beta G^{(rep)}_i )`, i.e., the Boltzmann factor
   corresponding to the free energy difference of confining a previously
   unconfined tether i.
 
@@ -86,13 +86,13 @@ Mean field approximation
 ************************
 
 For tethers grafted on parallel plates, we can make a mean field
-approximation by replacing :math:`\exp(-\\beta G^{(cnf)}_{ij})` by
+approximation by replacing :math:`\\exp(-\\beta G^{(cnf)}_{ij})` by
 :math:`M_{ab} \\sigma_b`, where :math:`\sigma_b` is the grafting density of
 b-type tethers and
 
 .. math::
 
-   M_{ab} = \int dr_j\, \exp( - \\beta G^{(cnf)}_{ij} )
+   M_{ab} = \int dr_j\, \\exp( - \\beta G^{(cnf)}_{ij} )
 
 Here, i and j are any representative a-type and b-type tethers,
 respectively, and the integration is over all possible grafting points of j.
@@ -102,15 +102,15 @@ as follows:
 
 .. math::
 
-   K_{ab} &= M_{ab} \exp[-\\beta(-G^{(rep)}_a - G^{(rep)}_b)]\\\\
-          &= \int dr_j\, \exp( - \\beta \\Delta G^{(cnf)}_{ij} )
+   K_{ab} &= M_{ab} \\exp[-\\beta(-G^{(rep)}_a - G^{(rep)}_b)]\\\\
+          &= \int dr_j\, \\exp( - \\beta \\Delta G^{(cnf)}_{ij} )
 
 A ``tether_statistics`` object for use in :class:`.PlatesMeanField` *must*
 implement the following methods:
 
 .. function:: calc_boltz_exclusion( system, type_info_a )
 
-  Return :math:`\exp( -\\beta G^{(rep)}_a )`, i.e., the Boltzmann factor
+  Return :math:`\\exp( -\\beta G^{(rep)}_a )`, i.e., the Boltzmann factor
   corresponding to the free energy difference of confining a previously
   unconfined a-type tether.
 
