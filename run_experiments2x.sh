@@ -54,19 +54,19 @@ DESTINATIONS_12="$ROOT_PATH/epr-with-speedupy/analyse_speedupy.py"
 DESTINATIONS=($DESTINATIONS_0 $DESTINATIONS_1 $DESTINATIONS_2 $DESTINATIONS_3 $DESTINATIONS_4 $DESTINATIONS_5 $DESTINATIONS_6 $DESTINATIONS_7 $DESTINATIONS_8 $DESTINATIONS_9 $DESTINATIONS_10 $DESTINATIONS_11 $DESTINATIONS_12)
 
 # Define the list of arguments for each destination path / Define a lista de argumentos para cada caminho de destino
-ARGUMENTS_0=("1e1") # "1e2" "1e3" "1e4" "1e5") # quicksort
-ARGUMENTS_1=("25") # "30" "35" "40" "45") # look_and_say
-ARGUMENTS_2=("1000") # "2000" "3000" "4000" "5000") # gauss_legendre_quadrature
-ARGUMENTS_3=("0.1") # "0.05" "0.01" "0.005" "0.001") # heat_distribution_lu
-ARGUMENTS_4=("1000") # "2000" "3000" "4000" "5000") # fft
-ARGUMENTS_5=("20000") # "25000" "30000" "35000" "39000") # pernicious_numbers
-ARGUMENTS_6=("1e6") # "5e6" "10e6" "50e6" "100e6") # cvar
-ARGUMENTS_7=("1000") # "2000" "3000" "4000" "5000") # belief_propagation
-ARGUMENTS_8=("40") # "1000" "10000" "100000" "1000000") # dnacc_basic_spheres
-ARGUMENTS_9=("-10") # "-20" "-30" "-40" "-50") # dnacc_walking_colloid
-ARGUMENTS_10=("1000000") # "2000000" "3000000" "4000000" "5000000") # vince_sim
-ARGUMENTS_11=("1") # "3" "5" "7" "9") # TINY_GSHCGP
-ARGUMENTS_12=("100") # "200" "300" "400" "500") # analyse_epr
+ARGUMENTS_0=("1e1" "1e2" "1e3" "1e4" "1e5") # quicksort
+ARGUMENTS_1=("25" "30" "35" "40" "45") # look_and_say
+ARGUMENTS_2=("1000" "2000" "3000" "4000" "5000") # gauss_legendre_quadrature
+ARGUMENTS_3=("0.1" "0.05" "0.01" "0.005" "0.001") # heat_distribution_lu
+ARGUMENTS_4=("1000" "2000" "3000" "4000" "5000") # fft
+ARGUMENTS_5=("20000" "25000" "30000" "35000" "39000") # pernicious_numbers
+ARGUMENTS_6=("1e6" "5e6" "10e6" "50e6" "100e6") # cvar
+ARGUMENTS_7=("1000" "2000" "3000" "4000" "5000") # belief_propagation
+ARGUMENTS_8=("40" "1000" "10000" "100000" "1000000") # dnacc_basic_spheres
+ARGUMENTS_9=("-10" "-20" "-30" "-40" "-50") # dnacc_walking_colloid
+ARGUMENTS_10=("1000000" "2000000" "3000000" "4000000" "5000000") # vince_sim
+ARGUMENTS_11=("1" "3" "5" "7" "9") # TINY_GSHCGP
+ARGUMENTS_12=("100" "200" "300" "400" "500") # analyse_epr
 # ARGUMENTS_13=("1576862 -8567453 1648423 542312 512 -20135 1455678 52349" "4341212 -12312419 123123 5423672 107 20135 145678 52349" "-11124 -11124 62412 1412 107501 201635 15678 57849" "43441212 -22523123 6219 5143228 107501 20135 1455678 5234567849" "-111243412 -124122123 62192412 5281412 107501 201422635 123455678 5234567849")
 # curves
 # ARGUMENTS_14=("100" "500" "1000" "5000" "10000") # qho2
