@@ -1,115 +1,155 @@
 import os
 import numpy as np
 import matplotlib.pyplot as plt
+from matplotlib.table import Table
 import pandas as pd
-from tqdm import tqdm
+from matplotlib.backends.backend_pdf import PdfPages
 from PIL import Image
 
-# Directory where the .txt output files are located
-OUTPUT_DIR = "./outputs"
+# Set non-interactive backend
+import matplotlib
+matplotlib.use('Agg')
 
-# List of experiment names (each ending in .py)
-experiments = [
-    "quicksort.py",
-    "look_and_say.py",
-    "test_gauss_legendre_quadrature.py",
-    "heat_distribution_lu",
-    "test_compute_FFT_speedupy.py",
-    "curves_speedupy.py",
-    "test_pernicious_numbers.py",
-    "cvar_speedupy.py",
-    "test_belief_propagation_speedupy.py",
-    "basic_spheres.py",
-    "walking_colloid.py",
-    "vince_sim_speedupy.py",
-    "TINY_GSHCGP.py",
-    "analyse_speedupy.py",
-    "qho2_speedupy.py"
+# Experiment input labels
+inputs_per_experiment = {
+    "quicksort": ["1e1", "1e2", "1e3", "1e4", "1e5"],
+    "look_and_say": ["25", "30", "35", "40", "45"],
+    "gauss_legendre_quadrature": ["1000", "2000", "3000", "4000", "5000"],
+    "heat_distribution_lu": ["0.1", "0.05", "0.01", "0.005", "0.001"],
+    "fft_speedupy": ["1000", "2000", "3000", "4000", "5000"],
+    "pernicious_numbers": ["20000", "25000", "30000", "35000", "39000"],
+    "cvar_speedupy": ["1e6", "5e6", "10e6", "50e6", "100e6"],
+    "belief_propagation_speedupy": ["1000", "2000", "3000", "4000", "5000"],
+    "basic_spheres": ["40", "1000", "10000", "100000", "1000000"],
+    "walking_colloid": ["-10", "-20", "-30", "-40", "-50"],
+    "vince_sim_speedupy": ["1000000", "2000000", "3000000", "4000000", "5000000"],
+    "TINY_GSHCGP": ["1", "3", "5", "7", "9"],
+    "analyse_speedupy": ["100", "200", "300", "400", "500"],
+}
+
+suffixes = [
+    "output_no_cache",
+    "output_spdpy_intra_args",
+    "output_spdpy_intra_exec",
+    "output_spdpy_intra_exp"
 ]
+markers = ['o', '^', 'x', 's']
 
-# Input values per experiment (5 inputs per experiment)
-experiment_inputs = [
-    ["1e1", "1e2", "1e3", "1e4", "1e5"],
-    ["25", "30", "35", "40", "45"],
-    ["1000", "2000", "3000", "4000", "5000"],
-    ["0.1", "0.05", "0.01", "0.005", "0.001"],
-    ["1000", "2000", "3000", "4000", "5000"],
-    [
-        "1576862 -8567453 1648423 542312 512 -20135 1455678 52349",
-        "4341212 -12312419 123123 5423672 107 20135 145678 52349",
-        "-11124 -11124 62412 1412 107501 201635 15678 57849",
-        "43441212 -22523123 6219 5143228 107501 20135 1455678 5234567849",
-        "-111243412 -124122123 62192412 5281412 107501 201422635 123455678 5234567849"
-    ],
-    ["20000", "25000", "30000", "35000", "39000"],
-    ["1e6", "5e6", "10e6", "50e6", "100e6"],
-    ["1000", "2000", "3000", "4000", "5000"],
-    ["40", "1000", "10000", "100000", "1000000"],
-    ["-10", "-20", "-30", "-40", "-50"],
-    ["1000000", "2000000", "3000000", "4000000", "5000000"],
-    ["1", "3", "5", "7", "9"],
-    ["100", "200", "300", "400", "500"],
-    ["100", "500", "1000", "5000", "10000"]
-]
+output_dir = "./outputs"
+graph_dir = "./graphs"
+os.makedirs(graph_dir, exist_ok=True)
 
-# Colors and markers for the 4 lines in each graph
-colors = ['tab:blue', 'tab:orange', 'tab:green', 'tab:red']
-markers = ['o', 's', '^', 'x']  # circle, square, triangle, X
+experiments = list(inputs_per_experiment.keys())
 
-# Loop through each experiment
-for idx, exp in enumerate(tqdm(experiments, desc="Generating graphs")):
-    exp_name = exp.replace(".py", "")
-    inputs = experiment_inputs[idx]
+def compute_medians(filepath):
+    with open(filepath, "r") as f:
+        values = [float(line.strip()) for line in f.readlines()]
+    return [np.median(values[i:i+2]) for i in range(0, len(values), 2)]
 
-    txt_files = [
-        f"{exp}_output_manual.txt",
-        f"{exp}_output_no_cache.txt",
-        f"intra_args_{exp}_output_manual.txt",
-        f"intra_exec_only_{exp}_output_manual.txt"
-    ]
+summary_best_last = []
+summary_all_points = []
+
+for exp in experiments:
+    inputs = inputs_per_experiment[exp]
+    best_per_input = []
+    methods_per_input = []
+    medians_by_method = {}
 
     plt.figure(figsize=(10, 6))
-    for i, fname in enumerate(txt_files):
-        path = os.path.join(OUTPUT_DIR, fname)
-        if not os.path.exists(path):
+
+    for idx, suf in enumerate(suffixes):
+        fname = f"{exp}_{suf}.txt"
+        fpath = os.path.join(output_dir, fname)
+        if not os.path.exists(fpath):
             continue
+        medians = compute_medians(fpath)
+        medians_by_method[suf] = medians
+        plt.plot(inputs, medians, label=suf.replace('output_', '').replace('spdpy_', 'speedupy_'), marker=markers[idx], linewidth=2)
+        for i, median in enumerate(medians):
+            plt.text(inputs[i], median + 0.01 * max(medians), f"{median:.2f}", ha='center')
 
-        with open(path) as f:
-            values = [float(line.strip()) for line in f]
+    for i in range(len(inputs)):
+        best_time = float('inf')
+        best_method = ''
+        for method, medians in medians_by_method.items():
+            if medians[i] < best_time:
+                best_time = medians[i]
+                best_method = method
+        best_per_input.append(f"{best_time:.2f} ({best_method.replace('output_', '').replace('spdpy_', 'speedupy_')})")
+        methods_per_input.append(best_method)
 
-        if len(values) != 10:
-            continue
+    last_input = inputs[-1]
+    best_last = best_per_input[-1]
+    best_method_last = methods_per_input[-1].replace(".txt", "")
+    time_val = best_last.split()[0]
 
-        medians = [np.median([values[j], values[j+1]]) for j in range(0, 10, 2)]
+    summary_best_last.append([exp, last_input, time_val, best_method_last.replace('output_', '').replace('spdpy_', 'speedupy_')])
+    summary_all_points.append([exp] + best_per_input)
 
-        label = fname.replace(".py", "").replace(".txt", "")
-        label = label.replace("___", "_").replace("__", "_").replace("output_", "")
-        label = label.replace("_manual", " (manual)").replace("_no_cache", " (no cache)")
-
-        plt.plot(inputs, medians, marker=markers[i], label=label, color=colors[i], zorder=3)
-
-        for x, y in zip(inputs, medians):
-            plt.text(x, y + y * 0.03, f"{y:.2f}", ha='center', va='bottom', fontsize=8, zorder=4)
-
-    plt.title(exp_name)
+    plt.title(exp, fontsize=14)
     plt.xlabel("Input")
-    plt.ylabel("Execution Time (s)")
-    plt.grid(True, linestyle="--", zorder=0)
-    plt.legend(loc="upper left", fontsize=9)
+    plt.ylabel("Execution Time Median (s)")
+    plt.legend()
+    plt.grid(True)
     plt.tight_layout()
-    plt.savefig(f"graph_{exp_name}_matplotlib.png")
+    plt.savefig(os.path.join(graph_dir, f"{exp}_plot.png"))
     plt.close()
 
-# --- Merge all PNGs into a single PDF ---
-png_files = sorted([f for f in os.listdir('.') if f.startswith("graph_") and f.endswith(".png")])
-images = [Image.open(f).convert("RGB") for f in png_files]
+df_best_last = pd.DataFrame(summary_best_last, columns=["Experiment", "Input", "Time (s)", "Best Method"])
+df_all_points = pd.DataFrame(summary_all_points, columns=["Experiment"] + [f"Input {i+1}" for i in range(5)])
 
-if images:
-    images[0].save(
-        "all_experiments_graphs.pdf",
-        save_all=True,
-        append_images=images[1:]
-    )
-    print("\n📄 PDF saved: all_experiments_graphs.pdf")
-else:
-    print("⚠️ No PNGs found to include in PDF.")
+# Print tables to terminal
+print("\nBest time for the largest input:")
+print(df_best_last.to_string(index=False))
+print("\nBest method and time for each input:")
+print(df_all_points.to_string(index=False))
+
+# Save CSVs
+df_best_last.to_csv(os.path.join(graph_dir, "best_last_input.csv"), index=False)
+df_all_points.to_csv(os.path.join(graph_dir, "best_all_inputs.csv"), index=False)
+
+def save_table_image(df, filename):
+    fig, ax = plt.subplots(figsize=(12, len(df)*0.5 + 1))
+    ax.set_axis_off()
+    table = Table(ax, bbox=[0, 0, 1, 1])
+    n_rows, n_cols = df.shape
+    col_labels = list(df.columns)
+    col_widths = [1.0 / n_cols] * n_cols
+
+    for col_idx, col_name in enumerate(col_labels):
+        cell = table.add_cell(0, col_idx, col_widths[col_idx], 0.5, text=col_name, loc='center', facecolor='#cccccc')
+        cell.get_text().set_fontweight('bold')
+
+    for row_idx, row in enumerate(df.values):
+        for col_idx, val in enumerate(row):
+            cell = table.add_cell(row_idx + 1, col_idx, col_widths[col_idx], 0.5, text=str(val), loc='center')
+            if col_idx == 0:
+                cell.get_text().set_fontweight('bold')
+
+    ax.add_table(table)
+    plt.savefig(os.path.join(graph_dir, filename))
+    plt.close()
+
+save_table_image(df_best_last, "summary_table_last_input.png")
+save_table_image(df_all_points, "summary_table_all_inputs.png")
+
+pdf_path = os.path.join(graph_dir, "all_graphs_and_tables.pdf")
+with PdfPages(pdf_path) as pdf:
+    for exp in experiments:
+        img_path = os.path.join(graph_dir, f"{exp}_plot.png")
+        if os.path.exists(img_path):
+            img = Image.open(img_path).convert("RGB")
+            fig, ax = plt.subplots(figsize=(10, 6), dpi=300)
+            ax.imshow(img)
+            ax.axis('off')
+            pdf.savefig(fig, dpi=300)
+            plt.close()
+
+    for table_img in ["summary_table_last_input.png", "summary_table_all_inputs.png"]:
+        img_path = os.path.join(graph_dir, table_img)
+        img = Image.open(img_path).convert("RGB")
+        fig, ax = plt.subplots(figsize=(12, len(df_best_last)*0.5 + 1), dpi=300)
+        ax.imshow(img)
+        ax.axis('off')
+        pdf.savefig(fig, dpi=300)
+        plt.close()
