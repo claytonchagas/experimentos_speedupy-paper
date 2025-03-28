@@ -25,6 +25,8 @@ inputs_per_experiment = {
     "vince_sim_speedupy": ["1000000", "2000000", "3000000", "4000000", "5000000"],
     "TINY_GSHCGP": ["1", "3", "5", "7", "9"],
     "analyse_speedupy": ["100", "200", "300", "400", "500"],
+    "qho2_speedupy": ["100", "500", "1000", "5000", "6000"],
+    "curves_speedupy": ["1","2","3","4","5"] # os 8 inputs padrões deixam a legenda ruim
 }
 
 suffixes = [

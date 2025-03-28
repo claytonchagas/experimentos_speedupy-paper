@@ -117,14 +117,14 @@ for i in "${!DESTINATIONS[@]}"; do
         echo "-Execution mode: no-cache with $ARG"
 
         # Execute the Python script with the argument in 'no-cache' mode
-        for j in {1..2}; do
+        for j in {1..5}; do
             python3.12 $PYTHON_FILE $ARG --exec-mode no-cache | tail -n 1 | cut -d':' -f2 >> $OUTPUT_FILE_NO_CACHE
         done
         
         echo "-Execution mode: manual with $ARG"
         
         # Execute the Python script with the argument in 'manual' mode
-        for j in {1..2}; do
+        for j in {1..5}; do
             python3.12 $PYTHON_FILE $ARG --exec-mode manual | tail -n 1 | cut -d':' -f2 >> $OUTPUT_FILE_MANUAL
         done        
        # Delete the .speedupy folder after each argument / Deleta a pasta .speedupy após cada argumento
@@ -162,7 +162,7 @@ for i in "${!DESTINATIONS[@]}"; do
         echo "-Execution mode: manual"
         
         # Execute the Python script with the argument in 'manual' mode
-        for j in {1..2}; do
+        for j in {1..5}; do
             python3.12 "speedupy/setup_exp/setup.py" "$PYTHON_FILE"        
             python3.12 $PYTHON_FILE $ARG --exec-mode manual | tail -n 1 | cut -d':' -f2 >> $OUTPUT_FILE_MANUAL
             # Delete the .speedupy folder after each execution / Deleta a pasta .speedupy após cada execução
@@ -202,7 +202,7 @@ for i in "${!DESTINATIONS[@]}"; do
     # Run the script with each argument
     for ARG in "${ARGUMENTS[@]}"; do    
         # Execute the Python script with the argument in 'manual' mode
-        for j in {1..2}; do
+        for j in {1..5}; do
             python3.12 $PYTHON_FILE $ARG --exec-mode manual | tail -n 1 | cut -d':' -f2 >> $OUTPUT_FILE_MANUAL
         done        
     done
