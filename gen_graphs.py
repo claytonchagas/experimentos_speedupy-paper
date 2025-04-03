@@ -11,15 +11,15 @@ from PIL import Image
 import matplotlib
 matplotlib.use('Agg')
 
-# Verifica argumento de execucoes
+# Check execution argument
 if len(sys.argv) != 2:
-    print("Uso: python3.12 gen_graphs.py <num_execucoes>")
+    print("Usage: python3.12 gen_graphs.py <num_executions>")
     sys.exit(1)
 
 try:
     num_execucoes = int(sys.argv[1])
 except ValueError:
-    print("O argumento deve ser um número inteiro representando o número de execuções por entrada.")
+    print("The argument must be an integer representing the number of executions per input.")
     sys.exit(1)
 
 # Experiment input labels
@@ -38,7 +38,7 @@ inputs_per_experiment = {
     "TINY_GSHCGP": ["1", "3", "5", "7", "9"],
     "analyse_speedupy": ["100", "200", "300", "400", "500"],
     "qho2_speedupy": ["100", "500", "1000", "5000", "6000"],
-    "curves_speedupy": ["1","2","3","4","5"]
+    "curves_speedupy": ["1", "2", "3", "4", "5"]
 }
 
 suffixes = [
@@ -55,16 +55,14 @@ os.makedirs(graph_dir, exist_ok=True)
 
 experiments = list(inputs_per_experiment.keys())
 
-
 def compute_medians(filepath):
     with open(filepath, "r") as f:
         values = [float(line.strip()) for line in f.readlines()]
 
     if len(values) % num_execucoes != 0:
-        raise ValueError(f"Arquivo {filepath} com número de linhas incompatível com {num_execucoes} execuções por entrada.")
+        raise ValueError(f"File {filepath} has an incompatible number of lines for {num_execucoes} executions per input.")
 
     return [np.median(values[i:i+num_execucoes]) for i in range(0, len(values), num_execucoes)]
-
 
 summary_best_last = []
 summary_all_points = []
@@ -125,7 +123,6 @@ print(df_all_points.to_string(index=False))
 
 df_best_last.to_csv(os.path.join(graph_dir, "best_last_input.csv"), index=False)
 df_all_points.to_csv(os.path.join(graph_dir, "best_all_inputs.csv"), index=False)
-
 
 def save_table_image(df, filename):
     fig, ax = plt.subplots(figsize=(12, len(df)*0.5 + 1))
