@@ -10,13 +10,17 @@ def integrand(t):
     return np.exp(t)
 
 @deterministic
+def cached_leggauss(n):
+    return np.polynomial.legendre.leggauss(n)
+
+@deterministic
 def compute_quadrature(n):
     """
       Perform the Gauss-Legendre Quadrature at the prescribed order n
     """
     a = -3.0
     b = 3.0
-    x, w = np.polynomial.legendre.leggauss(n)
+    x, w = cached_leggauss(n)
     t = 0.5 * (x + 1) * (b - a) + a
     return sum(w * integrand(t)) * 0.5 * (b - a)
 

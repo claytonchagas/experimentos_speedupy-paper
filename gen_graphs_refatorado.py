@@ -13,18 +13,20 @@ matplotlib.use('Agg')
 # Experiment input labels
 inputs_per_experiment = {
     "quicksort": ["1e1", "1e2", "1e3", "1e4", "1e5"],
-    "look_and_say": ["25", "30", "35", "40", "45"],
-    "gauss_legendre_quadrature": ["1000", "2000", "3000", "4000", "5000"],
+    "look_and_say": ["45", "46", "47", "48", "49"],
+    "gauss_legendre_quadrature": ["5000", "7000", "9000", "11000", "13000"],
     "heat_distribution_lu": ["0.1", "0.05", "0.01", "0.005", "0.001"],
-    "fft_speedupy": ["1000", "2000", "3000", "4000", "5000"],
+    "fft_speedupy": ["5000", "5500", "6000", "6500", "7000"],
     "pernicious_numbers": ["20000", "25000", "30000", "35000", "39000"],
     "cvar_speedupy": ["1e6", "5e6", "10e6", "50e6", "100e6"],
-    "belief_propagation_speedupy": ["1000", "2000", "3000", "4000", "5000"],
-    "basic_spheres": ["40", "1000", "10000", "100000", "1000000"],
-    "walking_colloid": ["-10", "-20", "-30", "-40", "-50"],
+    "belief_propagation_speedupy": ["1000", "5500", "10000", "14500", "19000"],
+    "basic_spheres": ["2000000", "5000000", "8000000", "11000000", "13000000"],
+    "walking_colloid": ["-20", "-50", "-80", "-110", "-140"],
     "vince_sim_speedupy": ["1000000", "2000000", "3000000", "4000000", "5000000"],
-    "TINY_GSHCGP": ["1", "3", "5", "7", "9"],
-    "analyse_speedupy": ["100", "200", "300", "400", "500"],
+    "TINY_GSHCGP": ["12", "13", "14", "15", "16"],
+    "analyse_speedupy": ["100", "250", "500", "750", "1000"],
+    "qho2_speedupy": ["4000", "4500", "5000", "5500", "6000"],
+    "curves_speedupy": ["1", "2", "3", "4", "6000"],
 }
 
 suffixes = [
@@ -115,7 +117,7 @@ print(df_all_points.to_string(index=False))
 df_best_last.to_csv(os.path.join(graph_dir, "best_last_input.csv"), index=False)
 df_all_points.to_csv(os.path.join(graph_dir, "best_all_inputs.csv"), index=False)
 
-def save_table_image(df, filename):
+def save_table_image(df, filename, header_fontsize=12, cell_fontsize=10):
     fig, ax = plt.subplots(figsize=(12, len(df)*0.5 + 1))
     ax.set_axis_off()
     table = Table(ax, bbox=[0, 0, 1, 1])
@@ -126,10 +128,12 @@ def save_table_image(df, filename):
     for col_idx, col_name in enumerate(col_labels):
         cell = table.add_cell(0, col_idx, col_widths[col_idx], 0.5, text=col_name, loc='center', facecolor='#cccccc')
         cell.get_text().set_fontweight('bold')
+        cell.get_text().set_fontsize(header_fontsize)  # Set header font size
 
     for row_idx, row in enumerate(df.values):
         for col_idx, val in enumerate(row):
             cell = table.add_cell(row_idx + 1, col_idx, col_widths[col_idx], 0.5, text=str(val), loc='center')
+            cell.get_text().set_fontsize(cell_fontsize)  # Set cell font size
             if col_idx == 0:
                 cell.get_text().set_fontweight('bold')
 
@@ -137,8 +141,8 @@ def save_table_image(df, filename):
     plt.savefig(os.path.join(graph_dir, filename))
     plt.close()
 
-save_table_image(df_best_last, "summary_table_last_input.png")
-save_table_image(df_all_points, "summary_table_all_inputs.png")
+save_table_image(df_best_last, "summary_table_last_input.png", header_fontsize=20, cell_fontsize=18)
+save_table_image(df_all_points, "summary_table_all_inputs.png", header_fontsize=20, cell_fontsize=18)
 
 pdf_path = os.path.join(graph_dir, "all_graphs_and_tables.pdf")
 with PdfPages(pdf_path) as pdf:
