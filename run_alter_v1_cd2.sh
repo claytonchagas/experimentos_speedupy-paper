@@ -1,10 +1,10 @@
 #!/bin/bash
 
-# Capture start time / Captura a hora de início
+# Capture start time
 START_TIME=$(date +%s)
 echo "Start time: $(date '+%H:%M:%S')"
 
-# Delete the old outputs / Deleta as saídas antigas
+# Delete old outputs
 rm -f *.txt
 if [ -d outputs ]; then
     rm -f outputs/*
@@ -12,10 +12,10 @@ else
     mkdir -p outputs
 fi
 
-# Pre-configurations to run the Framework | Configurações prévias para executar o Framework
+# Install requirements
 pip install -r speedupy/requirements.txt
 
-# Define the common root path / Define o caminho raiz comum
+# Define paths
 ROOT_PATH="$(pwd)"
 
 # Define the source directory
@@ -24,17 +24,17 @@ SOURCE_DIR="$ROOT_PATH/speedupy"
 # Define the list of destination paths / Define a lista de caminhos de destino
 DESTINATIONS_0="$ROOT_PATH/speedupy_experiments/01pilots/01pilots_exp03_quicksort/quicksort.py" 
 DESTINATIONS_1="$ROOT_PATH/speedupy_experiments/04benchproglangs/04benchpl_exp02_look_and_say/look_and_say.py" 
-DESTINATIONS_2="$ROOT_PATH/speedupy_experiments/04benchproglangs/04benchpl_exp11_gauss_legendre_quadrature/gauss_legendre_quadrature.py" 
+DESTINATIONS_2="$ROOT_PATH/speedupy_experiments/04benchproglangs/04benchpl_exp11_gauss_legendre_quadrature/gauss_legendre_quadrature.py"
 
 DESTINATIONS=($DESTINATIONS_0 $DESTINATIONS_1 $DESTINATIONS_2)
 # DESTINATIONS=($DESTINATIONS_0 $DESTINATIONS_1)
 
-# Define the list of arguments for each destination path / Define a lista de argumentos para cada caminho de destino
+# Define arguments
 ARGUMENTS_0=("1e1" "1e2" "1e3" "1e4" "1e5") # quicksort
 ARGUMENTS_1=("25" "30" "35" "40" "43") # look_and_say
 ARGUMENTS_2=("1000" "2000" "3000" "4000" "4500") # gauss_legendre_quadrature
 
-# Copy the source directory to each destination directory / Copia o diretório de origem para cada diretório de destino
+# Copy speedupy to each destination
 for i in "${!DESTINATIONS[@]}"; do
     DEST="${DESTINATIONS[i]}"
     DEST_DIR=$(dirname "$DEST")  # Extract the directory path from the destination path
@@ -44,7 +44,7 @@ for i in "${!DESTINATIONS[@]}"; do
     fi
 done
 
-# Definir arquivos de saída para cada experimento e modo
+# Define output files
 declare -A OUTPUT_FILES
 for i in "${!DESTINATIONS[@]}"; do
     PYTHON_FILE="${DESTINATIONS[i]}"
@@ -55,6 +55,9 @@ for i in "${!DESTINATIONS[@]}"; do
     OUTPUT_FILES["${i}_intra_exp"]="$ROOT_PATH/outputs/${BASE_NAME}_output_spdpy_intra_exp.txt"
 done
 
+########################################
+# Modo 1: Execução sem cache (no-cache)
+########################################
 echo "========================================"
 echo "Modo 1: Execução sem cache (no-cache)"
 echo "========================================"
@@ -85,8 +88,11 @@ for round in {1..3}; do
     done
 done
 
+########################################
+# Modo 2: Execução com cache intra-args
+########################################
 echo "========================================"
-echo "Modo 2: Execução com cache intra-args (VERSÃO CORRIGIDA)"
+echo "Modo 2: Execução com cache intra-args"
 echo "========================================"
 
 # Para cada uma das 3 rodadas
@@ -165,6 +171,9 @@ for exp_index in "${!DESTINATIONS[@]}"; do
     done
 done
 
+########################################
+# Modo 3: Execução com cache intra-exec
+########################################
 echo "========================================"
 echo "Modo 3: Execução com cache intra-exec"
 echo "========================================"
@@ -201,6 +210,9 @@ for round in {1..3}; do
     done
 done
 
+########################################
+# Modo 4: Execução com cache intra-exp (VERSÃO CORRIGIDA)
+########################################
 echo "========================================"
 echo "Modo 4: Execução com cache intra-exp"
 echo "========================================"

@@ -1,0 +1,16 @@
+Experiment,Input,Time (s),Best Method
+1. quicksort,1e5,0.2071,no_cache
+2. look_and_say,49,0.0062,speedupy_intra_args
+3. gauss_legendre_quadrature,13000,245.4311,speedupy_intra_exec
+4. heat_distribution_lu,0.001,386.9860,speedupy_intra_args
+5. fft,7000,3.1558,no_cache
+6. pernicious_numbers,39000,0.0504,no_cache
+7. cvar,100e6,134.1332,no_cache
+8. belief_propagation,19000,320.1290,speedupy_intra_exec
+9. basic_spheres,13000000,554.2895,speedupy_intra_exp
+10. walking_colloid,-140,133.3548,no_cache
+11. vince_sim,5000000,405.2949,no_cache
+12. TINY_GSHCGP,16,43.4641,no_cache
+13. analyse,1000,7.3928,speedupy_intra_exp
+14. qho2,6000,43.7506,speedupy_intra_exec
+15. curves,5,0.0118,no_cache
