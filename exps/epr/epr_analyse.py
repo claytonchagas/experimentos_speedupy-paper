@@ -124,6 +124,22 @@ def val(x):
     ANGLE_RESOLUTION = 3.75
     return numpy.round(x / ANGLE_RESOLUTION) * ANGLE_RESOLUTION
 
+# Modificado ficar de acordo com os parâmetros da tabela
+
+# if __name__ == '__main__':
+#     if len(sys.argv) >= 2:
+#         PARTICLE_SPIN = float(sys.argv[1])
+#         PARAM = int(sys.argv[2])
+#     else:
+#         PARTICLE_SPIN = 1.0
+#         PARAM = 0
+
+#     @initialize_speedupy
+#     def main():
+#         analyse(PARTICLE_SPIN, PARAM)
+#     main()
+
+
 @initialize_speedupy
 def main(PARAM):
     PARTICLE_SPIN = 0.5
