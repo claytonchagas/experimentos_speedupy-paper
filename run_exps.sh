@@ -32,13 +32,13 @@ SOURCE_DIR="$ROOT_PATH/speedupy"
 
 
 # Define the list of destination paths / Define a lista de caminhos de destino
-#DESTINATIONS_0="$ROOT_PATH/exps/belief_propagation/belief_propagation.py"
-#DESTINATIONS_1="$ROOT_PATH/exps/cvar/cvar.py"
-#DESTINATIONS_2="$ROOT_PATH/exps/diversity_sims/vince_sim.py"
+DESTINATIONS_0="$ROOT_PATH/exps/belief_propagation/belief_propagation.py"
+DESTINATIONS_1="$ROOT_PATH/exps/cvar/cvar.py"
+DESTINATIONS_2="$ROOT_PATH/exps/diversity_sims/vince_sim.py"
 
 #DESTINATIONS_0="$ROOT_PATH/exps/dnacc/basic_spheres/basic_spheres.py" 
 #DESTINATIONS_1="$ROOT_PATH/exps/dnacc/walking_colloid/walking_colloid.py"
-DESTINATIONS_0="$ROOT_PATH/exps/epr/epr_analyse.py"
+#DESTINATIONS_2="$ROOT_PATH/exps/epr/epr_analyse.py"
  
 #DESTINATIONS_0="$ROOT_PATH/exps/fft/fft.py"  
 #DESTINATIONS_1="$ROOT_PATH/exps/gauss_legendre_quadrature/gauss_legendre_quadrature.py" 
@@ -48,22 +48,22 @@ DESTINATIONS_0="$ROOT_PATH/exps/epr/epr_analyse.py"
 #DESTINATIONS_1="$ROOT_PATH/exps/tiny/TINY_GSHCGP.py" 
 
 
-DESTINATIONS=($DESTINATIONS_0)
+#DESTINATIONS=($DESTINATIONS_0)
 #DESTINATIONS=($DESTINATIONS_0 $DESTINATIONS_1)
-#DESTINATIONS=($DESTINATIONS_0 $DESTINATIONS_1 $DESTINATIONS_2)
+DESTINATIONS=($DESTINATIONS_0 $DESTINATIONS_1 $DESTINATIONS_2)
 #DESTINATIONS=($DESTINATIONS_0 $DESTINATIONS_1 $DESTINATIONS_2 $DESTINATIONS_3)
 
 #DESTINATIONS=($DESTINATIONS_0 $DESTINATIONS_1 $DESTINATIONS_2 $DESTINATIONS_3 $DESTINATIONS_4 $DESTINATIONS_5 $DESTINATIONS_6 $DESTINATIONS_7 $DESTINATIONS_8 $DESTINATIONS_9 $DESTINATIONS_10)
 
 
 # Define arguments
-#ARGUMENTS_0=("1000" "5500" "10000" "14500" "19000") # belief_propagation
-#ARGUMENTS_1=("1e6" "5e6" "10e6" "50e6" "100e6") # cvar
-#ARGUMENTS_2=("1000000" "2000000" "3000000" "4000000" "5000000") # diversity_sim
+ARGUMENTS_0=("1000" "5500" "10000" "14500" "19000") # belief_propagation
+ARGUMENTS_1=("1e6" "5e6" "10e6" "50e6" "100e6") # cvar
+ARGUMENTS_2=("1000000" "2000000" "3000000" "4000000" "5000000") # diversity_sim
 
 #ARGUMENTS_0=("2000000" "5000000" "8000000" "11000000" "13000000") # dnacc_basic_spheres
 #ARGUMENTS_1=("-20" "-50" "-80" "-110" "-140") # dnacc_walking_colloid
-ARGUMENTS_0=("200" "400" "600" "800" "1000") # epr_analyse
+#ARGUMENTS_2=("200" "400" "600" "800" "1000") # epr_analyse
 
 #ARGUMENTS_0=("2000" "4000" "6000" "8000" "10000") # fft
 #ARGUMENTS_1=("5000" "7000" "9000" "11000" "13000") # gauss_legendre_quadrature
