@@ -1,0 +1,12 @@
+Experiment,Input,Time (s),Best Method
+1.belief_propagation,19000,0.0023,speedupy_intra_exp
+2.cvar,100e6,22.5383,speedupy_intra_exp
+3.vince_sim,5000000,1.0330,speedupy_intra_exp
+4.basic_spheres,13000000,524.3182,speedupy_intra_exp
+5.walking_colloid,-140,137.2268,no_cache
+6.epr_analyse,1000,125.1880,speedupy_intra_exp
+7.fft,7000,1.8033,speedupy_intra_exec
+8.gauss_legendre_quadrature,13000,0.0217,speedupy_intra_exp
+9.heat_distribution_lu,0.001,390.1990,speedupy_intra_exp
+10.look_and_say,49,0.0094,speedupy_intra_exp
+11.TINY_GSHCGP,16,46.7209,no_cache

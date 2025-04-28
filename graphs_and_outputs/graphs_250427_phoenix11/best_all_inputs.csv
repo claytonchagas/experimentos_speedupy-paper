@@ -1,0 +1,12 @@
+Experiment,Input 1,Input 2,Input 3,Input 4,Input 5
+1.belief_propagation,0.0021 (speedupy_intra_exp),0.0022 (speedupy_intra_exp),0.0022 (speedupy_intra_exp),0.0022 (speedupy_intra_exp),0.0022 (speedupy_intra_exp)
+2.cvar,0.2563 (speedupy_intra_exp),1.2963 (speedupy_intra_exp),2.5758 (speedupy_intra_exp),12.7240 (speedupy_intra_exp),25.3563 (speedupy_intra_exp)
+3.vince_sim,1.0939 (speedupy_intra_exp),1.2468 (speedupy_intra_exp),1.3189 (speedupy_intra_exp),1.4734 (speedupy_intra_exp),1.6111 (speedupy_intra_exp)
+4.basic_spheres,126.7280 (no_cache),311.2178 (no_cache),511.0346 (no_cache),697.2269 (no_cache),830.2388 (speedupy_intra_exec)
+5.walking_colloid,31.0509 (no_cache),74.8541 (no_cache),119.1729 (no_cache),162.2178 (no_cache),207.9776 (no_cache)
+6.epr_analyse,30.7395 (speedupy_intra_exp),42.6240 (speedupy_intra_exp),54.2503 (speedupy_intra_exp),65.7608 (speedupy_intra_exp),77.8623 (speedupy_intra_exp)
+7.fft,2.1749 (no_cache),10.6548 (speedupy_intra_exp),10.7615 (speedupy_intra_exp),10.7328 (speedupy_intra_exp),10.7338 (speedupy_intra_exp)
+8.gauss_legendre_quadrature,0.0068 (speedupy_intra_exp),0.0069 (speedupy_intra_exp),0.0070 (speedupy_intra_exp),0.0069 (speedupy_intra_exp),0.0069 (speedupy_intra_exp)
+9.heat_distribution_lu,7.8618 (speedupy_intra_exp),12.3379 (speedupy_intra_exp),47.9708 (speedupy_intra_exp),87.8649 (speedupy_intra_exp),393.4308 (speedupy_intra_exp)
+10.look_and_say,0.0078 (speedupy_intra_exp),0.0078 (speedupy_intra_exp),0.0078 (speedupy_intra_exp),0.0076 (speedupy_intra_exp),0.0077 (speedupy_intra_exp)
+11.TINY_GSHCGP,4.6805 (no_cache),9.6487 (no_cache),19.9178 (no_cache),41.6639 (no_cache),87.1894 (no_cache)

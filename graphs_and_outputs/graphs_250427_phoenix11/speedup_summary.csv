@@ -1,0 +1,12 @@
+Experiment,Time no-cache,Time SpeeduPy,Speed up
+1.belief_propagation,125.8411,0.0022,57739.35 x
+2.cvar,107.4900,25.3563,4.24 x
+3.vince_sim,929.2716,1.6111,576.79 x
+4.basic_spheres,842.3170,844.3330,1.00 x
+5.walking_colloid,207.9776,233.6675,0.89 x
+6.epr_analyse,153.9628,77.8623,1.98 x
+7.fft,284.2546,10.7338,26.48 x
+8.gauss_legendre_quadrature,115.9114,0.0069,16717.89 x
+9.heat_distribution_lu,2297.3468,393.4308,5.84 x
+10.look_and_say,312.4273,0.0077,40618.67 x
+11.TINY_GSHCGP,87.1894,323.5352,0.27 x
