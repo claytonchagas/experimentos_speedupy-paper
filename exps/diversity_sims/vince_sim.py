@@ -1,11 +1,12 @@
 import sys
-sys.path.append('/home/ricardo/Downloads/selected/diversity-with-speedupy')
-from speedupy.speedupy import maybe_deterministic
+#sys.path.append('/home/ricardo/Downloads/selected/diversity-with-speedupy')
+#from speedupy.speedupy import maybe_deterministic
 from speedupy.speedupy import initialize_speedupy, deterministic
 import numpy as np
 from itertools import combinations
 from collections import Counter
 import datetime as dt
+
 np.random.seed(0)
 
 @maybe_deterministic
@@ -43,6 +44,7 @@ def main(N):
     temp2 = t2 - t1
     print('took', temp2.seconds, 'seconds to do pairwise comparisons')
     print(shared_counts)
+
 if __name__ == '__main__':
     N = float(sys.argv[1])
     main(N)

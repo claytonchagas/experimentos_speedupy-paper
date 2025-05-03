@@ -1,18 +1,15 @@
 from __future__ import division
 import sys
-sys.path.append('/home/joaopedrolopez/Downloads/AvaliacaoExperimental/Experimentos/epr-with-speedupy')
-from speedupy.speedupy import maybe_deterministic
-from speedupy.speedupy import initialize_speedupy, deterministic
 import numpy
-import sys
-import matplotlib
 import gzip
 import itertools
+import matplotlib
+from matplotlib import rcParams, colors, pyplot as plt, cm
 from mpl_toolkits.mplot3d import Axes3D
-from matplotlib import cm
-from matplotlib import pyplot as plt
-from matplotlib import rcParams, colors
 import matplotlib.gridspec as gridspec
+
+from speedupy.speedupy import initialize_speedupy, deterministic, maybe_deterministic
+
 rcParams['legend.loc'] = 'best'
 rcParams['legend.fontsize'] = 8.5
 rcParams['figure.facecolor'] = 'white'
@@ -144,6 +141,7 @@ def val(x):
 def main(PARAM):
     PARTICLE_SPIN = 0.5
     analyse(PARTICLE_SPIN, PARAM)
+    
 if __name__ == '__main__':
     PARAM = int(sys.argv[1])
     main(PARAM)

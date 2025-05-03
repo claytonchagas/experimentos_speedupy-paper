@@ -75,6 +75,10 @@ def _script_already_has_decorator_import(script:Script, decorator_name:str) -> b
                 if alias.name == decorator_name: return True
     return False
 
-def overwrite_decorated_script(script:Script):        
+def overwrite_decorated_script(script:Script):
+    if "dnacc" in str(script):
+        print(f"[AVISO] Ignorando arquivo externo do dnacc: {script}")
+        return
+           
     with open(script.name, 'wt') as f:
         f.write(ast.unparse(script.AST))

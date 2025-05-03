@@ -1,0 +1,25 @@
+Traceback (most recent call last):
+  File "/home/esc/Músicas/experimentos_speedupy-paper/speedupy/speedupy.py", line 68, in wrapper
+    main_func(*args, **kwargs)
+  File "/home/esc/Músicas/experimentos_speedupy-paper/exps/belief_propagation/belief_propagation.py", line 22, in main
+    y = belief_propagation(N)
+        ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/esc/Músicas/experimentos_speedupy-paper/speedupy/speedupy.py", line 55, in wrapper
+    result = func(*args, **kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/esc/Músicas/experimentos_speedupy-paper/exps/belief_propagation/belief_propagation.py", line 16, in belief_propagation
+    x = np.log(np.dot(A, np.exp(x)))
+               ^^^^^^^^^^^^^^^^^^^^
+KeyboardInterrupt
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/esc/Músicas/experimentos_speedupy-paper/exps/belief_propagation/belief_propagation.py", line 26, in <module>
+    main(N)
+  File "/home/esc/Músicas/experimentos_speedupy-paper/speedupy/speedupy.py", line 72, in wrapper
+    dump_cache_metrics(execution_time)
+  File "/home/esc/Músicas/experimentos_speedupy-paper/speedupy/speedupy.py", line 88, in dump_cache_metrics
+    cache_dir = os.path.join(os.path.dirname(sys.modules[func.__module__].__file__), ".speedupy", "cache")  # cria o cache na pasta do experimento
+                                                         ^^^^
+NameError: name 'func' is not defined

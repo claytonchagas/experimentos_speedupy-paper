@@ -19,7 +19,7 @@ def exec_mode_msg():
     =>probabilistic : SpeeduPy looks for statistically pure functions and caches function calls that sometimes returned different outputs, according to the policy set on --strategy param\n"
 
 def strategy_msg():
-    return "\nStrategy - Defines SpeeduPy\'s policy for caching function calls when executing in probabilistic mode\n\
+    return "\nStrategy - Defines SpeeduPy's policy for caching function calls when executing in probabilistic mode\n\
     =>error    : SpeeduPy only caches function calls that introduce errors up to a user-specified limit\n\
     =>counting : SpeeduPy only caches function calls whose most produced output occurred at least a minimum percentage of times defined by the user. The output that appeared most times will always be returned.\n"
 
@@ -89,6 +89,11 @@ def get_params():
                                   default=None,
                                   nargs=1,
                                   help='defines SpeeduPy\'s policy for caching function calls when executing in probabilistic mode')
+
+    speedupy_arg_parser.add_argument('--monitor-cache',
+                                  action='store_true',
+                                  default=False,
+                                  help='Enable cache instrumentation and logging')
     
     speedupy_arg_parser.add_argument('--revalidation',
                                   choices=revalidations,
@@ -178,20 +183,18 @@ def get_params():
     
     args = speedupy_arg_parser.parse_args()
     
-    argsp_num_dict = args.num_dict
-    argsp_retrieval_strategy = args.retrieval_strategy
-    argsp_retrieval_exec_mode = args.retrieval_exec_mode
-    argsp_hash = args.hash
-    argsp_s = args.storage
-
-    argsp_exec_mode = args.exec_mode
-    argsp_strategy = args.strategy
-    argsp_revalidation = args.revalidation
-    argsp_max_num_exec_til_revalidation = args.max_num_exec_til_revalidation
-    argsp_reduction_factor = args.reduction_factor
-    argsp_min_num_exec = args.min_num_exec
-    argsp_min_mode_occurrence = args.min_mode_occurrence
-    argsp_confidence_level = args.confidence_level
-    argsp_max_error_per_function = args.max_error_per_function
-    
-    return argsp_num_dict, argsp_retrieval_strategy, argsp_retrieval_exec_mode, argsp_hash, argsp_s, argsp_exec_mode, argsp_strategy, argsp_revalidation, argsp_max_num_exec_til_revalidation, argsp_reduction_factor, argsp_min_num_exec, argsp_min_mode_occurrence, argsp_confidence_level, argsp_max_error_per_function
+    return (args.num_dict,
+            args.retrieval_strategy,
+            args.retrieval_exec_mode,
+            args.hash,
+            args.storage,
+            args.exec_mode,
+            args.strategy,
+            args.revalidation,
+            args.max_num_exec_til_revalidation,
+            args.reduction_factor,
+            args.min_num_exec,
+            args.min_mode_occurrence,
+            args.confidence_level,
+            args.max_error_per_function,
+            args.monitor_cache)

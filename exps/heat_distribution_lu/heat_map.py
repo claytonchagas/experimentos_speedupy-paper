@@ -1,5 +1,5 @@
-import sys
-sys.path.append('/home/joaopedrolopez/Downloads/AvaliacaoExperimental/Experimentos/speedupy_experiments/01pilots/01pilots_exp04_heat_distribution_lu/adapted_for_speedupy')
+#import sys
+#sys.path.append('/home/joaopedrolopez/Downloads/AvaliacaoExperimental/Experimentos/speedupy_experiments/01pilots/01pilots_exp04_heat_distribution_lu/adapted_for_speedupy')
 from speedupy.speedupy import maybe_deterministic
 import os
 import time

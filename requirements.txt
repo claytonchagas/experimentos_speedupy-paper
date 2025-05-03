@@ -1,0 +1,8 @@
+# Arquivo: requirements.txt
+mmh3==4.0.1
+numpy==1.26.4
+scipy==1.12.0
+xxhash==3.4.1
+pandas>=1.5
+matplotlib>=3.7
+

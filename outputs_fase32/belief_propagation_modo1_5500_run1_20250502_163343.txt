@@ -1,0 +1,6 @@
+cache_entries_created: 1
+cache_hits: 0
+cache_misses: 1
+cache_hit_rate: 0.0000
+cache_size_bytes: 80302
+cache_overhead_per_hit: 0.000000

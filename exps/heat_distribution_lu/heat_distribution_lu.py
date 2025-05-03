@@ -16,6 +16,7 @@ def main(n):
     solver.solve()
     end_time = time.perf_counter()
     print(end_time - start_time)
+
 if __name__ == '__main__':
     n = float(sys.argv[1])
     main(n)

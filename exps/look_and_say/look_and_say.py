@@ -1,7 +1,7 @@
 import sys
 import time
-from pathlib import Path
-sys.path.append(str(Path(__file__).parent / 'speedupy'))
+#from pathlib import Path
+#sys.path.append(str(Path(__file__).parent / 'speedupy'))
 from speedupy.speedupy import deterministic, initialize_speedupy
 
 @deterministic
@@ -35,5 +35,6 @@ def main():
     t0 = time.perf_counter()
     seq = look_and_say_sequence('1223334444', N)
     print(time.perf_counter() - t0)
+    
 if __name__ == '__main__':
     main()

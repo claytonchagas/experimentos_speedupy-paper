@@ -1,7 +1,5 @@
 import numpy as np
 import sys
-from pathlib import Path
-sys.path.append(str(Path(__file__).parent / 'speedupy'))
 import time
 from speedupy.speedupy import initialize_speedupy, deterministic
 
@@ -16,7 +14,7 @@ def cached_leggauss(n):
 @deterministic
 def compute_quadrature(n):
     """
-      Perform the Gauss-Legendre Quadrature at the prescribed order n
+    Perform the Gauss-Legendre Quadrature at the prescribed order n
     """
     a = -3.0
     b = 3.0
@@ -27,6 +25,7 @@ def compute_quadrature(n):
 @initialize_speedupy
 def main(order):
     compute_quadrature(order)
+
 if __name__ == '__main__':
     order = int(sys.argv[1])
     dti = time.perf_counter()
