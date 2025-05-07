@@ -23,7 +23,5 @@ def belief_propagation(N):
 def main(N):
     y = belief_propagation(N)
 if __name__ == '__main__':
-    N = int(sys.argv[1])
-    dti = time.perf_counter()
-    main(N)
-    print(time.perf_counter() - dti)
+    N = int(sys.argv[1])    
+    main(N)    

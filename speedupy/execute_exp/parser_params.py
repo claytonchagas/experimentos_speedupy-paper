@@ -16,6 +16,7 @@ def exec_mode_msg():
     =>no-cache      : SpeeduPy will cache no functions\n\
     =>manual        : SpeeduPy only caches the functions annotated by the user with @deterministic\n\
     =>accurate      : SpeeduPy looks for statistically pure functions and only caches function calls that always returned the same output\n\
+    =>multiprocess  : SpeeduPy mixes 'manual' and 'no-cache' modes, executing both and return the one that first end\n\
     =>probabilistic : SpeeduPy looks for statistically pure functions and caches function calls that sometimes returned different outputs, according to the policy set on --strategy param\n"
 
 def strategy_msg():
@@ -59,7 +60,7 @@ def retrieval_exec_modes_msg():
     =>thread     : SpeeduPy will request data from the storage using a thread. It will allow the experiment to execute while the data is being loaded to RAN\n"
 
 def get_params():
-    exec_modes = ['no-cache', 'manual', 'accurate', 'probabilistic']
+    exec_modes = ['no-cache', 'manual', 'accurate', 'multiprocess', 'probabilistic']
     prob_mode_strategies = ['counting', 'error']
     revalidations = ['none', 'fixed', 'adaptative']
     retrieval_strategies = ['lazy', 'function', 'eager']

@@ -1,5 +1,6 @@
 import time, sys, os
 from functools import wraps
+import multiprocessing, signal
 sys.path.append(os.path.dirname(__file__))
 
 from execute_exp.services.factory import init_exec_mode, init_revalidation
@@ -111,6 +112,23 @@ def _execute_func_measuring_time(f, method_args, method_kwargs):
     end = time.perf_counter()
     return result_value, end - start
 
+# This function is used for execution porposes on each process
+def function_executer(shared_dict, barrier, function, f_aux, *args, **kwargs):    
+    pid = os.getpid()
+    shared_dict["procs"] = shared_dict["procs"] + [pid]
+    barrier.wait()        
+    print(f"iniciando função {function.__qualname__} com args {args}")
+    res = function(f_aux,*args, **kwargs) if function.__qualname__ == "old_deterministic" else function(*args, **kwargs)
+    # res = function(*args, **kwargs)
+    shared_dict["res"] = res
+    shared_dict["winner"] = function.__qualname__
+
+    for p in shared_dict["procs"]:
+        if p != pid:
+            os.kill(p, signal.SIGTERM)
+
+    return res
+
 check_python_version()
 
 if SpeeduPySettings().exec_mode == ['no-cache']:
@@ -132,3 +150,45 @@ if SpeeduPySettings().exec_mode == ['no-cache']:
 elif SpeeduPySettings().exec_mode == ['manual']:
     def maybe_deterministic(f):
         return f
+
+elif SpeeduPySettings().exec_mode == ['multiprocess']:
+    # This function saves the manual mode 
+    def old_deterministic(f, *args, **kwargs):
+        f._primeira_chamada = False
+        debug("calling {0}".format(f.__qualname__))
+        c = DataAccess().get_cache_entry(f.__qualname__, args, kwargs)
+        if _cache_doesnt_exist(c):
+            debug("cache miss for {0}({1})".format(f.__qualname__, args))
+            return_value = f(*args, **kwargs)
+            DataAccess().create_cache_entry(f.__qualname__, args, kwargs, return_value)
+            return return_value
+        else:
+            debug("cache hit for {0}({1})".format(f.__qualname__, args))
+            return c
+        
+    # Create two processes and executes the function in mode no-cache and manual
+    def deterministic(f):
+        f._primeira_chamada = True
+        manager = multiprocessing.Manager()
+        barrier = multiprocessing.Barrier(2)
+        shared_dict = manager.dict()
+        shared_dict["procs"] = []
+        @wraps(f)
+        def wrapper(*args, **kwargs):
+            if f._primeira_chamada:
+                f._primeira_chamada = False
+                p1 = multiprocessing.Process(target=function_executer, args=(shared_dict, barrier, f, f, *args))
+                p2 = multiprocessing.Process(target=function_executer, args=(shared_dict, barrier, old_deterministic, f, *args))
+                
+                p1.start()
+                p2.start()
+
+                p1.join()
+                p2.join()
+                
+                print(f"função vencedora {shared_dict["winner"]}")                
+                return shared_dict["res"]
+            else:
+                return f(*args, **kwargs)
+        
+        return wrapper
