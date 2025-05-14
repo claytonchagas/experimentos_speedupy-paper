@@ -92,6 +92,7 @@ def deterministic(f):
     @wraps(f)
     def wrapper(*method_args, **method_kwargs):
         debug("calling {0}".format(f.__qualname__))
+        print("calling {0} {1} {2}".format(f.__qualname__,method_args, method_kwargs))        
         c = DataAccess().get_cache_entry(f.__qualname__, method_args, method_kwargs)
         if _cache_doesnt_exist(c):
             debug("cache miss for {0}({1})".format(f.__qualname__, method_args))
@@ -113,7 +114,7 @@ def _execute_func_measuring_time(f, method_args, method_kwargs):
     return result_value, end - start
 
 # Variable used to obtain the time of the lowest function and its name
-TIME_EXECUTION = 0
+TIME_EXECUTION = 0.
 LOWEST_FUNCTION = ""
 WINNER_MODE = ""
 
@@ -121,22 +122,18 @@ WINNER_MODE = ""
 def function_executer(shared_dict, barrier, function, f_aux, *args, **kwargs):    
     pid = os.getpid()
     shared_dict["procs"] = shared_dict["procs"] + [pid]
-    barrier.wait()        
-    print(f"iniciando função {function.__qualname__} com args {args}")
+    barrier.wait()            
     start = time.perf_counter()
     res = function(f_aux,*args, **kwargs) if function.__qualname__ == "old_deterministic" else function(*args, **kwargs)
     end = time.perf_counter()
-    time = end - start
-    shared_dict["res"] = res
-    shared_dict["winner"] = function.__qualname__
-    if time > TIME_EXECUTION:
-        global TIME_EXECUTION, FUNCTION_NAME, WINNER_MODE
-        TIME_EXECUTION = time
-        FUNCTION_NAME = f_aux.__qualname__
-        WINNER_MODE = "CACHE" if function.__qualname__=="old_deterministic" else "NO-CACHE"
+    total_time = end - start     
     for p in shared_dict["procs"]:
         if p != pid:
-            os.kill(p, signal.SIGTERM)
+            os.kill(p, signal.SIGTERM)  
+    shared_dict["res"] = res  
+    shared_dict["total_time"] = total_time
+    shared_dict["function"] = f_aux.__qualname__
+    shared_dict["mode"] = "CACHE" if function.__qualname__ == "old_deterministic" else "NO CACHE"
 
     return res
 
@@ -162,18 +159,23 @@ elif SpeeduPySettings().exec_mode == ['manual']:
     def maybe_deterministic(f):
         return f
 
-elif SpeeduPySettings().exec_mode == ['multiprocess']:
+elif SpeeduPySettings().exec_mode == ['multiprocess']:    
+        
     def initialize_speedupy(f):
         @wraps(f)
-        def wrapper(*method_args, **method_kwargs):            
-            f(*method_args, **method_kwargs)                        
+        def wrapper(*method_args, **method_kwargs):             
+            DataAccess().init_data_access()
+            f(*method_args, **method_kwargs)
+            DataAccess().close_data_access()
             print(f"LOWEST FUNCTION: {LOWEST_FUNCTION}")
-            print(f"TOTAL EXECUTION TIME: {TIME_EXECUTION}")
+            print(f"WINNER MODE: {WINNER_MODE}")
+            print(f"TOTAL EXECUTION TIME: {TIME_EXECUTION}")        
         return wrapper
+    
     # This function saves the manual mode 
     def old_deterministic(f, *args, **kwargs):
         f._primeira_chamada = False
-        debug("calling {0}".format(f.__qualname__))
+        debug("calling {0}".format(f.__qualname__))        
         c = DataAccess().get_cache_entry(f.__qualname__, args, kwargs)
         if _cache_doesnt_exist(c):
             debug("cache miss for {0}({1})".format(f.__qualname__, args))
@@ -203,9 +205,15 @@ elif SpeeduPySettings().exec_mode == ['multiprocess']:
 
                 p1.join()
                 p2.join()
-                                
+                    
+                global TIME_EXECUTION, LOWEST_FUNCTION, WINNER_MODE    
+                
+                if shared_dict["total_time"] > TIME_EXECUTION:        
+                    TIME_EXECUTION = shared_dict["total_time"]
+                    LOWEST_FUNCTION = shared_dict["function"]
+                    WINNER_MODE = shared_dict["mode"]
+                
                 return shared_dict["res"]
             else:
                 return f(*args, **kwargs)
-        
         return wrapper
