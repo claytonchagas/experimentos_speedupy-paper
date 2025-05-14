@@ -112,17 +112,28 @@ def _execute_func_measuring_time(f, method_args, method_kwargs):
     end = time.perf_counter()
     return result_value, end - start
 
+# Variable used to obtain the time of the lowest function and its name
+TIME_EXECUTION = 0
+LOWEST_FUNCTION = ""
+WINNER_MODE = ""
+
 # This function is used for execution porposes on each process
 def function_executer(shared_dict, barrier, function, f_aux, *args, **kwargs):    
     pid = os.getpid()
     shared_dict["procs"] = shared_dict["procs"] + [pid]
     barrier.wait()        
     print(f"iniciando função {function.__qualname__} com args {args}")
+    start = time.perf_counter()
     res = function(f_aux,*args, **kwargs) if function.__qualname__ == "old_deterministic" else function(*args, **kwargs)
-    # res = function(*args, **kwargs)
+    end = time.perf_counter()
+    time = end - start
     shared_dict["res"] = res
     shared_dict["winner"] = function.__qualname__
-
+    if time > TIME_EXECUTION:
+        global TIME_EXECUTION, FUNCTION_NAME, WINNER_MODE
+        TIME_EXECUTION = time
+        FUNCTION_NAME = f_aux.__qualname__
+        WINNER_MODE = "CACHE" if function.__qualname__=="old_deterministic" else "NO-CACHE"
     for p in shared_dict["procs"]:
         if p != pid:
             os.kill(p, signal.SIGTERM)
@@ -135,7 +146,7 @@ if SpeeduPySettings().exec_mode == ['no-cache']:
     def initialize_speedupy(f):
         @wraps(f)
         def wrapper(*method_args, **method_kwargs):
-            start = time.perf_counter()            
+            start = time.perf_counter()
             f(*method_args, **method_kwargs)            
             end = time.perf_counter()
             print(f"TOTAL EXECUTION TIME: {end - start}")
@@ -152,6 +163,13 @@ elif SpeeduPySettings().exec_mode == ['manual']:
         return f
 
 elif SpeeduPySettings().exec_mode == ['multiprocess']:
+    def initialize_speedupy(f):
+        @wraps(f)
+        def wrapper(*method_args, **method_kwargs):            
+            f(*method_args, **method_kwargs)                        
+            print(f"LOWEST FUNCTION: {LOWEST_FUNCTION}")
+            print(f"TOTAL EXECUTION TIME: {TIME_EXECUTION}")
+        return wrapper
     # This function saves the manual mode 
     def old_deterministic(f, *args, **kwargs):
         f._primeira_chamada = False
@@ -185,8 +203,7 @@ elif SpeeduPySettings().exec_mode == ['multiprocess']:
 
                 p1.join()
                 p2.join()
-                
-                print(f"função vencedora {shared_dict["winner"]}")                
+                                
                 return shared_dict["res"]
             else:
                 return f(*args, **kwargs)
