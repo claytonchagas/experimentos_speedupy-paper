@@ -28,6 +28,4 @@ if __name__ == '__main__':
     import random
     random.seed(0)
     n = [random.randint(0, 1000000000) for i in range(int(float(sys.argv[1])))]
-    start = time.perf_counter()
     main(n)
-    print(time.perf_counter() - start)

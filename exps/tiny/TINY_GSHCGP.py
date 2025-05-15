@@ -1,8 +1,11 @@
 import sys
-sys.path.append('/home/joaopedrolopez/Downloads/AvaliacaoExperimental/Experimentos/Tiny-GSGP-with-speedupy/adapted_for_speedupy')
-from speedupy.speedupy import maybe_deterministic
+sys.path.append('/home/lanerson/Documentos/experimentos_speedupy-paper/exps/tiny')
+from speedupy.speedupy import maybe_deterministic, deterministic
+import sys
+sys.path.append('/home/lanerson/Documentos/experimentos_speedupy-paper/exps/tiny')
+from speedupy.speedupy import initialize_speedupy
+import sys
 "\n\nTINY_GSHCGP.py: An Implementation of Geometric Semantic ***Hill Climber*** Genetic Programming Using Higher-Order Functions and Memoization\n\nAuthor: Alberto Moraglio (albmor@gmail.com)\n\nFeatures:\n\n- Same as TINY_GSGP.py, substituting the evolutionary algorithm with a hill-climber.\n\n- The fitness landscape seen by Geometric Semantic operators is always unimodal. A hill climber can reach the optimum.\n\n- Offspring functions call parent functions rather than embed their definitions (no grwoth, implicit ancestry trace).\n\n- Even if offspring functions embedded parent function definition, the growth is linear in the number of generation (not exponential as with crossover). \n\n- Memoization of individuals turns time complexity of fitness evalutation from linear to constant (not exponential to constant as with crossover).\n\n- Implicit ancestry trace and memoization not strictly necessary with hill-climber for efficent implementation.\n\n- The final solution is a compiled function. It can be extracted using the ancestry trace to reconstruct its 'source code'. \n\nThis implementation is to evolve Boolean expressions. It can be easily adapted to evolve arithmetic expressions or classifiers.\n\n"
-from speedupy.speedupy import initialize_speedupy, deterministic
 import random
 import itertools
 DEPTH = 4
