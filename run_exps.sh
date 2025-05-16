@@ -17,8 +17,8 @@ fi
 chmod +x run_before/dnacc_prepare.sh
 ./run_before/dnacc_prepare.sh
 
-chmod +x run_before/epr_prepare.sh
-./run_before/epr_prepare.sh
+# chmod +x run_before/epr_prepare.sh
+# ./run_before/epr_prepare.sh
 
 chmod +x run_before/heat_prepare.sh
 ./run_before/heat_prepare.sh
@@ -31,20 +31,20 @@ SOURCE_DIR="$ROOT_PATH/speedupy"
 
 
 # Define the list of destination paths / Define a lista de caminhos de destino
-DESTINATIONS_0="$ROOT_PATH/exps/belief_propagation/belief_propagation.py"
-DESTINATIONS_1="$ROOT_PATH/exps/cvar/cvar.py"
-DESTINATIONS_2="$ROOT_PATH/exps/diversity_sims/vince_sim.py"
+# DESTINATIONS_0="$ROOT_PATH/exps/belief_propagation/belief_propagation.py"
+# DESTINATIONS_1="$ROOT_PATH/exps/cvar/cvar.py"
+# DESTINATIONS_2="$ROOT_PATH/exps/diversity_sims/vince_sim.py"
 
-DESTINATIONS_3="$ROOT_PATH/exps/dnacc/basic_spheres/basic_spheres.py" 
-DESTINATIONS_4="$ROOT_PATH/exps/dnacc/walking_colloid/walking_colloid.py"
-DESTINATIONS_5="$ROOT_PATH/exps/epr/epr_analyse.py"
+# DESTINATIONS_3="$ROOT_PATH/exps/dnacc/basic_spheres/basic_spheres.py" 
+# DESTINATIONS_4="$ROOT_PATH/exps/dnacc/walking_colloid/walking_colloid.py"
+# DESTINATIONS_5="$ROOT_PATH/exps/epr/epr_analyse.py"
  
 DESTINATIONS_6="$ROOT_PATH/exps/fft/fft.py"  
 DESTINATIONS_7="$ROOT_PATH/exps/gauss_legendre_quadrature/gauss_legendre_quadrature.py" 
-DESTINATIONS_8="$ROOT_PATH/exps/heat_distribution_lu/heat_distribution_lu.py"
+# DESTINATIONS_8="$ROOT_PATH/exps/heat_distribution_lu/heat_distribution_lu.py"
  
-DESTINATIONS_9="$ROOT_PATH/exps/look_and_say/look_and_say.py"
-DESTINATIONS_10="$ROOT_PATH/exps/tiny/TINY_GSHCGP.py" 
+# DESTINATIONS_9="$ROOT_PATH/exps/look_and_say/look_and_say.py"
+# DESTINATIONS_10="$ROOT_PATH/exps/tiny/TINY_GSHCGP.py" 
 
 
 # DESTINATIONS=($DESTINATIONS_0)
@@ -56,20 +56,20 @@ DESTINATIONS=($DESTINATIONS_0 $DESTINATIONS_1 $DESTINATIONS_2 $DESTINATIONS_3 $D
 
 
 # Define arguments
-ARGUMENTS_0=("10000" "19000") # belief_propagation
-ARGUMENTS_1=("10e6" "50e6") # cvar
-ARGUMENTS_2=("3000000" "5000000") # diversity_sim
+# ARGUMENTS_0=("5500" "14500") # belief_propagation
+# ARGUMENTS_1=("5e6" "50e6") # cvar
+# ARGUMENTS_2=("2000000" "4000000") # diversity_sim
 
-ARGUMENTS_3=("2000000" "8000000") # dnacc_basic_spheres
-ARGUMENTS_4=("-80" "-140") # dnacc_walking_colloid
-ARGUMENTS_5=("600" "1000") # epr_analyse
+# ARGUMENTS_3=("5000000" "11000000") # dnacc_basic_spheres
+# ARGUMENTS_4=("-50" "-110") # dnacc_walking_colloid
+# ARGUMENTS_5=("400" "800") # epr_analyse
 
-ARGUMENTS_6=("6000" "10000") # fft
-ARGUMENTS_7=("9000" "13000") # gauss_legendre_quadrature
-ARGUMENTS_8=("0.01" "0.001") # heat_distribution_lu
+ARGUMENTS_0=("4000" "6000") # fft
+ARGUMENTS_1=("7000" "11000") # gauss_legendre_quadrature
+# ARGUMENTS_1=("0.05" "0.005") # heat_distribution_lu
 
-ARGUMENTS_9=("47" "49") # look_and_say
-ARGUMENTS_10=("14" "16") # TINY_GSHCGP
+# ARGUMENTS_9=("46" "48") # look_and_say
+# ARGUMENTS_10=("13" "15") # TINY_GSHCGP
 
 
 # Copy speedupy to each destination
@@ -107,8 +107,7 @@ for exp_index in "${!DESTINATIONS[@]}"; do
         python3.12 $(basename $PYTHON_FILE) $(echo "$ARG") --exec-mode manual -s file | tail -n 1 | cut -d':' -f2 >> "$ROOT_PATH/outputs/$(basename $PYTHON_FILE | sed 's/\.[^.]*$//')_cache.txt"
         echo "Modo multiprocess"
         python3.12 $(basename $PYTHON_FILE) $(echo "$ARG") --exec-mode multiprocess -s file| tail -n 3 >> "$ROOT_PATH/outputs/$(basename $PYTHON_FILE | sed 's/\.[^.]*$//')_multiprocess.txt"
-        echo "Fim da rodada"
-        rm -rf .speedupy/
+        echo "Fim da rodada"        
         cd "$ROOT_PATH"
         
     done
@@ -118,7 +117,7 @@ done
 for i in "${!DESTINATIONS[@]}"; do
     DEST="${DESTINATIONS[i]}"
     DEST_DIR=$(dirname "$DEST")
-    rm -rf "$DEST_DIR/speedupy/"
+    rm -rf "$DEST_DIR/speedupy/" rm -rf "$DEST_DIR/.speedupy/"
 done
 
 # Capture end time
@@ -138,5 +137,8 @@ elif [ $ELAPSED_TIME -lt 3600 ]; then
 else
     echo "Total execution time: ${HOURS}:${MINUTES}:${SECONDS} hours"
 fi
+python3.12 gen_graphs/gen_graphs_multiprocess.py
+echo "Tabela salva"
+
 
 echo "Execution completed. Outputs saved in 'outputs' directory."

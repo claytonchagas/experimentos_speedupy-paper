@@ -22,6 +22,4 @@ def main(n):
         compute_FFT(i)
 if __name__ == '__main__':
     n = int(sys.argv[1])
-    dt1 = time.perf_counter()
     main(n)
-    print(time.perf_counter() - dt1)

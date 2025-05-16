@@ -29,6 +29,4 @@ def main(order):
     compute_quadrature(order)
 if __name__ == '__main__':
     order = int(sys.argv[1])
-    dti = time.perf_counter()
     main(order)
-    print(time.perf_counter() - dti)
