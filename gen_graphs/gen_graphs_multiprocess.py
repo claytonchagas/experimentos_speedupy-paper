@@ -21,7 +21,9 @@ suffixes = [
 
 data_cache = []
 data_no_cache = []
-data_multiprocess = []
+data_multiprocess_mode = []
+data_multiprocess_time = []
+
 
 base_dir = "outputs_15mai2025/"
 
@@ -33,7 +35,8 @@ for chave, keys in inputs_per_experiment.items():
         data_no_cache.append([round(float(line[:-1]),4) for line in file.readlines()])
     with open(base_dir+chave+"_multiprocess.txt","r") as file:
         data = file.readlines()
-        data_multiprocess.append([data[1][:-1].split(": ")[-1], data[4][:-1].split(": ")[-1]])
+        data_multiprocess_mode.append([data[1][:-1].split(": ")[-1], data[4][:-1].split(": ")[-1]])
+        data_multiprocess_time.append([round(float(data[2][:-1].split(": ")[-1]),4), round(float(data[5][:-1].split(": ")[-1]),4)])
 
 def decision(cache_value, no_cache_value):
     return 'CACHE' if cache_value < no_cache_value else "NO CACHE"
@@ -47,7 +50,8 @@ linhas = []
 for i, (chave, inputs) in enumerate(inputs_per_experiment.items()):
     cache_vals = data_cache[i]
     no_cache_vals = data_no_cache[i]
-    decisor_vals = data_multiprocess[i]
+    decisor_vals = data_multiprocess_mode[i]
+    decisor_time = data_multiprocess_time[i]
     for j in range(len(inputs)):
         decisao = decision(cache_vals[j], no_cache_vals[j])
         linhas.append({
@@ -55,9 +59,10 @@ for i, (chave, inputs) in enumerate(inputs_per_experiment.items()):
             "inputs": inputs[j],
             "no_cache": no_cache_vals[j],
             "cache": cache_vals[j],
-            "decisor": decisor_vals[j],
+            "decisor_answer": decisor_vals[j],
+            "decisor_timer": decisor_time[j],
             "real deal": decisao,
-            "precisão": precision(decisor_vals[j], decisao)
+            "precision": precision(decisor_vals[j], decisao)
         })
 
 df = pd.DataFrame(linhas)

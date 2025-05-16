@@ -33,17 +33,17 @@ SOURCE_DIR="$ROOT_PATH/speedupy"
 # Define the list of destination paths / Define a lista de caminhos de destino
 # DESTINATIONS_0="$ROOT_PATH/exps/belief_propagation/belief_propagation.py"
 # DESTINATIONS_1="$ROOT_PATH/exps/cvar/cvar.py"
-# DESTINATIONS_2="$ROOT_PATH/exps/diversity_sims/vince_sim.py"
+DESTINATIONS_2="$ROOT_PATH/exps/diversity_sims/vince_sim.py"
 
 # DESTINATIONS_3="$ROOT_PATH/exps/dnacc/basic_spheres/basic_spheres.py" 
 # DESTINATIONS_4="$ROOT_PATH/exps/dnacc/walking_colloid/walking_colloid.py"
 # DESTINATIONS_5="$ROOT_PATH/exps/epr/epr_analyse.py"
  
-DESTINATIONS_6="$ROOT_PATH/exps/fft/fft.py"  
-DESTINATIONS_7="$ROOT_PATH/exps/gauss_legendre_quadrature/gauss_legendre_quadrature.py" 
+# DESTINATIONS_6="$ROOT_PATH/exps/fft/fft.py"  
+# DESTINATIONS_7="$ROOT_PATH/exps/gauss_legendre_quadrature/gauss_legendre_quadrature.py" 
 # DESTINATIONS_8="$ROOT_PATH/exps/heat_distribution_lu/heat_distribution_lu.py"
  
-# DESTINATIONS_9="$ROOT_PATH/exps/look_and_say/look_and_say.py"
+DESTINATIONS_9="$ROOT_PATH/exps/look_and_say/look_and_say.py"
 # DESTINATIONS_10="$ROOT_PATH/exps/tiny/TINY_GSHCGP.py" 
 
 
@@ -58,17 +58,17 @@ DESTINATIONS=($DESTINATIONS_0 $DESTINATIONS_1 $DESTINATIONS_2 $DESTINATIONS_3 $D
 # Define arguments
 # ARGUMENTS_0=("5500" "14500") # belief_propagation
 # ARGUMENTS_1=("5e6" "50e6") # cvar
-# ARGUMENTS_2=("2000000" "4000000") # diversity_sim
+ARGUMENTS_0=("2000000" "4000000") # diversity_sim
 
 # ARGUMENTS_3=("5000000" "11000000") # dnacc_basic_spheres
 # ARGUMENTS_4=("-50" "-110") # dnacc_walking_colloid
 # ARGUMENTS_5=("400" "800") # epr_analyse
 
-ARGUMENTS_0=("4000" "6000") # fft
-ARGUMENTS_1=("7000" "11000") # gauss_legendre_quadrature
+# ARGUMENTS_0=("4000" "6000") # fft
+# ARGUMENTS_1=("7000" "11000") # gauss_legendre_quadrature
 # ARGUMENTS_1=("0.05" "0.005") # heat_distribution_lu
 
-# ARGUMENTS_9=("46" "48") # look_and_say
+ARGUMENTS_1=("46" "48") # look_and_say
 # ARGUMENTS_10=("13" "15") # TINY_GSHCGP
 
 
