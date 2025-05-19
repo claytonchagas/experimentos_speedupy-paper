@@ -1,7 +1,0 @@
-TOTAL EXECUTION TIME: 162.272129
-cache_entries_created: 69
-cache_hits: 937
-cache_misses: 69
-cache_hit_rate: 0.931412
-cache_size_bytes: 255622242
-cache_overhead_per_hit: 0.000039
