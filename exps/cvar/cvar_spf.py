@@ -1,4 +1,5 @@
 from speedupy.speedupy import initialize_speedupy, maybe_deterministic
+import time
 import sys
 import numpy as np
 
