@@ -9,6 +9,9 @@ from execute_exp.entitites.Metadata import Metadata
 from SingletonMeta import SingletonMeta
 from util import check_python_version
 from logger.log import debug
+import numbers, statistics, math
+from collections import defaultdict
+from scipy import stats 
 
 class SpeeduPy(metaclass=SingletonMeta):
     def __init__(self):
@@ -26,51 +29,144 @@ def initialize_speedupy(f):
         print(f"TOTAL EXECUTION TIME: {end - start}")
     return wrapper
 
-#TODO: CORRIGIR IMPLEMENTAÇÃO
+_MIN_NUM_EXEC   = 4    # nº mínimo de execuções antes de analisar
+_MIN_OCCURRENCE = 0.8   # para strategy 'counting'
+_CONF_LEVEL     = 0.95  # para strategy 'error'
+_MAX_ERROR      = 0.5   # margem de erro máxima no strategy 'error'
+
+_SAMPLES = defaultdict(list)  # func_call_hash → [amostras]
+
+def _margin_error(lst):
+    n = len(lst)
+    if n < 2:
+        return math.inf
+    stdev = statistics.pstdev(lst)
+    z     = stats.t.ppf(_CONF_LEVEL, n - 1)
+    return z * stdev / math.sqrt(n)
+
 def maybe_deterministic(f):
+    """
+    • no-cache / manual  → passa direto.
+    • accurate           → cacheia se todas as _MIN_NUM_EXEC amostras forem iguais.
+    • probabilistic      → counting (freq ≥ 0.8) OU error (margem ≤ 0.5).
+    • Apenas valores numéricos escalares são considerados.
+    """
     @wraps(f)
-    def wrapper(*method_args, **method_kwargs):
+    def wrapper(*args, **kwargs):
+        print('wrapper')
+        mode = SpeeduPySettings().exec_mode[0] if SpeeduPySettings().exec_mode else 'manual'
+        if mode in ('no-cache', 'manual'):
+            return f(*args, **kwargs)
+
         func_hash = DataAccess().get_function_hash(f.__qualname__)
-        func_call_hash = get_id(func_hash, method_args, method_kwargs)
-        if SpeeduPy().revalidation.revalidation_in_current_execution(func_call_hash):
-            return_value, elapsed_time = _execute_func_measuring_time(f, *method_args, **method_kwargs)
-            
-            md = Metadata(func_hash, method_args, method_kwargs, return_value, elapsed_time)
-            DataAccess().add_to_metadata(func_call_hash, md)
-            SpeeduPy().revalidation.calculate_next_revalidation(func_call_hash, md)
-            DataAccess().add_metadata_collected_to_a_func_call_prov(func_call_hash)
-        # else:
-        #     if (num_exec_BD < num_exec_min) and \
-        #        (num_exec_BD + num_exec_metadados >= num_exec_min):
-        #         atualizar_dados_BD_com_metadados()
-        #     if num_exec_BD >= num_exec_min:
-        #         if exec_mode.pode_acelerar_funcao():
-        #             Acelera! (exec_mode.get_func_call_cache)
-        #             revalidation.decrementar_cont_prox_revalidacao()
-        #         else:
-        #             Executa função!
-        #     else:
-        #         Executa função + Coleta Metadados!
+        func_call_hash = get_id(func_hash, args, kwargs)
 
+        print(f"[DEBUG] Calling: {f.__qualname__}")
+        print(f"[DEBUG] Func hash: {func_hash}")
+        print(f"[DEBUG] Func call hash: {func_call_hash}")
 
-        # OLD IMPLEMENTATION
-        # c = DataAccess().get_cache_entry(f.__qualname__, method_args, method_kwargs)
-        # returns_2_freq = _get_function_call_return_freqs(f, method_args, method_kwargs)
-        # if _cache_exists(c):
-        #     debug("cache hit for {0}({1})".format(f.__name__, *method_args))
-        #     return c
-        # if _returns_exist(returns_2_freq):
-        #     debug("simulating {0}({1})".format(f.__name__, *method_args))
-        #     ret = _simulate_func_exec(returns_2_freq)
-        #     return ret
-        # else:
-        #     debug("cache miss for {0}({1})".format(f.__name__, *method_args))
-        #     return_value, elapsed_time = _execute_func(f, *method_args, **method_kwargs)
-        #     if _function_call_maybe_deterministic(f, method_args, method_kwargs):
-        #         debug("{0}({1} may be deterministic!)".format(f.__name__, *method_args))
-        #         # DataAccess().add_to_metadata(f.__qualname__, method_args, method_kwargs, return_value, elapsed_time)
-        #     return return_value
+        buf = _SAMPLES[func_call_hash]
+        
+        # Try to simulate if we already have enough samples
+        if len(buf) >= _MIN_NUM_EXEC:
+            print('entrou')
+            if mode == 'accurate':
+                if all(v == buf[0] for v in buf):
+                    return buf[0]  # simulate with value
+
+            elif mode == 'probabilistic':
+                strategy = SpeeduPySettings().strategy[0] if SpeeduPySettings().strategy else 'counting'
+
+                if strategy == 'counting':
+                    try:
+                        moda = statistics.mode(buf)
+                        freq = buf.count(moda) / len(buf)
+                        if freq >= _MIN_OCCURRENCE:
+                            return moda
+                    except statistics.StatisticsError:
+                        pass  # no unique mode yet
+
+                elif strategy == 'error':
+                    mean = statistics.mean(buf)
+                    if _margin_error(buf) <= _MAX_ERROR:
+                        return mean
+
+        # Fallback to real execution
+        ret, elapsed = _execute_func_measuring_time(f, *args, **kwargs)
+        md = Metadata(func_hash, args, kwargs, ret, elapsed)
+        DataAccess().add_to_metadata(func_call_hash, md)
+
+        if isinstance(ret, numbers.Number):
+            buf.append(ret)
+            if len(buf) >= _MIN_NUM_EXEC:
+                # Preemptively store in cache
+                if mode == 'accurate':
+                    if all(v == buf[0] for v in buf):
+                        DataAccess().create_cache_entry(f.__qualname__, args, kwargs, buf[0])
+                elif mode == 'probabilistic':
+                    strategy = SpeeduPySettings().strategy[0] if SpeeduPySettings().strategy else 'counting'
+                    if strategy == 'counting':
+                        try:
+                            moda = statistics.mode(buf)
+                            freq = buf.count(moda) / len(buf)
+                            if freq >= _MIN_OCCURRENCE:
+                                DataAccess().create_cache_entry(f.__qualname__, args, kwargs, moda)
+                        except statistics.StatisticsError:
+                            pass
+                    elif strategy == 'error':
+                        mean = statistics.mean(buf)
+                        if _margin_error(buf) <= _MAX_ERROR:
+                            DataAccess().create_cache_entry(f.__qualname__, args, kwargs, mean)
+
+        return ret
     return wrapper
+
+
+# #TODO: CORRIGIR IMPLEMENTAÇÃO
+# def maybe_deterministic(f):
+#     @wraps(f)
+#     def wrapper(*method_args, **method_kwargs):
+#         func_hash = DataAccess().get_function_hash(f.__qualname__)
+#         func_call_hash = get_id(func_hash, method_args, method_kwargs)
+#         if SpeeduPy().revalidation.revalidation_in_current_execution(func_call_hash):
+#             return_value, elapsed_time = _execute_func_measuring_time(f, *method_args, **method_kwargs)
+            
+#             md = Metadata(func_hash, method_args, method_kwargs, return_value, elapsed_time)
+#             DataAccess().add_to_metadata(func_call_hash, md)
+#             SpeeduPy().revalidation.calculate_next_revalidation(func_call_hash, md)
+#             DataAccess().add_metadata_collected_to_a_func_call_prov(func_call_hash)
+#         # else:
+#         #     if (num_exec_BD < num_exec_min) and \
+#         #        (num_exec_BD + num_exec_metadados >= num_exec_min):
+#         #         atualizar_dados_BD_com_metadados()
+#         #     if num_exec_BD >= num_exec_min:
+#         #         if exec_mode.pode_acelerar_funcao():
+#         #             Acelera! (exec_mode.get_func_call_cache)
+#         #             revalidation.decrementar_cont_prox_revalidacao()
+#         #         else:
+#         #             Executa função!
+#         #     else:
+#         #         Executa função + Coleta Metadados!
+
+
+#         # OLD IMPLEMENTATION
+#         # c = DataAccess().get_cache_entry(f.__qualname__, method_args, method_kwargs)
+#         # returns_2_freq = _get_function_call_return_freqs(f, method_args, method_kwargs)
+#         # if _cache_exists(c):
+#         #     debug("cache hit for {0}({1})".format(f.__name__, *method_args))
+#         #     return c
+#         # if _returns_exist(returns_2_freq):
+#         #     debug("simulating {0}({1})".format(f.__name__, *method_args))
+#         #     ret = _simulate_func_exec(returns_2_freq)
+#         #     return ret
+#         # else:
+#         #     debug("cache miss for {0}({1})".format(f.__name__, *method_args))
+#         #     return_value, elapsed_time = _execute_func(f, *method_args, **method_kwargs)
+#         #     if _function_call_maybe_deterministic(f, method_args, method_kwargs):
+#         #         debug("{0}({1} may be deterministic!)".format(f.__name__, *method_args))
+#         #         # DataAccess().add_to_metadata(f.__qualname__, method_args, method_kwargs, return_value, elapsed_time)
+#         #     return return_value
+#     return wrapper
 
 # OLD IMPLEMENTATION
 # def _returns_exist(rets_2_freq:Optional[Dict]) -> bool:
@@ -105,7 +201,7 @@ def deterministic(f):
 def _cache_doesnt_exist(cache) -> bool:
     return cache is None
 
-def _execute_func_measuring_time(f, method_args, method_kwargs):
+def _execute_func_measuring_time(f, *method_args, **method_kwargs):
     start = time.perf_counter()
     result_value = f(*method_args, **method_kwargs)
     end = time.perf_counter()
