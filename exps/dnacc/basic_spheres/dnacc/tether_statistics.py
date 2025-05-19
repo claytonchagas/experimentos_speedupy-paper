@@ -87,12 +87,12 @@ Mean field approximation
 
 For tethers grafted on parallel plates, we can make a mean field
 approximation by replacing :math:`\\exp(-\\beta G^{(cnf)}_{ij})` by
-:math:`M_{ab} \\sigma_b`, where :math:`\sigma_b` is the grafting density of
+:math:`M_{ab} \\sigma_b`, where :math:`\\sigma_b` is the grafting density of
 b-type tethers and
 
 .. math::
 
-   M_{ab} = \int dr_j\, \\exp( - \\beta G^{(cnf)}_{ij} )
+   M_{ab} = \\int dr_j\\, \\exp( - \\beta G^{(cnf)}_{ij} )
 
 Here, i and j are any representative a-type and b-type tethers,
 respectively, and the integration is over all possible grafting points of j.
@@ -103,7 +103,7 @@ as follows:
 .. math::
 
    K_{ab} &= M_{ab} \\exp[-\\beta(-G^{(rep)}_a - G^{(rep)}_b)]\\\\
-          &= \int dr_j\, \\exp( - \\beta \\Delta G^{(cnf)}_{ij} )
+          &= \\int dr_j\\, \\exp( - \\beta \\Delta G^{(cnf)}_{ij} )
 
 A ``tether_statistics`` object for use in :class:`.PlatesMeanField` *must*
 implement the following methods:
@@ -137,13 +137,7 @@ As above, a ``tether_statistics`` object for use in
   Raises a ``ValueError`` exception if the system attributes are incomplete
   or invalid.
 """
-
-__all__ = ['RodsGraftedOnPlates',
-           'RodsGraftedOnPlatesMeanField',
-           '_segment_point_distance2',
-           'RodsGraftedOnSpheres',
-           ]
-
+__all__ = ['RodsGraftedOnPlates', 'RodsGraftedOnPlatesMeanField', '_segment_point_distance2', 'RodsGraftedOnSpheres']
 import sys, os
 PROJECT_FOLDER = os.path.join(os.path.dirname(__file__), '..', '..')
 sys.path.append(PROJECT_FOLDER)
@@ -212,23 +206,21 @@ class RodsGraftedOnPlates(object):
         """
 
         try:
-            if len(system.dims) != 2 or any(x <= 0 for x in system.dims):
-                raise ValueError("Invalid System.dims")
+            if len(system.dims) != 2 or any((x <= 0 for x in system.dims)):
+                raise ValueError('Invalid System.dims')
         except AttributeError:
-            raise ValueError("System must define a dims attribute")
+            raise ValueError('System must define a dims attribute')
         except Exception:
-            raise ValueError("Invalid dims attribute in System")
-
+            raise ValueError('Invalid dims attribute in System')
         if not hasattr(system, 'periodic'):
-            raise ValueError("System must define a periodic attribute")
-
+            raise ValueError('System must define a periodic attribute')
         try:
             if system.separation <= 0:
-                raise ValueError("Invalid System.separation")
+                raise ValueError('Invalid System.separation')
         except AttributeError:
-            raise ValueError("System must define a separation attribute")
+            raise ValueError('System must define a separation attribute')
         except Exception:
-            raise ValueError("Invalid separation attribute in System")
+            raise ValueError('Invalid separation attribute in System')
 
     def check_tether(self, system, tether_info_i):
         """Checks that necessary tether properties are defined and valid.
@@ -243,39 +235,29 @@ class RodsGraftedOnPlates(object):
         """
 
         if not 'plate' in tether_info_i:
-            raise ValueError("Tether must have a plate attribute")
-
+            raise ValueError('Tether must have a plate attribute')
         if not 'L' in tether_info_i:
-            raise ValueError("Tether length must be stored in L attribute")
+            raise ValueError('Tether length must be stored in L attribute')
         if tether_info_i['L'] < 0:
-            raise ValueError("Invalid tether length")
-
+            raise ValueError('Invalid tether length')
         try:
             if len(tether_info_i['pos']) != 2:
-                raise ValueError("Tether position must be an (x,y) tuple")
+                raise ValueError('Tether position must be an (x,y) tuple')
             if not system.periodic:
                 pos = tether_info_i['pos']
                 dims = system.dims
-                if (pos[0] < 0 or pos[0] >= dims[0] or
-                    pos[1] < 0 or pos[1] >= dims[1]):
-                    raise ValueError(
-                        "Tether position, (%g nm, %g nm), lies"
-                        " outside system boundaries, (%g nm, %g nm)" %
-                        (pos[0] / units.nm, pos[1] / units.nm,
-                         dims[0] / units.nm, dims[1] / units.nm))
+                if pos[0] < 0 or pos[0] >= dims[0] or pos[1] < 0 or (pos[1] >= dims[1]):
+                    raise ValueError('Tether position, (%g nm, %g nm), lies outside system boundaries, (%g nm, %g nm)' % (pos[0] / units.nm, pos[1] / units.nm, dims[0] / units.nm, dims[1] / units.nm))
         except KeyError:
-            raise ValueError("Tether must have a pos attribute")
+            raise ValueError('Tether must have a pos attribute')
         except Exception:
-            raise ValueError("Invalid pos tether attribute")
+            raise ValueError('Invalid pos tether attribute')
 
     def _cell_list_interaction_lists(self, system, max_L):
         boxLx, boxLy = system.dims
         num_cells = [int(floor(d / max_L)) for d in system.dims]
         cell_size = [d / n for d, n in zip(system.dims, num_cells)]
-
-        # Sneaky indexing to support PBCs if necessary
-        cells = np.empty((num_cells[0] + 2, num_cells[1] + 2),
-                         dtype=object)
+        cells = np.empty((num_cells[0] + 2, num_cells[1] + 2), dtype=object)
         for i in range(-1, num_cells[0] + 1):
             for j in range(-1, num_cells[1] + 1):
                 cells[i, j] = []
@@ -283,19 +265,13 @@ class RodsGraftedOnPlates(object):
         if system.periodic:
             for i in range(-1, num_cells[0] + 1):
                 for j in range(-1, num_cells[1] + 1):
-                    cells[i, j] = cells[i % num_cells[0],
-                                        j % num_cells[1]]
-
-        # Put all tethers in cell list
+                    cells[i, j] = cells[i % num_cells[0], j % num_cells[1]]
         for i, t in enumerate(system.tethers):
             x, y = t['pos']
             if system.periodic:
                 x %= boxLx
                 y %= boxLy
-            cells[floor(x / cell_size[0]),
-                  floor(y / cell_size[1])].append(i)
-
-        # Build crude interaction list
+            cells[floor(x / cell_size[0]), floor(y / cell_size[1])].append(i)
         result = [[] for t in system.tethers]
         for i in range(num_cells[0]):
             for j in range(num_cells[1]):
@@ -327,9 +303,7 @@ class RodsGraftedOnPlates(object):
         """
 
         boxLx, boxLy = system.dims
-        max_L = 2 * max(t['L'] for t in system.tethers)
-
-        # TODO: Figure out when/if using a CoverTree might be a good idea
+        max_L = 2 * max((t['L'] for t in system.tethers))
         if True:
             # Use cell lists
             return self._cell_list_interaction_lists(system, max_L)
@@ -370,7 +344,7 @@ class RodsGraftedOnPlates(object):
                     return sqrt(dx2 + dy2)
 
             else:
-                positions = list(t['pos'] for t in system.tethers)
+                positions = list((t['pos'] for t in system.tethers))
 
                 def distance(ri, rj):
                     return sqrt((ri[0] - rj[0]) ** 2 + (ri[1] - rj[1]) ** 2)
@@ -409,8 +383,7 @@ class RodsGraftedOnPlates(object):
         Lj = tether_info_j['L']
 
         if system.periodic:
-            dr = ((ri[0] - rj[0] + boxL[0] / 2) % boxL[0] - boxL[0] / 2,
-                  (ri[1] - rj[1] + boxL[1] / 2) % boxL[1] - boxL[1] / 2)
+            dr = ((ri[0] - rj[0] + boxL[0] / 2) % boxL[0] - boxL[0] / 2, (ri[1] - rj[1] + boxL[1] / 2) % boxL[1] - boxL[1] / 2)
         else:
             dr = (ri[0] - rj[0], ri[1] - rj[1])
 
@@ -457,19 +430,13 @@ class RodsGraftedOnPlates(object):
         if h <= 0 or not abs(Li - Lj) < d < Li + Lj:
             return 0.0
         else:
-            return (self._Omega_loop(Li, Lj, h, d) /
-                    ((2 * pi * Li ** 2) *
-                     (2 * pi * Lj ** 2) *
-                     1 * units.M))
+            return self._Omega_loop(Li, Lj, h, d) / (2 * pi * Li ** 2 * (2 * pi * Lj ** 2) * 1 * units.M)
 
     def _calc_bridge_boltz(self, Li, Lj, h, d):
         if h <= 0 or d > Li + Lj:
             return 0.0
         else:
-            return (self._Omega_bridge(Li, Lj, h, d) /
-                    ((2 * pi * Li ** 2) *
-                     (2 * pi * Lj ** 2) *
-                     1 * units.M))
+            return self._Omega_bridge(Li, Lj, h, d) / (2 * pi * Li ** 2 * (2 * pi * Lj ** 2) * 1 * units.M)
 
     def _Omega_unbound(self, Li, h):
         return 2 * pi * Li * min(h, Li) if h >= 0 else 0.0
@@ -497,7 +464,7 @@ class RodsGraftedOnPlates(object):
             result = pi * bindingRad
         else:
             result = 2 * asin(h / bindingRad) * bindingRad
-        result /= (sinAlpha * cosBeta + sinBeta * cosAlpha)
+        result /= sinAlpha * cosBeta + sinBeta * cosAlpha
         return result
 
     def _Omega_bridge(self, Li, Lj, h, d):
@@ -508,17 +475,12 @@ class RodsGraftedOnPlates(object):
         # Check for obvious case
         if h <= 0.0:
             return 0.0
-
-        # Check that the triangle form by the tethering points and the
-        # binding site can be formed (sides satisfy triangle inequality)
-        if (d + Li) <= Lj or (Li + Lj) <= d or (Lj + d) <= Li:
+        if d + Li <= Lj or Li + Lj <= d or Lj + d <= Li:
             return 0.0
 
         # Ensure Li < Lj
         if Li > Lj:
-            Li, Lj = Lj, Li
-
-        # Go!
+            Li, Lj = (Lj, Li)
         gammaA = acos((d ** 2 + Li ** 2 - Lj ** 2) / (2 * d * Li))
         gammaB = acos((d ** 2 + Lj ** 2 - Li ** 2) / (2 * d * Lj))
         assert gammaB <= gammaA
@@ -583,8 +545,7 @@ class RodsGraftedOnPlatesMeanField(object):
        A full description of this object's methods.
     """
 
-    def calc_boltz_binding_cnf_bridge(self, system,
-                                      type_info_a, type_info_b):
+    def calc_boltz_binding_cnf_bridge(self, system, type_info_a, type_info_b):
         """Calculate :math:`M_{ab}` for tethers on opposite plates.
 
         See also
@@ -619,8 +580,7 @@ class RodsGraftedOnPlatesMeanField(object):
         else:
             return stdVol * (La + Lb - h) / (La * Lb)
 
-    def calc_boltz_binding_cnf_loop(self, system,
-                                    type_info_a, type_info_b):
+    def calc_boltz_binding_cnf_loop(self, system, type_info_a, type_info_b):
         """Calculate :math:`M_{ab}` for tethers on the same plate.
 
         See also
@@ -668,8 +628,7 @@ class RodsGraftedOnPlatesMeanField(object):
 
         L = type_info_a['L']
         h = system.separation
-
-        return (h / L if h < L else 1.0)
+        return h / L if h < L else 1.0
 
     def check_system(self, system):
         """Checks that necessary system attributes are defined and valid.
@@ -684,8 +643,7 @@ class RodsGraftedOnPlatesMeanField(object):
         """
 
         if system.separation <= 0:
-            raise ValueError("Invalid separation for "
-                             "DNACoatedPlatesMeanField")
+            raise ValueError('Invalid separation for DNACoatedPlatesMeanField')
 
     def check_tether_type(self, system, type_info_a):
         """Checks that necessary tether type properties are defined and valid.
@@ -700,10 +658,9 @@ class RodsGraftedOnPlatesMeanField(object):
         """
 
         if not 'L' in type_info_a:
-            raise ValueError("Length of tethers of this type must "
-                             "be stored in L attribute")
+            raise ValueError('Length of tethers of this type must be stored in L attribute')
         if type_info_a['L'] < 0:
-            raise ValueError("Invalid tether length")
+            raise ValueError('Invalid tether length')
 
 
 ## Rods on spheres (Stefano Angioletti-Uberti)
@@ -796,7 +753,7 @@ class RodsGraftedOnSpheres(object):
         """
 
         if not hasattr(system, 'sphere_info'):
-            raise ValueError("System must define a sphere_info attribute")
+            raise ValueError('System must define a sphere_info attribute')
         for S in system.sphere_info.values():
             try:
                 if len(S['centre']) != 3:
@@ -823,32 +780,27 @@ class RodsGraftedOnSpheres(object):
         """
 
         if 'sphere' not in tether_info_i:
-            raise ValueError("Tether must have a sphere attribute")
-
+            raise ValueError('Tether must have a sphere attribute')
         S_name = tether_info_i['sphere']
         if S_name not in system.sphere_info:
-            raise ValueError("Missing sphere_info for sphere %s" % S_name)
+            raise ValueError('Missing sphere_info for sphere %s' % S_name)
         S = system.sphere_info[S_name]
 
         if not 'L' in tether_info_i:
-            raise ValueError("Tether length must be stored in L attribute")
+            raise ValueError('Tether length must be stored in L attribute')
         if tether_info_i['L'] < 0:
-            raise ValueError("Invalid tether length")
-
+            raise ValueError('Invalid tether length')
         try:
             if len(tether_info_i['pos']) != 3:
-                raise ValueError("Tether position must be an (x,y,z) tuple")
+                raise ValueError('Tether position must be an (x,y,z) tuple')
         except KeyError:
-            raise ValueError("Tether must have a pos attribute")
+            raise ValueError('Tether must have a pos attribute')
         except Exception:
-            raise ValueError("Invalid pos tether attribute")
-
+            raise ValueError('Invalid pos tether attribute')
         ri = np.asarray(tether_info_i['pos'])
         R = S['radius']
-
-        if abs(np.sum(ri ** 2) - R ** 2) > (1e-5 * R) ** 2:
-            raise ValueError("Tether is not properly grafted on "
-                             "sphere surface")
+        if abs(np.sum(ri ** 2) - R ** 2) > (1e-05 * R) ** 2:
+            raise ValueError('Tether is not properly grafted on sphere surface')
 
     def calc_boltz_binding_cnf(self, system, tether_info_i, tether_info_j):
         """Calculate :math:`\\exp(-\\beta G^{(cnf)}_{ij})`.
@@ -862,11 +814,7 @@ class RodsGraftedOnSpheres(object):
         tether_statistics.calc_boltz_binding_cnf :
             Full description of this method
         """
-
-        return (self._omega_bound(system, tether_info_i, tether_info_j) /
-                ((2 * pi * tether_info_i['L'] ** 2) *
-                 (2 * pi * tether_info_j['L'] ** 2) *
-                 1 * units.M))
+        return self._omega_bound(system, tether_info_i, tether_info_j) / (2 * pi * tether_info_i['L'] ** 2 * (2 * pi * tether_info_j['L'] ** 2) * 1 * units.M)
 
     def _omega_bound(self, system, tether_info_i, tether_info_j):
         # Algorithm:
@@ -885,10 +833,10 @@ class RodsGraftedOnSpheres(object):
 
         # Must use np.array() here to *copy* position
         ri = np.array(tether_info_i['pos'])
-        assert abs(np.sum(ri ** 2) - Ri ** 2) < (1e-5 * Ri) ** 2
+        assert abs(np.sum(ri ** 2) - Ri ** 2) < (1e-05 * Ri) ** 2
         ri += rsi
         rj = np.array(tether_info_j['pos'])
-        assert abs(np.sum(rj ** 2) - Rj ** 2) < (1e-5 * Rj) ** 2
+        assert abs(np.sum(rj ** 2) - Rj ** 2) < (1e-05 * Rj) ** 2
         rj += rsj
 
         # First, check if tethers can bond at all
@@ -904,13 +852,7 @@ class RodsGraftedOnSpheres(object):
             # xc is unitless, fraction of rji vector
             xc = (d2 + Li ** 2 - Lj ** 2) / (2 * d2)
             rc = ri + xc * rji
-
-            # Construct an orthonormal basis at rc, with e_1 pointing
-            # from ri to rj.  With this basis, the parametric equation of
-            # the binding circle is r(t) = rc + R*sin(phi)*v + R*cos(phi)*u,
-            # where Li**2 = R**2 + (xc*rji)**2 = R**2 + (xc**2 * d2)
-            _, u, v = np.linalg.qr(
-                np.array([rji, [1, 0, 0], [0, 1, 0], [0, 0, 1]]).T)[0].T
+            _, u, v = np.linalg.qr(np.array([rji, [1, 0, 0], [0, 1, 0], [0, 0, 1]]).T)[0].T
             R = np.sqrt(Li ** 2 - xc ** 2 * d2)
             u *= R
             v *= R
@@ -932,14 +874,7 @@ class RodsGraftedOnSpheres(object):
 
                 # No overlaps
                 return 1.0
-
-            # In 1D, direct integration converges faster than Monte Carlo
-            good_fraction = (1.0 / self.num_samples) * sum(
-                integrand(phi)
-                for phi in np.linspace(0, 2 * pi, self.num_samples,
-                                       endpoint=False))
-
-            # Calculate Jacobian factor
+            good_fraction = 1.0 / self.num_samples * sum((integrand(phi) for phi in np.linspace(0, 2 * pi, self.num_samples, endpoint=False)))
             d = np.sqrt(d2)
             gammaA = acos((d2 + Li ** 2 - Lj ** 2) / (2 * d * Li))
             gammaB = acos((d2 + Lj ** 2 - Li ** 2) / (2 * d * Lj))
@@ -961,8 +896,7 @@ class RodsGraftedOnSpheres(object):
         """
 
         Li = tether_info_i['L']
-        return (self._omega_unbound(system, tether_info_i) /
-                (2 * pi * Li ** 2))
+        return self._omega_unbound(system, tether_info_i) / (2 * pi * Li ** 2)
 
     def _omega_unbound(self, system, tether_info_i):
         # Algorithm:
@@ -981,28 +915,13 @@ class RodsGraftedOnSpheres(object):
 
         # Must use np.array() here to *COPY* position
         ri = np.array(tether_info_i['pos'])
-        assert abs(np.sum(ri ** 2) - Ri ** 2) < (1e-5 * Ri) ** 2
+        assert abs(np.sum(ri ** 2) - Ri ** 2) < (1e-05 * Ri) ** 2
         ri += rsi
         Li = tether_info_i['L']
-
-        # Construct an orthonormal basis at ri, with zHat pointing
-        # from rsi to ri.  With this basis, the parametric equation of
-        # the hemisphere in (2) is
-        #
-        #  r(phi,theta) = xHat * Li*sin(theta)*cos(phi) +
-        #                 yHat * Li*sin(theta)*sin(phi) +
-        #                 zHat * Li*cos(theta)
-        #
-        # with 0 <= phi < 2*pi and 0 < theta < pi/2 [this is what makes
-        # it a hemisphere]
-        [zHat, xHat, yHat], _ = np.linalg.qr(
-            np.array([ri - rsi, [1, 0, 0], [0, 1, 0], [0, 0, 1]]).T)
+        [zHat, xHat, yHat], _ = np.linalg.qr(np.array([ri - rsi, [1, 0, 0], [0, 1, 0], [0, 0, 1]]).T)
 
         def integrand(phi, theta):
-            r = ri + (xHat * Li * sin(theta) * cos(phi) +
-                      yHat * Li * sin(theta) * sin(phi) +
-                      zHat * Li * cos(theta))
-
+            r = ri + (xHat * Li * sin(theta) * cos(phi) + yHat * Li * sin(theta) * sin(phi) + zHat * Li * cos(theta))
             for Sj in system.sphere_info.values():
                 rsj = np.asarray(Sj['centre'])
                 Rj = Sj['radius']
@@ -1015,14 +934,5 @@ class RodsGraftedOnSpheres(object):
                     return 0.0
 
             return 1.0
-
-        # In 2D, direct integration converges as fast as Monte Carlo and
-        # is deterministic
-        good_fraction = (1.0 / self.num_samples) ** 2 * sum(
-            integrand(phi, theta)
-            for phi in np.linspace(0, 2 * pi, self.num_samples,
-                                   endpoint=False)
-            for theta in np.linspace(0, pi / 2.0, self.num_samples,
-                                     endpoint=False))
-
+        good_fraction = (1.0 / self.num_samples) ** 2 * sum((integrand(phi, theta) for phi in np.linspace(0, 2 * pi, self.num_samples, endpoint=False) for theta in np.linspace(0, pi / 2.0, self.num_samples, endpoint=False)))
         return 2 * pi * Li ** 2 * good_fraction

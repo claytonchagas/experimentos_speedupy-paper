@@ -137,30 +137,23 @@ Units that pop up regularly in chemistry.
 """
 
 from math import pi
-
-_GSL_CONST_MKSA_UNIFIED_ATOMIC_MASS = 1.660538782e-27  # kg
-_GSL_CONST_MKSA_ELECTRON_CHARGE = 1.602176487e-19  # A s
-_GSL_CONST_NUM_AVOGADRO = 6.02214199e23  # 1 / mol
-_GSL_CONST_MKSA_GAUSS = 1e-4  # kg / A s^2
-_GSL_CONST_MKSA_BAR = 1e5  # kg / m s^2
-_GSL_CONST_MKSA_STD_ATMOSPHERE = 1.01325e5  # kg / m s^2
-_GSL_CONST_MKSA_TORR = 1.33322368421e2  # kg / m s^2
-_GSL_CONST_MKSA_METER_OF_MERCURY = 1.33322368421e5  # kg / m s^2
-
-#: Meter
-m = 1e9
-#: Gram
-g = 1e-3 / _GSL_CONST_MKSA_UNIFIED_ATOMIC_MASS
-#: Second
-s = 1e12
-#: Ampere
-Ampere = (1. / _GSL_CONST_MKSA_ELECTRON_CHARGE) / s
-#: Kelvin
+_GSL_CONST_MKSA_UNIFIED_ATOMIC_MASS = 1.660538782e-27
+_GSL_CONST_MKSA_ELECTRON_CHARGE = 1.602176487e-19
+_GSL_CONST_NUM_AVOGADRO = 6.02214199e+23
+_GSL_CONST_MKSA_GAUSS = 0.0001
+_GSL_CONST_MKSA_BAR = 100000.0
+_GSL_CONST_MKSA_STD_ATMOSPHERE = 101325.0
+_GSL_CONST_MKSA_TORR = 133.322368421
+_GSL_CONST_MKSA_METER_OF_MERCURY = 133322.368421
+m = 1000000000.0
+g = 0.001 / _GSL_CONST_MKSA_UNIFIED_ATOMIC_MASS
+s = 1000000000000.0
+Ampere = 1.0 / _GSL_CONST_MKSA_ELECTRON_CHARGE / s
 K = 1.0
 #: mole
 mol = _GSL_CONST_NUM_AVOGADRO
 
-
+@maybe_deterministic
 def add_amperes_unit():
     """Define ``A`` as the unit Ampere.
 
@@ -170,25 +163,9 @@ def add_amperes_unit():
 
     global A
     A = Ampere
+_SI_prefixes = {'f': 1e-15, 'p': 1e-12, 'n': 1e-09, 'u': 1e-06, 'm': 0.001, 'c': 0.01, 'd': 0.1, 'da': 10.0, 'h': 100.0, 'k': 1000.0, 'M': 1000000.0, 'G': 1000000000.0, 'T': 1000000000000.0}
 
-
-_SI_prefixes = {
-    'f': 1e-15,
-    'p': 1e-12,
-    'n': 1e-9,
-    'u': 1e-6,
-    'm': 1e-3,
-    'c': 1e-2,
-    'd': 1e-1,
-    'da': 1e+1,
-    'h': 1e+2,
-    'k': 1e+3,
-    'M': 1e+6,
-    'G': 1e+9,
-    'T': 1e+12
-}
-
-
+@maybe_deterministic
 def _add_prefixes(name, realname=None):
     """Add standard SI prefixes to a base unit."""
     globs = globals()
@@ -259,10 +236,7 @@ min = 60 * s
 h = 60 * min
 #: day
 d = 24 * h
-
-#: degree of arc
-degree = (pi / 180.0)
-#: arc-minute
+degree = pi / 180.0
 arcmin = degree / 60.0
 #: arc-second
 arcsec = arcmin / 60.0
@@ -272,13 +246,7 @@ ha = 10000 * m ** 2
 
 #: litre
 L = dm ** 3
-
-#: tonne
-t = 1e3 * kg
-
-# Some physics-based units are defined in physics.py, some here
-
-#: Gauss
+t = 1000.0 * kg
 G = _GSL_CONST_MKSA_GAUSS * T
 
 #: bar (prefixed versions available, e.g. mbar = millibar)
@@ -288,11 +256,7 @@ _add_prefixes('bar')
 atm = _GSL_CONST_MKSA_STD_ATMOSPHERE * Pa
 #: Torr
 Torr = _GSL_CONST_MKSA_TORR * Pa
-#: mmHg
-mmHg = 1e-3 * _GSL_CONST_MKSA_METER_OF_MERCURY * Pa
-
-# Viscosity
-#: Poise (prefixed versions available, e.g. cP = centipoise)
+mmHg = 0.001 * _GSL_CONST_MKSA_METER_OF_MERCURY * Pa
 P = 1 * g / (cm * s)
 _add_prefixes('P')
 
@@ -303,18 +267,8 @@ _add_prefixes('P')
 AA = 1e-10 * m
 
 cal = 4.184 * J
-"""Thermochemical calorie
-
-.. note::
-
-  The calorie here is the thermochemical calorie (4.184 J), not the
-  International Steam Table calorie (4.1868 J) used in GSL.
-"""
-
-#: kilocalorie
-kcal = 1e3 * cal
-
-#: molar (prefixed versions available, e.g. mM = millimolar)
+'Thermochemical calorie\n\n.. note::\n\n  The calorie here is the thermochemical calorie (4.184 J), not the\n  International Steam Table calorie (4.1868 J) used in GSL.\n'
+kcal = 1000.0 * cal
 M = mol / L
 _add_prefixes('M')
 

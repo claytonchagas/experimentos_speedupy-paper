@@ -1,5 +1,7 @@
 import sys
-#sys.path.append('/home/joaopedrolopez/Downloads/AvaliacaoExperimental/Experimentos/DNACC-with-speedupy/adapted_for_speedupy/examples/walking_colloid')
+sys.path.append('/home/esc/Músicas/experimentos_speedupy-paper/exps/dnacc/walking_colloid')
+from speedupy.speedupy import initialize_speedupy
+import sys
 from speedupy.speedupy import maybe_deterministic
 import sys, os
 #from speedupy.speedupy import initialize_speedupy
@@ -18,7 +20,7 @@ BETA_2 = plates.add_tether_type(plate='surface', sticky_end='beta2')
 R = 500.0 * nm
 ts = plates.tether_types
 
-#@maybe_deterministic
+@maybe_deterministic
 def do_it(beta_DeltaG0Mid):
     print('Working on beta_DeltaG0Mid = %g' % beta_DeltaG0Mid)
     for beta_Delta in range(0, 10):

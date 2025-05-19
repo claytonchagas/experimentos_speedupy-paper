@@ -65,6 +65,7 @@ class CoverTree(object):
     #
     # Below, I implement these two fundamental scales as a lazy dictionary
     class _lazy_child_dist(dict):
+
         def __init__(self, base, *a, **kw):
             dict.__init__(self, *a, **kw)
             self.b = base
@@ -74,6 +75,7 @@ class CoverTree(object):
             return value
 
     class _lazy_heir_dist(dict):
+
         def __init__(self, base, *a, **kw):
             dict.__init__(self, *a, **kw)
             self.b = base
@@ -136,8 +138,7 @@ class CoverTree(object):
         self.distance = distance
         self.leafsize = leafsize
         if self.leafsize < 1:
-            raise ValueError("leafsize must be at least 1")
-
+            raise ValueError('leafsize must be at least 1')
         self._child_d = CoverTree._lazy_child_dist(base)
         self._heir_d = CoverTree._lazy_heir_dist(base)
 
@@ -168,16 +169,13 @@ class CoverTree(object):
             self.level = level
             self.radius = radius
             self.children = children
-            self.num_children = sum(c.num_children for c in children)
+            self.num_children = sum((c.num_children for c in children))
 
         def __repr__(self):
-            return ("<_InnerNode: ctr_idx=%d, level=%d (radius=%f), "
-                    "len(children)=%d, num_children=%d>" %
-                    (self.ctr_idx, self.level,
-                     self.radius, len(self.children), self.num_children))
+            return '<_InnerNode: ctr_idx=%d, level=%d (radius=%f), len(children)=%d, num_children=%d>' % (self.ctr_idx, self.level, self.radius, len(self.children), self.num_children)
 
     class _LeafNode(_Node):
-        # idx is an array of integers
+
         def __init__(self, idx, ctr_idx, radius):
             self.idx = idx
             self.ctr_idx = ctr_idx
@@ -185,8 +183,7 @@ class CoverTree(object):
             self.num_children = len(idx)
 
         def __repr__(self):
-            return('_LeafNode(idx=%s, ctr_idx=%d, radius=%f)' %
-                   (repr(self.idx), self.ctr_idx, self.radius))
+            return '_LeafNode(idx=%s, ctr_idx=%d, radius=%f)' % (repr(self.idx), self.ctr_idx, self.radius)
 
     def _build(self):
         """Build the cover tree using the Batch Construction algorithm
@@ -237,8 +234,7 @@ class CoverTree(object):
                     pts_p_ds[new_pts_len] = pts_p_ds[i]
                     new_pts_len += 1
             pts_p_ds[:] = pts_p_ds[:new_pts_len]
-
-            return near_p_ds, far_p_ds
+            return (near_p_ds, far_p_ds)
 
         def split_without_dist(q_idx, dmax, Dmax, pts_p_ds):
             """Split the points in a list into a those closer than dmax to q
@@ -285,8 +281,7 @@ class CoverTree(object):
                     pts_p_ds[new_pts_len] = pts_p_ds[i]
                     new_pts_len += 1
             pts_p_ds[:] = pts_p_ds[:new_pts_len]
-
-            return near_q_ds, far_q_ds
+            return (near_q_ds, far_q_ds)
 
         def construct(p_idx, near_p_ds, far_p_ds, i):
             """Main construction loop.
@@ -306,30 +301,15 @@ class CoverTree(object):
             #           for (k, d) in far_p_ds)
 
             if len(near_p_ds) + len(far_p_ds) <= self.leafsize:
-                idx = [ii for (ii, d) in itertools.chain(near_p_ds,
-                                                         far_p_ds)]
-                radius = max(d for (ii, d) in itertools.chain(near_p_ds,
-                                                              far_p_ds,
-                                                              [(0.0, None)]))
-                #print("Building level %d leaf node for p_idx=%d with %s"
-                #      % (i, p_idx, str(idx)))
+                idx = [ii for ii, d in itertools.chain(near_p_ds, far_p_ds)]
+                radius = max((d for ii, d in itertools.chain(near_p_ds, far_p_ds, [(0.0, None)])))
                 node = CoverTree._LeafNode(idx, p_idx, radius)
-                return node, []
+                return (node, [])
             else:
-                # Remove points very near to p, and as many as possible of
-                # those that are just "near"
-                nearer_p_ds, so_so_near_p_ds = split_with_dist(
-                    child_d[i - 1], child_d[i], near_p_ds)
-                p_im1, near_p_ds = construct(p_idx, nearer_p_ds,
-                                             so_so_near_p_ds, i - 1)
-
-                # If no near points remain, p_i would only have the
-                # trivial child p_im1.  Skip directly to p_im1 in the
-                # explicit representation
+                nearer_p_ds, so_so_near_p_ds = split_with_dist(child_d[i - 1], child_d[i], near_p_ds)
+                p_im1, near_p_ds = construct(p_idx, nearer_p_ds, so_so_near_p_ds, i - 1)
                 if not near_p_ds:
-                    #print("Passing though level %d child node %s "
-                    #      "up to level %d" % (i - 1, str(p_im1), i))
-                    return p_im1, far_p_ds
+                    return (p_im1, far_p_ds)
                 else:
                     # near_p_ds now contains points near to p at level i,
                     # but not descendants of p at level i-1.
@@ -339,37 +319,18 @@ class CoverTree(object):
                     children = [p_im1]
                     while near_p_ds:
                         q_idx, _ = random.choice(near_p_ds)
-
-                        near_q_ds, far_q_ds = split_without_dist(
-                            q_idx, child_d[i - 1], child_d[i], near_p_ds)
-                        near_q_ds2, far_q_ds2 = split_without_dist(
-                            q_idx, child_d[i - 1], child_d[i], far_p_ds)
+                        near_q_ds, far_q_ds = split_without_dist(q_idx, child_d[i - 1], child_d[i], near_p_ds)
+                        near_q_ds2, far_q_ds2 = split_without_dist(q_idx, child_d[i - 1], child_d[i], far_p_ds)
                         near_q_ds += near_q_ds2
                         far_q_ds += far_q_ds2
-
-                        #assert not (set(i for (i,d) in near_q_ds) &
-                        #            set(i for (i,d) in far_q_ds))
-                        #assert not (set(i for (i,d) in near_q_ds+far_q_ds) &
-                        #            set(i for (i,d) in far_p_ds))
-
-                        q_im1, unused_q_ds = construct(
-                            q_idx, near_q_ds, far_q_ds, i - 1)
-
+                        q_im1, unused_q_ds = construct(q_idx, near_q_ds, far_q_ds, i - 1)
                         children.append(q_im1)
-
-                        # TODO: Figure out an effective way of not having
-                        # to recalculate distances to p
-                        new_near_p_ds, new_far_p_ds = split_without_dist(
-                            p_idx, child_d[i], child_d[i + 1], unused_q_ds)
+                        new_near_p_ds, new_far_p_ds = split_without_dist(p_idx, child_d[i], child_d[i + 1], unused_q_ds)
                         near_p_ds += new_near_p_ds
                         far_p_ds += new_far_p_ds
 
                     p_i = CoverTree._InnerNode(p_idx, i, heir_d[i], children)
-                    #print("Creating level %d inner node with %d children, "
-                    #      "remaining points = %s" %
-                    #      (i, len(p_i.children), str(far_p_ds)))
-                    return p_i, far_p_ds
-
+                    return (p_i, far_p_ds)
         if self.n == 0:
             self.root = CoverTree._LeafNode(idx=[], ctr_idx=-1, radius=0)
         else:
@@ -377,8 +338,7 @@ class CoverTree(object):
             # distance between some fixed point and any other point due to
             # the triangle inequality
             p_idx = random.randrange(self.n)
-            near_p_ds = [(j, self.distance(self.data[p_idx], self.data[j]))
-                         for j in np.arange(self.n)]
+            near_p_ds = [(j, self.distance(self.data[p_idx], self.data[j])) for j in np.arange(self.n)]
             far_p_ds = []
             try:
                 maxdist = 2 * max(near_p_ds, key=operator.itemgetter(1))[1]
@@ -390,28 +350,21 @@ class CoverTree(object):
             maxlevel = 0
             while maxdist > child_d[maxlevel]:
                 maxlevel += 1
-
-            self.root, unused_p_ds = construct(p_idx, near_p_ds,
-                                               far_p_ds, maxlevel)
-            #assert not unused_p_ds
-            #assert self._check()
+            self.root, unused_p_ds = construct(p_idx, near_p_ds, far_p_ds, maxlevel)
 
     def _check(self):
+
         def check_node(node):
             if isinstance(node, CoverTree._LeafNode):
-                assert all(self.distance(self.data[node.ctr_idx],
-                                         self.data[idx]) <= node.radius
-                           for idx in node.idx)
+                assert all((self.distance(self.data[node.ctr_idx], self.data[idx]) <= node.radius for idx in node.idx))
             else:
                 assert node.radius == self._heir_d[node.level]
-                assert any(child.ctr_idx == node.ctr_idx
-                           for child in node.children)
+                assert any((child.ctr_idx == node.ctr_idx for child in node.children))
                 for child in node.children:
-                    d_n_c = self.distance(self.data[node.ctr_idx],
-                                          self.data[child.ctr_idx])
+                    d_n_c = self.distance(self.data[node.ctr_idx], self.data[child.ctr_idx])
                     assert d_n_c <= self._child_d[node.level]
                     if isinstance(child, CoverTree._LeafNode):
-                        assert (child.radius + d_n_c) <= node.radius
+                        assert child.radius + d_n_c <= node.radius
                     check_node(child)
 
         check_node(self.root)
@@ -420,21 +373,18 @@ class CoverTree(object):
             if isinstance(node, CoverTree._LeafNode):
                 return node.idx
             else:
-                return list(
-                    itertools.chain.from_iterable(
-                        enum_leaves(child)
-                        for child in node.children))
-
+                return list(itertools.chain.from_iterable((enum_leaves(child) for child in node.children)))
         assert sorted(enum_leaves(self.root)) == list(range(self.data.shape[0]))
 
         return True
 
     def _print(self):
+
         def print_node(node, indent):
             if isinstance(node, CoverTree._LeafNode):
-                print("-" * indent, node)
+                print('-' * indent, node)
             else:
-                print("-" * indent, node)
+                print('-' * indent, node)
                 for child in node.children:
                     print_node(child, indent + 1)
 
@@ -446,18 +396,7 @@ class CoverTree(object):
 
         dist_to_ctr = self.distance(p, self.data[self.root.ctr_idx])
         min_distance = max(0.0, dist_to_ctr - self.root.radius)
-
-        # priority queue for chasing nodes
-        # entries are:
-        #  minimum distance between the node area and the target
-        #  distance between node center and target
-        #  the node
-        q = [(min_distance,
-              dist_to_ctr,
-              self.root)]
-        # priority queue for the nearest neighbors
-        # furthest known neighbor first
-        # entries are (-distance, i)
+        q = [(min_distance, dist_to_ctr, self.root)]
         neighbors = []
 
         if eps == 0:
@@ -498,8 +437,7 @@ class CoverTree(object):
                     # child might be too far, if so, don't bother pushing it
                     if min_distance <= distance_upper_bound * epsfac:
                         heappush(q, (min_distance, d, child))
-
-        return sorted([(-d, i) for (d, i) in neighbors])
+        return sorted([(-d, i) for d, i in neighbors])
 
     def query(self, x, k=1, eps=0, distance_upper_bound=np.inf):
         """
@@ -538,9 +476,7 @@ class CoverTree(object):
         x = np.asarray(x)
         if self.pt_shape:
             if np.shape(x)[-len(self.pt_shape):] != self.pt_shape:
-                raise ValueError("x must consist of vectors of shape %s "
-                                 "but has shape %s"
-                                 % (self.pt_shape, np.shape(x)))
+                raise ValueError('x must consist of vectors of shape %s but has shape %s' % (self.pt_shape, np.shape(x)))
             retshape = np.shape(x)[:-len(self.pt_shape)]
         else:
             retshape = np.shape(x)
@@ -560,16 +496,12 @@ class CoverTree(object):
                 ii = np.empty(retshape, dtype=np.int)
                 ii.fill(self.n)
             else:
-                raise ValueError("Requested %s nearest neighbors; "
-                                 "acceptable numbers are integers greater "
-                                 "than or equal to one, or None")
+                raise ValueError('Requested %s nearest neighbors; acceptable numbers are integers greater than or equal to one, or None')
             for c in np.ndindex(retshape):
-                hits = self._query(
-                    x[c], k=k, eps=eps,
-                    distance_upper_bound=distance_upper_bound)
+                hits = self._query(x[c], k=k, eps=eps, distance_upper_bound=distance_upper_bound)
                 if k is None:
-                    dd[c] = [d for (d, i) in hits]
-                    ii[c] = [i for (d, i) in hits]
+                    dd[c] = [d for d, i in hits]
+                    ii[c] = [i for d, i in hits]
                 elif k > 1:
                     for j in range(len(hits)):
                         dd[c + (j,)], ii[c + (j,)] = hits[j]
@@ -579,17 +511,16 @@ class CoverTree(object):
                     else:
                         dd[c] = np.inf
                         ii[c] = self.n
-            return dd, ii
+            return (dd, ii)
         else:
-            hits = self._query(x, k=k, eps=eps,
-                               distance_upper_bound=distance_upper_bound)
+            hits = self._query(x, k=k, eps=eps, distance_upper_bound=distance_upper_bound)
             if k is None:
-                return [d for (d, i) in hits], [i for (d, i) in hits]
+                return ([d for d, i in hits], [i for d, i in hits])
             elif k == 1:
                 if len(hits) > 0:
                     return hits[0]
                 else:
-                    return np.inf, self.n
+                    return (np.inf, self.n)
             elif k > 1:
                 dd = np.empty(k, dtype=np.float)
                 dd.fill(np.inf)
@@ -597,39 +528,30 @@ class CoverTree(object):
                 ii.fill(self.n)
                 for j in range(len(hits)):
                     dd[j], ii[j] = hits[j]
-                return dd, ii
+                return (dd, ii)
             else:
-                raise ValueError("Requested %s nearest neighbors; "
-                                 "acceptable numbers are integers greater "
-                                 "than or equal to one, or None")
+                raise ValueError('Requested %s nearest neighbors; acceptable numbers are integers greater than or equal to one, or None')
 
     def _query_ball_point(self, x, r, eps=0):
+
         def traverse_checking(node):
             d_x_node = self.distance(x, self.data[node.ctr_idx])
             min_distance = max(0.0, d_x_node - node.radius)
             max_distance = d_x_node + node.radius
-            if min_distance > r / (1. + eps):
+            if min_distance > r / (1.0 + eps):
                 return []
-            elif max_distance < r * (1. + eps):
+            elif max_distance < r * (1.0 + eps):
                 return traverse_no_checking(node)
             elif isinstance(node, CoverTree._LeafNode):
-                return list(i for i in node.idx
-                            if self.distance(x, self.data[i]) <= r)
+                return list((i for i in node.idx if self.distance(x, self.data[i]) <= r))
             else:
-                return list(
-                    itertools.chain.from_iterable(
-                        traverse_checking(child)
-                        for child in node.children))
+                return list(itertools.chain.from_iterable((traverse_checking(child) for child in node.children)))
 
         def traverse_no_checking(node):
             if isinstance(node, CoverTree._LeafNode):
                 return node.idx
             else:
-                return list(
-                    itertools.chain.from_iterable(
-                        traverse_no_checking(child)
-                        for child in node.children))
-
+                return list(itertools.chain.from_iterable((traverse_no_checking(child) for child in node.children)))
         return traverse_checking(self.root)
 
     def query_ball_point(self, x, r, eps=0):
@@ -664,11 +586,7 @@ class CoverTree(object):
         """
         x = np.asarray(x)
         if self.pt_shape and x.shape[-len(self.pt_shape):] != self.pt_shape:
-            raise ValueError("Searching for a point of shape %s in a "
-                             "CoverTree with points of shape %s" %
-                             (x.shape[-len(self.pt_shape):],
-                              self.pt_shape))
-
+            raise ValueError('Searching for a point of shape %s in a CoverTree with points of shape %s' % (x.shape[-len(self.pt_shape):], self.pt_shape))
         if len(x.shape) == 1:
             return self._query_ball_point(x, r, eps)
         else:
@@ -706,12 +624,11 @@ class CoverTree(object):
         """
 
         results = [[] for i in range(self.n)]
-        real_min_r = r / (1. + eps)
-        real_max_r = r * (1. + eps)
+        real_min_r = r / (1.0 + eps)
+        real_max_r = r * (1.0 + eps)
 
         def traverse_checking(node1, node2):
-            d = self.distance(self.data[node1.ctr_idx],
-                              other.data[node2.ctr_idx])
+            d = self.distance(self.data[node1.ctr_idx], other.data[node2.ctr_idx])
             min_distance = d - node1.radius - node2.radius
             max_distance = d + node1.radius + node2.radius
             if min_distance > real_min_r:
@@ -722,8 +639,7 @@ class CoverTree(object):
                 if isinstance(node2, CoverTree._LeafNode):
                     for i in node1.idx:
                         for j in node2.idx:
-                            if self.distance(self.data[i],
-                                             other.data[j]) <= r:
+                            if self.distance(self.data[i], other.data[j]) <= r:
                                 results[i].append(j)
                 else:
                     for child2 in node2.children:
@@ -731,14 +647,12 @@ class CoverTree(object):
             elif isinstance(node2, CoverTree._LeafNode):
                 for child1 in node1.children:
                     traverse_checking(child1, node2)
+            elif node1.radius > node2.radius:
+                for child1 in node1.children:
+                    traverse_checking(child1, node2)
             else:
-                # Break down bigger node
-                if node1.radius > node2.radius:
-                    for child1 in node1.children:
-                        traverse_checking(child1, node2)
-                else:
-                    for child2 in node2.children:
-                        traverse_checking(node1, child2)
+                for child2 in node2.children:
+                    traverse_checking(node1, child2)
 
         def traverse_no_checking(node1, node2):
             if isinstance(node1, CoverTree._LeafNode):
@@ -812,23 +726,20 @@ class CoverTree(object):
                 for child1 in node1.children:
                     traverse_checking(child1, node2)
             else:
-                d_1_2 = self.distance(self.data[node1.ctr_idx],
-                                      self.data[node2.ctr_idx])
+                d_1_2 = self.distance(self.data[node1.ctr_idx], self.data[node2.ctr_idx])
                 min_distance = d_1_2 - node1.radius - node2.radius
                 max_distance = d_1_2 + node1.radius + node2.radius
-                if min_distance > r / (1. + eps):
+                if min_distance > r / (1.0 + eps):
                     return
-                elif max_distance < r * (1. + eps):
+                elif max_distance < r * (1.0 + eps):
                     for child1 in node1.children:
                         traverse_no_checking(child1, node2)
+                elif node1.radius > node2.radius:
+                    for child1 in node1.children:
+                        traverse_checking(child1, node2)
                 else:
-                    # Break down bigger node
-                    if node1.radius > node2.radius:
-                        for child1 in node1.children:
-                            traverse_checking(child1, node2)
-                    else:
-                        for child2 in node2.children:
-                            traverse_checking(node1, child2)
+                    for child2 in node2.children:
+                        traverse_checking(node1, child2)
 
         def traverse_no_checking(node1, node2):
             if test_set_visited(node1, node2):
@@ -883,8 +794,7 @@ class CoverTree(object):
         """
 
         def traverse(node1, node2, idx):
-            d_1_2 = self.distance(self.data[node1.ctr_idx],
-                                  other.data[node2.ctr_idx])
+            d_1_2 = self.distance(self.data[node1.ctr_idx], other.data[node2.ctr_idx])
             min_r = d_1_2 - node1.radius - node2.radius
             max_r = d_1_2 + node1.radius + node2.radius
             c_greater = r[idx] > max_r
@@ -895,9 +805,7 @@ class CoverTree(object):
 
             if isinstance(node1, CoverTree._LeafNode):
                 if isinstance(node2, CoverTree._LeafNode):
-                    ds = [self.distance(self.data[i], other.data[j])
-                          for i in node1.idx
-                          for j in node2.idx]
+                    ds = [self.distance(self.data[i], other.data[j]) for i in node1.idx for j in node2.idx]
                     ds.sort()
                     result[idx] += np.searchsorted(ds, r[idx], side='right')
                 else:
@@ -906,15 +814,12 @@ class CoverTree(object):
             elif isinstance(node2, CoverTree._LeafNode):
                 for child1 in node1.children:
                     traverse(child1, node2, idx)
+            elif node1.radius > node2.radius:
+                for child1 in node1.children:
+                    traverse(child1, node2, idx)
             else:
-                # Break down bigger node
-                if node1.radius > node2.radius:
-                    for child1 in node1.children:
-                        traverse(child1, node2, idx)
-                else:
-                    for child2 in node2.children:
-                        traverse(node1, child2, idx)
-
+                for child2 in node2.children:
+                    traverse(node1, child2, idx)
         if np.shape(r) == ():
             r = np.array([r])
             result = np.zeros(1, dtype=int)
@@ -927,8 +832,7 @@ class CoverTree(object):
             traverse(self.root, other.root, np.arange(n))
             return result
         else:
-            raise ValueError("r must be either a single value or "
-                             "a one-dimensional array of values")
+            raise ValueError('r must be either a single value or a one-dimensional array of values')
 
     def sparse_distance_matrix(self, other, max_distance):
         """
@@ -953,8 +857,7 @@ class CoverTree(object):
         result = scipy.sparse.dok_matrix((self.n, other.n))
 
         def traverse(node1, node2):
-            d_1_2 = self.distance(self.data[node1.ctr_idx],
-                                  other.data[node2.ctr_idx])
+            d_1_2 = self.distance(self.data[node1.ctr_idx], other.data[node2.ctr_idx])
             min_distance_1_2 = d_1_2 - node1.radius - node2.radius
             if min_distance_1_2 > max_distance:
                 return
@@ -962,8 +865,7 @@ class CoverTree(object):
                 if isinstance(node2, CoverTree._LeafNode):
                     for i in node1.idx:
                         for j in node2.idx:
-                            d = self.distance(self.data[i],
-                                              other.data[j])
+                            d = self.distance(self.data[i], other.data[j])
                             if d <= max_distance:
                                 result[i, j] = d
                 else:
@@ -972,15 +874,12 @@ class CoverTree(object):
             elif isinstance(node2, CoverTree._LeafNode):
                 for child1 in node1.children:
                     traverse(child1, node2)
+            elif node1.radius > node2.radius:
+                for child1 in node1.children:
+                    traverse(child1, node2)
             else:
-                # Break down bigger node
-                if node1.radius > node2.radius:
-                    for child1 in node1.children:
-                        traverse(child1, node2)
-                else:
-                    for child2 in node2.children:
-                        traverse(node1, child2)
-
+                for child2 in node2.children:
+                    traverse(node1, child2)
         traverse(self.root, other.root)
 
         return result
@@ -1014,10 +913,7 @@ def distance_matrix(x, y, distance):
     pt_shape_y = y.shape[1:]
 
     if pt_shape_x != pt_shape_y:
-        raise ValueError("x contains vectors of shape %s but y contains "
-                         "vectors of shape %s"
-                         % (str(pt_shape_x), str(pt_shape_y)))
-
+        raise ValueError('x contains vectors of shape %s but y contains vectors of shape %s' % (str(pt_shape_x), str(pt_shape_y)))
     result = np.empty((m, n), dtype=np.float)
     for i, j in np.ndindex((m, n)):
         result[i, j] = distance(x[i], y[j])

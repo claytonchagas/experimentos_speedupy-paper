@@ -17,7 +17,7 @@ def compute_FFT(n):
 @initialize_speedupy
 def main(n):
     for i in range(100, n + 1, 100):
-        print(f'Executando FFT para n={i}')  # Impressão fora do cache
+        print(f'Executando FFT para n={i}')
         compute_FFT(i)
 
 if __name__ == '__main__':

@@ -1,0 +1,18 @@
+	total pairs counted: 0
+
+	total pairs counted: 10000000
+
+	total pairs counted: 20000000
+
+	total pairs counted: 30000000
+
+	total pairs counted: 40000000
+
+	total pairs counted: 50000000
+
+	total pairs counted: 60000000
+
+	total pairs counted: 70000000
+
+took 279 seconds to do pairwise comparisons
+Counter({2: 33191686, 1: 26349549, 3: 21023433, 4: 8909108, 5: 2844035, 6: 721128, 7: 154784, 8: 27760, 9: 4446, 10: 560, 11: 77, 0: 0})

@@ -58,9 +58,7 @@ class Spheres(System):
     """
 
     def __init__(self, tether_statistics=None):
-        super(Spheres, self).__init__(tether_statistics if tether_statistics
-                                      else RodsGraftedOnSpheres())
-
+        super(Spheres, self).__init__(tether_statistics if tether_statistics else RodsGraftedOnSpheres())
         self.sphere_info = {}
 
     def add_sphere(self, name, centre, radius):

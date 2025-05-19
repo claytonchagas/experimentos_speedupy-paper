@@ -174,14 +174,10 @@ class System(object):
         """
 
         if not kwargs:
-            raise ValueError("No properties specified in find_tethers")
-
+            raise ValueError('No properties specified in find_tethers')
         result = set()
         for i, t in enumerate(self.tethers):
-
-            if (all(prop in t for prop in kwargs) and
-                all(t[prop] == val for prop, val in kwargs.items())):
-
+            if all((prop in t for prop in kwargs)) and all((t[prop] == val for prop, val in kwargs.items())):
                 result.add(i)
 
         return result
@@ -222,13 +218,8 @@ class System(object):
                 stats.check_tether(self, t)
         except AttributeError:
             pass
-
-        # Set up repulsion
-        boltz_rep = [stats.calc_boltz_exclusion(self, t)
-                     for t in self.tethers]
-        self._rep_free_energy = -sum(log(x) for x in boltz_rep)
-
-        # Pre-exponentiate beta_DeltaG0
+        boltz_rep = [stats.calc_boltz_exclusion(self, t) for t in self.tethers]
+        self._rep_free_energy = -sum((log(x) for x in boltz_rep))
         boltz_soln = SymDict()
         for (i, j), beta_DeltaG0 in self.beta_DeltaG0.items():
             if i <= j:
@@ -259,15 +250,10 @@ class System(object):
                     sticky_end_pair = (ends[i], ends[j])
                     if sticky_end_pair not in boltz_soln:
                         continue
-
-                    boltz_cnf = (
-                        calc_boltz_binding_cnf(self, info_i, info_j) /
-                        (boltz_rep[i] * boltz_rep[j]))
+                    boltz_cnf = calc_boltz_binding_cnf(self, info_i, info_j) / (boltz_rep[i] * boltz_rep[j])
                     if boltz_cnf != 0:
                         self._boltz_binding_cnf[i, j] = boltz_cnf
-                        boltz_bind[i, j] = (boltz_soln[sticky_end_pair] *
-                                            boltz_cnf)
-
+                        boltz_bind[i, j] = boltz_soln[sticky_end_pair] * boltz_cnf
         else:
 
             # Simply run through old _boltz_binding_cnf factors and
@@ -286,15 +272,12 @@ class System(object):
 
         self._ref_binding_free_energy = self.binding_free_energy
         self._ref_rep_free_energy = self.rep_free_energy
-
-        assert abs(self.binding_free_energy < 1e-8)
-        assert abs(self.rep_free_energy < 1e-8)
+        assert abs(self.binding_free_energy < 1e-08)
+        assert abs(self.rep_free_energy < 1e-08)
 
     def _dnacc_check(self):
         if self._dnacc is None:
-            raise RuntimeError("You must call update() whenever "
-                               "you change any tether properties or "
-                               "binding strengths")
+            raise RuntimeError('You must call update() whenever you change any tether properties or binding strengths')
 
     @property
     def num_tethers(self):
@@ -343,8 +326,7 @@ class System(object):
 
         This excludes repulsion due to volume exclusion."""
         self._dnacc_check()
-        return (self._dnacc.binding_free_energy -
-                self._ref_binding_free_energy)
+        return self._dnacc.binding_free_energy - self._ref_binding_free_energy
 
     @property
     def rep_free_energy(self):

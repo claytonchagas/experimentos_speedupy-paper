@@ -92,6 +92,7 @@ class SymDict(dict):
 
     Use exactly as a dict.
     """
+
     def __setitem__(self, key, value):
         dict.__setitem__(self, key, value)
         if key[0] != key[1]:
@@ -105,6 +106,7 @@ class SymDict(dict):
 
 class default_zero_dict(dict):
     """A dictionary where missing keys have the value 0.0"""
+
     def __missing__(self, key):
         return 0.0
 
@@ -112,8 +114,7 @@ class default_zero_dict(dict):
 class SyntheticList(object):
     """A list that calls methods to get, set and delete items."""
 
-    def __init__(self, fgetlen=None, fgetitem=None,
-                 fsetitem=None, fdelitem=None):
+    def __init__(self, fgetlen=None, fgetitem=None, fsetitem=None, fdelitem=None):
         self.fgetlen = fgetlen
         self.fgetitem = fgetitem
         self.fsetitem = fsetitem
@@ -188,7 +189,7 @@ class csr_matrix_from_dict(object):
         # values are stored in data[indptr[i]:indptr[i+1]].
         M, N = shape
         nnz_in_row = np.zeros(M, dtype='int32')
-        for (i, j) in d:
+        for i, j in d:
             nnz_in_row[i] += 1
         nnz = len(d)
 
@@ -217,16 +218,15 @@ class csr_matrix_from_dict(object):
         """Retrive item (i,j) from the matrix.  VERY SLOW."""
         i, j = key
         M, N = self.shape
-        if not (0 <= i < M) or not (0 <= j < N):
-            raise KeyError('Item (%d,%d) out of range (matrix is %dx%d)' %
-                           (i, j, M, N))
-
+        if not 0 <= i < M or not 0 <= j < N:
+            raise KeyError('Item (%d,%d) out of range (matrix is %dx%d)' % (i, j, M, N))
         for ind in range(self.indptr[i], self.indptr[i + 1]):
             if self.indices[ind] == j:
                 return self.data[ind]
         else:
             return 0.0
 
+@maybe_deterministic
 def csr_matrix_items(mtx, row=None):
     """A generator to efficiently iterate through CSR matrix items.
 
@@ -255,7 +255,7 @@ def csr_matrix_items(mtx, row=None):
 
     for i in range(mtx.shape[0]) if row is None else (row,):
         for ind in range(indptr[i], indptr[i + 1]):
-            yield (i, indices[ind]), data[ind]
+            yield ((i, indices[ind]), data[ind])
 
 @deterministic
 def is_csr_matrix_symmetric(mtx):
@@ -271,7 +271,7 @@ def is_csr_matrix_symmetric(mtx):
     else:
         return True
 
-
+@maybe_deterministic
 def random_point_sphere(radius, centre=(0.0, 0.0, 0.0)):
     """Generate a random point (x,y,z) on a sphere
 

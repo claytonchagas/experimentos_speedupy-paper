@@ -32,9 +32,9 @@ def build_cache_key(func, args, kwargs):
 
 def deterministic(func):
     cache = {}
-    # cache_dir = os.path.join(os.getcwd(), ".speedupy", "cache")
-    cache_dir = os.path.join(os.path.dirname(sys.modules[func.__module__].__file__), ".speedupy", "cache")  # cria o cache na pasta do experimento
-
+    # Antes: cache no diretório do script original; agora usa cwd do experimento
+    cache_dir = os.path.join(os.getcwd(), ".speedupy", "cache")  # cria o cache na pasta do experimento
+    #cache_dir = os.path.join(os.path.dirname(sys.modules[func.__module__].__file__), ".speedupy", "cache")  # antigo
     os.makedirs(cache_dir, exist_ok=True)
 
     @functools.wraps(func)
@@ -65,12 +65,14 @@ def initialize_speedupy(main_func):
     def wrapper(*args, **kwargs):
         start = time.perf_counter()
         try:
-            main_func(*args, **kwargs)
+            # chama função principal e guarda resultado
+            result = main_func(*args, **kwargs)  # captura resultado
         finally:
             end = time.perf_counter()
             execution_time = end - start
             dump_cache_metrics(execution_time)
-        return wrapper
+        #return wrapper  # antigo (incorreto: retornava função wrapper em vez do resultado)
+        return result  # retorna resultado da função principal
     return wrapper
 
 def dump_cache_metrics(execution_time):
@@ -84,8 +86,9 @@ def dump_cache_metrics(execution_time):
     path = os.path.join(LOG_DIR, filename)
 
     hit_rate = cache_hits / (cache_hits + cache_misses) if (cache_hits + cache_misses) > 0 else 0.0
-    # cache_dir = os.path.join(os.getcwd(), ".speedupy", "cache")
-    cache_dir = os.path.join(os.path.dirname(sys.modules[func.__module__].__file__), ".speedupy", "cache")  # cria o cache na pasta do experimento
+    # Antes: cache no diretório do script original; agora usa cwd do experimento
+    cache_dir = os.path.join(os.getcwd(), ".speedupy", "cache")  # usa cwd para pasta do experimento
+    #cache_dir = os.path.join(os.path.dirname(sys.modules[func.__module__].__file__), ".speedupy", "cache")  # antigo
     cache_size = sum(os.path.getsize(os.path.join(dirpath, f))
                      for dirpath, _, files in os.walk(cache_dir) for f in files)
     overhead = hit_total_time / cache_hits if cache_hits > 0 else 0.0
@@ -98,3 +101,7 @@ def dump_cache_metrics(execution_time):
         f.write(f"cache_hit_rate: {hit_rate:.6f}\n")
         f.write(f"cache_size_bytes: {cache_size}\n")
         f.write(f"cache_overhead_per_hit: {overhead:.6f}\n")
+
+def maybe_deterministic(func):
+    """Decorador neutro que não altera a função decorada."""
+    return func

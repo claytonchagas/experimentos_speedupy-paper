@@ -66,8 +66,7 @@ class PlatesMeanField(object):
     """
 
     def __init__(self, tether_statistics=None):
-        self.tether_statistics = (tether_statistics if tether_statistics
-                                  else RodsGraftedOnPlatesMeanField())
+        self.tether_statistics = tether_statistics if tether_statistics else RodsGraftedOnPlatesMeanField()
         self._tether_type_prototype = {}
         self.tether_types = []
         self.beta_DeltaG0 = SymDict()
@@ -81,15 +80,8 @@ class PlatesMeanField(object):
 
         # Internal Generic object that drives the calculation
         self._dnacc = None
-
-        # p_free and p_bound here means something slightly different that
-        # in a Generic, see p_bound property docstring
-        self._p_free = SyntheticList(
-            fgetitem=lambda i: (self._dnacc.p_free[i] /
-                                self._dnacc.weights[i]))
-        self._p_bound = SyntheticList(
-            fgetitem=lambda pair: (self._dnacc.p_bound[pair] /
-                                   self._dnacc.weights[pair[0]]))
+        self._p_free = SyntheticList(fgetitem=lambda i: self._dnacc.p_free[i] / self._dnacc.weights[i])
+        self._p_bound = SyntheticList(fgetitem=lambda pair: self._dnacc.p_bound[pair] / self._dnacc.weights[pair[0]])
 
     def set_tether_type_prototype(self, **kwargs):
         """Set properties common to all tether types added after this call.
@@ -152,13 +144,9 @@ class PlatesMeanField(object):
         # Check that the attributes 'plate' and 'sigma' are defined
         # and have sensible values
         if not 'plate' in new_type_info:
-            raise ValueError("Tether type must have a plate attribute")
-
+            raise ValueError('Tether type must have a plate attribute')
         if not 'sigma' in new_type_info:
-            raise ValueError("Tether type must have a sigma attribute")
-
-        # Other checks specific to particular tether statistics (e.g.,
-        # check rod length is defined for rigid rods)
+            raise ValueError('Tether type must have a sigma attribute')
         try:
             self.tether_statistics.check_tether_type(self, new_type_info)
         except AttributeError:
@@ -190,14 +178,10 @@ class PlatesMeanField(object):
         """
 
         if not kwargs:
-            raise ValueError("No properties specified in find_tether_types")
-
+            raise ValueError('No properties specified in find_tether_types')
         result = set()
         for i, t in enumerate(self.tether_types):
-
-            if (all(prop in t for prop in kwargs) and
-                all(t[prop] == val for prop, val in kwargs.items())):
-
+            if all((prop in t for prop in kwargs)) and all((t[prop] == val for prop, val in kwargs.items())):
                 result.add(i)
 
         return result
@@ -231,13 +215,10 @@ class PlatesMeanField(object):
 
         self._ref_binding_free_energy_density = 0.0
         self._ref_rep_free_energy_density = 0.0
-
-        self._ref_binding_free_energy_density = \
-            self.binding_free_energy_density
+        self._ref_binding_free_energy_density = self.binding_free_energy_density
         self._ref_rep_free_energy_density = self.rep_free_energy_density
-
-        assert abs(self.binding_free_energy_density < 1e-8)
-        assert abs(self.rep_free_energy_density < 1e-8)
+        assert abs(self.binding_free_energy_density < 1e-08)
+        assert abs(self.rep_free_energy_density < 1e-08)
 
     def update(self):
         """
@@ -262,19 +243,9 @@ class PlatesMeanField(object):
                 stats.check_tether_type(self, t)
         except AttributeError:
             pass
-
-        # Set up weights as grafting densities
-        weights = np.array(list(t['sigma'] for t in self.tether_types),
-                           dtype='float64')
-
-        # Set up repulsion
-        boltz_rep = [stats.calc_boltz_exclusion(self, t)
-                     for t in self.tether_types]
-        self._rep_free_energy_density = (
-            -sum(t['sigma'] * log(x)
-                 for (t, x) in zip(self.tether_types, boltz_rep)))
-
-        # Set up binding
+        weights = np.array(list((t['sigma'] for t in self.tether_types)), dtype='float64')
+        boltz_rep = [stats.calc_boltz_exclusion(self, t) for t in self.tether_types]
+        self._rep_free_energy_density = -sum((t['sigma'] * log(x) for t, x in zip(self.tether_types, boltz_rep)))
         for i, t_i in enumerate(self.tether_types):
             for j, t_j in enumerate(self.tether_types):
 
@@ -293,16 +264,11 @@ class PlatesMeanField(object):
 
                     boltz_soln = exp(-self.beta_DeltaG0[binding_pair])
                     boltz_bind[i, j] = boltz_soln * boltz_cnf
-
-        # Calculate p_free, p_bound and avg_num_bound
-        self._dnacc = Generic(csr_matrix_from_dict((N, N), boltz_bind),
-                              weights)
+        self._dnacc = Generic(csr_matrix_from_dict((N, N), boltz_bind), weights)
 
     def _dnacc_check(self):
         if self._dnacc is None:
-            raise RuntimeError("You must call update() whenever you "
-                               "change any tether properties or binding "
-                               "strengths")
+            raise RuntimeError('You must call update() whenever you change any tether properties or binding strengths')
 
     @property
     def p_free(self):
@@ -319,8 +285,7 @@ class PlatesMeanField(object):
     @property
     def p_bound(self):
         """
-        p_bound[a, b] = probability that one a-type tether is bound """\
-        """to any b-type tether.
+        p_bound[a, b] = probability that one a-type tether is bound to any b-type tether.
         """
         self._dnacc_check()
         return self._p_bound
@@ -328,8 +293,7 @@ class PlatesMeanField(object):
     @property
     def sigma_bound(self):
         """
-        sigma_bound[a, b] = area density of bonds between a-type """\
-        """and b-type tethers.
+        sigma_bound[a, b] = area density of bonds between a-type and b-type tethers.
         """
         self._dnacc_check()
         return self._dnacc.p_bound
@@ -346,18 +310,15 @@ class PlatesMeanField(object):
 
         This excludes repulsion due to volume exclusion."""
         self._dnacc_check()
-        return (self._dnacc.binding_free_energy -
-                self._ref_binding_free_energy_density)
+        return self._dnacc.binding_free_energy - self._ref_binding_free_energy_density
 
     @property
     def rep_free_energy_density(self):
         """Free energy of repulsion per unit area due to volume exclusion."""
         self._dnacc_check()
-        return (self._rep_free_energy_density -
-                self._ref_rep_free_energy_density)
+        return self._rep_free_energy_density - self._ref_rep_free_energy_density
 
     @property
     def free_energy_density(self):
         """Free energy per unit area of system."""
-        return (self.rep_free_energy_density +
-                self.binding_free_energy_density)
+        return self.rep_free_energy_density + self.binding_free_energy_density

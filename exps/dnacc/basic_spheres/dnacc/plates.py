@@ -67,8 +67,7 @@ class Plates(System):
     """
 
     def __init__(self, Lx, Ly, tether_statistics=None, periodic=True):
-        super(Plates, self).__init__(tether_statistics if tether_statistics
-                                     else RodsGraftedOnPlates())
+        super(Plates, self).__init__(tether_statistics if tether_statistics else RodsGraftedOnPlates())
         self.dims = (Lx, Ly)
         self.periodic = periodic
         self.separation = 0
