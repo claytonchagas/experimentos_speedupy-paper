@@ -8,10 +8,6 @@ from execute_exp.services.DataAccess import DataAccess, get_id
 from execute_exp.SpeeduPySettings import SpeeduPySettings
 from execute_exp.entitites.Metadata import Metadata
 from execute_exp.utils.persistance import load_samples, save_samples
-
-# Persistencia local para o maybe_deterministic
-_SAMPLES = defaultdict(list, load_samples())
-
 from SingletonMeta import SingletonMeta
 from util import check_python_version
 from logger.log import debug
@@ -43,8 +39,7 @@ _MIN_NUM_EXEC = 4  # nº mínimo de execuções antes de analisar
 _MIN_OCCURRENCE = 0.8  # para strategy 'counting'
 _CONF_LEVEL = 0.95  # para strategy 'error'
 _MAX_ERROR = 0.5  # margem de erro máxima no strategy 'error'
-
-_SAMPLES = defaultdict(list)  # func_call_hash → [amostras]
+_SAMPLES = defaultdict(list, load_samples())  # persistencia local maybe_deterministic
 
 
 def _margin_error(lst):
