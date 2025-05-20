@@ -45,7 +45,6 @@ _CONF_LEVEL = 0.95  # para strategy 'error'
 _MAX_ERROR = 0.5  # margem de erro máxima no strategy 'error'
 
 
-
 def _margin_error(lst):
     n = len(lst)
     if n < 2:
