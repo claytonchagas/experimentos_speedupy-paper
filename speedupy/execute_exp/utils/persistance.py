@@ -1,7 +1,7 @@
 import json
 from pathlib import Path
 
-SAMPLES_FILE = Path.home / ".speedupy" / "samples.json"
+SAMPLES_FILE = Path.home() / ".speedupy" / "samples.json"
 SAMPLES_FILE.parent.mkdir(exist_ok=True)
 
 
