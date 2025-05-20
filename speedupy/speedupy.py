@@ -1,22 +1,30 @@
 import time, sys, os
 from functools import wraps
+
 sys.path.append(os.path.dirname(__file__))
 
 from execute_exp.services.factory import init_exec_mode, init_revalidation
 from execute_exp.services.DataAccess import DataAccess, get_id
 from execute_exp.SpeeduPySettings import SpeeduPySettings
 from execute_exp.entitites.Metadata import Metadata
+from execute_exp.utils.persistance import load_samples, save_samples
+
+# Persistencia local para o maybe_deterministic
+_SAMPLES = defaultdict(list, load_samples())
+
 from SingletonMeta import SingletonMeta
 from util import check_python_version
 from logger.log import debug
 import numbers, statistics, math
 from collections import defaultdict
-from scipy import stats 
+from scipy import stats
+
 
 class SpeeduPy(metaclass=SingletonMeta):
     def __init__(self):
         self.exec_mode = init_exec_mode()
         self.revalidation = init_revalidation(self.exec_mode)
+
 
 def initialize_speedupy(f):
     @wraps(f)
@@ -27,22 +35,26 @@ def initialize_speedupy(f):
         DataAccess().close_data_access()
         end = time.perf_counter()
         print(f"TOTAL EXECUTION TIME: {end - start}")
+
     return wrapper
 
-_MIN_NUM_EXEC   = 4    # nº mínimo de execuções antes de analisar
-_MIN_OCCURRENCE = 0.8   # para strategy 'counting'
-_CONF_LEVEL     = 0.95  # para strategy 'error'
-_MAX_ERROR      = 0.5   # margem de erro máxima no strategy 'error'
+
+_MIN_NUM_EXEC = 4  # nº mínimo de execuções antes de analisar
+_MIN_OCCURRENCE = 0.8  # para strategy 'counting'
+_CONF_LEVEL = 0.95  # para strategy 'error'
+_MAX_ERROR = 0.5  # margem de erro máxima no strategy 'error'
 
 _SAMPLES = defaultdict(list)  # func_call_hash → [amostras]
+
 
 def _margin_error(lst):
     n = len(lst)
     if n < 2:
         return math.inf
     stdev = statistics.pstdev(lst)
-    z     = stats.t.ppf(_CONF_LEVEL, n - 1)
+    z = stats.t.ppf(_CONF_LEVEL, n - 1)
     return z * stdev / math.sqrt(n)
+
 
 def maybe_deterministic(f):
     """
@@ -51,11 +63,16 @@ def maybe_deterministic(f):
     • probabilistic      → counting (freq ≥ 0.8) OU error (margem ≤ 0.5).
     • Apenas valores numéricos escalares são considerados.
     """
+
     @wraps(f)
     def wrapper(*args, **kwargs):
-        print('wrapper')
-        mode = SpeeduPySettings().exec_mode[0] if SpeeduPySettings().exec_mode else 'manual'
-        if mode in ('no-cache', 'manual'):
+        print("wrapper")
+        mode = (
+            SpeeduPySettings().exec_mode[0]
+            if SpeeduPySettings().exec_mode
+            else "manual"
+        )
+        if mode in ("no-cache", "manual"):
             return f(*args, **kwargs)
 
         func_hash = DataAccess().get_function_hash(f.__qualname__)
@@ -66,18 +83,22 @@ def maybe_deterministic(f):
         print(f"[DEBUG] Func call hash: {func_call_hash}")
 
         buf = _SAMPLES[func_call_hash]
-        
+
         # Try to simulate if we already have enough samples
         if len(buf) >= _MIN_NUM_EXEC:
-            print('entrou')
-            if mode == 'accurate':
+            print("entrou")
+            if mode == "accurate":
                 if all(v == buf[0] for v in buf):
                     return buf[0]  # simulate with value
 
-            elif mode == 'probabilistic':
-                strategy = SpeeduPySettings().strategy[0] if SpeeduPySettings().strategy else 'counting'
+            elif mode == "probabilistic":
+                strategy = (
+                    SpeeduPySettings().strategy[0]
+                    if SpeeduPySettings().strategy
+                    else "counting"
+                )
 
-                if strategy == 'counting':
+                if strategy == "counting":
                     try:
                         moda = statistics.mode(buf)
                         freq = buf.count(moda) / len(buf)
@@ -86,7 +107,7 @@ def maybe_deterministic(f):
                     except statistics.StatisticsError:
                         pass  # no unique mode yet
 
-                elif strategy == 'error':
+                elif strategy == "error":
                     mean = statistics.mean(buf)
                     if _margin_error(buf) <= _MAX_ERROR:
                         return mean
@@ -98,27 +119,39 @@ def maybe_deterministic(f):
 
         if isinstance(ret, numbers.Number):
             buf.append(ret)
+            save_samples(_SAMPLES)
             if len(buf) >= _MIN_NUM_EXEC:
                 # Preemptively store in cache
-                if mode == 'accurate':
+                if mode == "accurate":
                     if all(v == buf[0] for v in buf):
-                        DataAccess().create_cache_entry(f.__qualname__, args, kwargs, buf[0])
-                elif mode == 'probabilistic':
-                    strategy = SpeeduPySettings().strategy[0] if SpeeduPySettings().strategy else 'counting'
-                    if strategy == 'counting':
+                        DataAccess().create_cache_entry(
+                            f.__qualname__, args, kwargs, buf[0]
+                        )
+                elif mode == "probabilistic":
+                    strategy = (
+                        SpeeduPySettings().strategy[0]
+                        if SpeeduPySettings().strategy
+                        else "counting"
+                    )
+                    if strategy == "counting":
                         try:
                             moda = statistics.mode(buf)
                             freq = buf.count(moda) / len(buf)
                             if freq >= _MIN_OCCURRENCE:
-                                DataAccess().create_cache_entry(f.__qualname__, args, kwargs, moda)
+                                DataAccess().create_cache_entry(
+                                    f.__qualname__, args, kwargs, moda
+                                )
                         except statistics.StatisticsError:
                             pass
-                    elif strategy == 'error':
+                    elif strategy == "error":
                         mean = statistics.mean(buf)
                         if _margin_error(buf) <= _MAX_ERROR:
-                            DataAccess().create_cache_entry(f.__qualname__, args, kwargs, mean)
+                            DataAccess().create_cache_entry(
+                                f.__qualname__, args, kwargs, mean
+                            )
 
         return ret
+
     return wrapper
 
 
@@ -130,7 +163,7 @@ def maybe_deterministic(f):
 #         func_call_hash = get_id(func_hash, method_args, method_kwargs)
 #         if SpeeduPy().revalidation.revalidation_in_current_execution(func_call_hash):
 #             return_value, elapsed_time = _execute_func_measuring_time(f, *method_args, **method_kwargs)
-            
+
 #             md = Metadata(func_hash, method_args, method_kwargs, return_value, elapsed_time)
 #             DataAccess().add_to_metadata(func_call_hash, md)
 #             SpeeduPy().revalidation.calculate_next_revalidation(func_call_hash, md)
@@ -176,12 +209,13 @@ def maybe_deterministic(f):
 #     f_hash = DataAccess().FUNCTIONS_2_HASHES[f.__qualname__]
 #     return get_function_call_return_freqs(f_hash, args, kwargs)
 
-#TODO: CORRIGIR IMPLEMENTAÇÃO
+# TODO: CORRIGIR IMPLEMENTAÇÃO
 # def _function_call_maybe_deterministic(func: Callable, func_args:List, func_kwargs:Dict) -> bool:
 #     func_hash = DataAccess().FUNCTIONS_2_HASHES[func.__qualname__]
 #     func_call_hash = get_id(func_hash, func_args, func_kwargs)
 #     #return func_call_hash not in Constantes().DONT_CACHE_FUNCTION_CALLS
 #     return True
+
 
 def deterministic(f):
     @wraps(f)
@@ -191,15 +225,20 @@ def deterministic(f):
         if _cache_doesnt_exist(c):
             debug("cache miss for {0}({1})".format(f.__qualname__, method_args))
             return_value = f(*method_args, **method_kwargs)
-            DataAccess().create_cache_entry(f.__qualname__, method_args, method_kwargs, return_value)
+            DataAccess().create_cache_entry(
+                f.__qualname__, method_args, method_kwargs, return_value
+            )
             return return_value
         else:
             debug("cache hit for {0}({1})".format(f.__qualname__, method_args))
             return c
+
     return wrapper
+
 
 def _cache_doesnt_exist(cache) -> bool:
     return cache is None
+
 
 def _execute_func_measuring_time(f, *method_args, **method_kwargs):
     start = time.perf_counter()
@@ -207,24 +246,28 @@ def _execute_func_measuring_time(f, *method_args, **method_kwargs):
     end = time.perf_counter()
     return result_value, end - start
 
+
 check_python_version()
 
-if SpeeduPySettings().exec_mode == ['no-cache']:
+if SpeeduPySettings().exec_mode == ["no-cache"]:
+
     def initialize_speedupy(f):
         @wraps(f)
         def wrapper(*method_args, **method_kwargs):
-            start = time.perf_counter()            
-            f(*method_args, **method_kwargs)            
+            start = time.perf_counter()
+            f(*method_args, **method_kwargs)
             end = time.perf_counter()
             print(f"TOTAL EXECUTION TIME: {end - start}")
+
         return wrapper
 
     def deterministic(f):
         return f
-    
+
     def maybe_deterministic(f):
         return f
 
-elif SpeeduPySettings().exec_mode == ['manual']:
+elif SpeeduPySettings().exec_mode == ["manual"]:
+
     def maybe_deterministic(f):
         return f
