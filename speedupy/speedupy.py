@@ -7,7 +7,7 @@ from execute_exp.services.factory import init_exec_mode, init_revalidation
 from execute_exp.services.DataAccess import DataAccess, get_id
 from execute_exp.SpeeduPySettings import SpeeduPySettings
 from execute_exp.entitites.Metadata import Metadata
-from execute_exp.utils.persistance import load_samples, save_samples, make_serializable
+from execute_exp.utils.persistance import load_samples, save_samples
 
 from SingletonMeta import SingletonMeta
 from util import check_python_version
@@ -54,18 +54,24 @@ def _margin_error(lst):
     z = stats.t.ppf(_CONF_LEVEL, n - 1)
     return z * stdev / math.sqrt(n)
 
+
+def safe_equal(a, b):
+    try:
+        if isinstance(a, np.ndarray) and isinstance(b, np.ndarray):
+            return np.array_equal(a, b)
+        return a == b
+    except Exception:
+        return False
+
 def _values_all_equal(buf):
-  if not buf:
-      return False
-  first = buf[0]
-  for v in buf[1:]:
-      if isinstance(v, np.ndarray) or isinstance(first, np.ndarray):
-          if not np.array_equal(v, first):
-              return False
-      else:
-          if v != first:
-              return False
-  return True
+    if not buf:
+        return False
+    first = buf[0]
+    for v in buf[1:]:
+        if not safe_equal(v, first):
+            return False
+    return True
+
 
 def array_mode(buf):
     seen = []
@@ -144,7 +150,7 @@ def maybe_deterministic(f):
 
         if mode == "accurate" or (mode == "probabilistic" and strategy == "counting"):
             buf.append(ret)
-            save_samples(make_serializable(_SAMPLES))
+            save_samples(_SAMPLES)
 
             if len(buf) >= _MIN_NUM_EXEC:
                 if mode == "accurate":
@@ -160,7 +166,7 @@ def maybe_deterministic(f):
 
         elif isinstance(ret, numbers.Number) and strategy == "error":
             buf.append(ret)
-            save_samples(make_serializable(_SAMPLES))
+            save_samples(_SAMPLES)
 
             if len(buf) >= _MIN_NUM_EXEC:
                 mean = statistics.mean(buf)
