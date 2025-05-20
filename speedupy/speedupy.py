@@ -7,10 +7,7 @@ from execute_exp.services.factory import init_exec_mode, init_revalidation
 from execute_exp.services.DataAccess import DataAccess, get_id
 from execute_exp.SpeeduPySettings import SpeeduPySettings
 from execute_exp.entitites.Metadata import Metadata
-from execute_exp.utils.persistance import load_samples, save_samples
-
-# Persistencia local para o maybe_deterministic
-_SAMPLES = defaultdict(list, load_samples())
+from execute_exp.utils.persistance import load_samples, save_samples, make_serializable
 
 from SingletonMeta import SingletonMeta
 from util import check_python_version
@@ -18,7 +15,10 @@ from logger.log import debug
 import numbers, statistics, math
 from collections import defaultdict
 from scipy import stats
+import numpy as np
 
+# Persistencia local para o maybe_deterministic
+_SAMPLES = defaultdict(list, load_samples())
 
 class SpeeduPy(metaclass=SingletonMeta):
     def __init__(self):
@@ -44,7 +44,6 @@ _MIN_OCCURRENCE = 0.8  # para strategy 'counting'
 _CONF_LEVEL = 0.95  # para strategy 'error'
 _MAX_ERROR = 0.5  # margem de erro máxima no strategy 'error'
 
-_SAMPLES = defaultdict(list)  # func_call_hash → [amostras]
 
 
 def _margin_error(lst):
@@ -55,15 +54,37 @@ def _margin_error(lst):
     z = stats.t.ppf(_CONF_LEVEL, n - 1)
     return z * stdev / math.sqrt(n)
 
+def _values_all_equal(buf):
+  if not buf:
+      return False
+  first = buf[0]
+  for v in buf[1:]:
+      if isinstance(v, np.ndarray) or isinstance(first, np.ndarray):
+          if not np.array_equal(v, first):
+              return False
+      else:
+          if v != first:
+              return False
+  return True
+
+def array_mode(buf):
+    seen = []
+    counts = []
+    for v in buf:
+        found = False
+        for i, s in enumerate(seen):
+            if np.array_equal(s, v):
+                counts[i] += 1
+                found = True
+                break
+        if not found:
+            seen.append(v)
+            counts.append(1)
+    max_idx = np.argmax(counts)
+    return seen[max_idx], counts[max_idx] / len(buf)
+
 
 def maybe_deterministic(f):
-    """
-    • no-cache / manual  → passa direto.
-    • accurate           → cacheia se todas as _MIN_NUM_EXEC amostras forem iguais.
-    • probabilistic      → counting (freq ≥ 0.8) OU error (margem ≤ 0.5).
-    • Apenas valores numéricos escalares são considerados.
-    """
-
     @wraps(f)
     def wrapper(*args, **kwargs):
         print("wrapper")
@@ -84,12 +105,11 @@ def maybe_deterministic(f):
 
         buf = _SAMPLES[func_call_hash]
 
-        # Try to simulate if we already have enough samples
         if len(buf) >= _MIN_NUM_EXEC:
             print("entrou")
             if mode == "accurate":
-                if all(v == buf[0] for v in buf):
-                    return buf[0]  # simulate with value
+                if _values_all_equal(buf):
+                    return buf[0]
 
             elif mode == "probabilistic":
                 strategy = (
@@ -100,12 +120,11 @@ def maybe_deterministic(f):
 
                 if strategy == "counting":
                     try:
-                        moda = statistics.mode(buf)
-                        freq = buf.count(moda) / len(buf)
+                        moda, freq = array_mode(buf)
                         if freq >= _MIN_OCCURRENCE:
                             return moda
                     except statistics.StatisticsError:
-                        pass  # no unique mode yet
+                        pass
 
                 elif strategy == "error":
                     mean = statistics.mean(buf)
@@ -117,38 +136,36 @@ def maybe_deterministic(f):
         md = Metadata(func_hash, args, kwargs, ret, elapsed)
         DataAccess().add_to_metadata(func_call_hash, md)
 
-        if isinstance(ret, numbers.Number):
+        strategy = (
+            SpeeduPySettings().strategy[0]
+            if SpeeduPySettings().strategy
+            else "counting"
+        )
+
+        if mode == "accurate" or (mode == "probabilistic" and strategy == "counting"):
             buf.append(ret)
-            save_samples(_SAMPLES)
+            save_samples(make_serializable(_SAMPLES))
+
             if len(buf) >= _MIN_NUM_EXEC:
-                # Preemptively store in cache
                 if mode == "accurate":
-                    if all(v == buf[0] for v in buf):
-                        DataAccess().create_cache_entry(
-                            f.__qualname__, args, kwargs, buf[0]
-                        )
-                elif mode == "probabilistic":
-                    strategy = (
-                        SpeeduPySettings().strategy[0]
-                        if SpeeduPySettings().strategy
-                        else "counting"
-                    )
-                    if strategy == "counting":
-                        try:
-                            moda = statistics.mode(buf)
-                            freq = buf.count(moda) / len(buf)
-                            if freq >= _MIN_OCCURRENCE:
-                                DataAccess().create_cache_entry(
-                                    f.__qualname__, args, kwargs, moda
-                                )
-                        except statistics.StatisticsError:
-                            pass
-                    elif strategy == "error":
-                        mean = statistics.mean(buf)
-                        if _margin_error(buf) <= _MAX_ERROR:
-                            DataAccess().create_cache_entry(
-                                f.__qualname__, args, kwargs, mean
-                            )
+                    if _values_all_equal(buf):
+                        DataAccess().create_cache_entry(f.__qualname__, args, kwargs, buf[0])
+                elif strategy == "counting":
+                    try:
+                        moda, freq = array_mode(buf)
+                        if freq >= _MIN_OCCURRENCE:
+                            DataAccess().create_cache_entry(f.__qualname__, args, kwargs, moda)
+                    except statistics.StatisticsError:
+                        pass
+
+        elif isinstance(ret, numbers.Number) and strategy == "error":
+            buf.append(ret)
+            save_samples(make_serializable(_SAMPLES))
+
+            if len(buf) >= _MIN_NUM_EXEC:
+                mean = statistics.mean(buf)
+                if _margin_error(buf) <= _MAX_ERROR:
+                    DataAccess().create_cache_entry(f.__qualname__, args, kwargs, mean)
 
         return ret
 

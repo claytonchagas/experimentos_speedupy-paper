@@ -32,8 +32,9 @@ SOURCE_DIR="$ROOT_PATH/speedupy"
 
 
 # Define the list of destination paths / Define a lista de caminhos de destino
-# DESTINATIONS_0="$ROOT_PATH/exps/belief_propagation/belief_propagation_spf.py"
-DESTINATIONS_0="$ROOT_PATH/exps/cvar/cvar_spf.py"
+DESTINATIONS_0="$ROOT_PATH/exps/belief_propagation/belief_propagation_spf.py"
+# DESTINATIONS_0="$ROOT_PATH/exps/cvar/cvar_spf.py"
+# DESTINATIONS_1="$ROOT_PATH/exps/gauss_legendre_quadrature/gauss_legendre_quadrature_spf.py" 
 # DESTINATIONS_2="$ROOT_PATH/exps/diversity_sims/vince_sim.py"
 
 #DESTINATIONS_0="$ROOT_PATH/exps/dnacc/basic_spheres/basic_spheres.py" 
@@ -41,7 +42,6 @@ DESTINATIONS_0="$ROOT_PATH/exps/cvar/cvar_spf.py"
 #DESTINATIONS_2="$ROOT_PATH/exps/epr/epr_analyse.py"
  
 #DESTINATIONS_0="$ROOT_PATH/exps/fft/fft.py"  
-#DESTINATIONS_1="$ROOT_PATH/exps/gauss_legendre_quadrature/gauss_legendre_quadrature.py" 
 #DESTINATIONS_2="$ROOT_PATH/exps/heat_distribution_lu/heat_distribution_lu.py"
  
 #DESTINATIONS_0="$ROOT_PATH/exps/look_and_say/look_and_say.py"
@@ -53,12 +53,14 @@ DESTINATIONS=($DESTINATIONS_0)
 # DESTINATIONS=($DESTINATIONS_0 $DESTINATIONS_1 $DESTINATIONS_2)
 #DESTINATIONS=($DESTINATIONS_0 $DESTINATIONS_1 $DESTINATIONS_2 $DESTINATIONS_3)
 
-#DESTINATIONS=($DESTINATIONS_0 $DESTINATIONS_1 $DESTINATIONS_2 $DESTINATIONS_3 $DESTINATIONS_4 $DESTINATIONS_5 $DESTINATIONS_6 $DESTINATIONS_7 $DESTINATIONS_8 $DESTINATIONS_9 $DESTINATIONS_10)
+# DESTINATIONS=($DESTINATIONS_0 $DESTINATIONS_1 $DESTINATIONS_2 $DESTINATIONS_3 $DESTINATIONS_4 $DESTINATIONS_5)
+# DESTINATIONS=($DESTINATIONS_0 $DESTINATIONS_1 $DESTINATIONS_2 $DESTINATIONS_3 $DESTINATIONS_4 $DESTINATIONS_5 $DESTINATIONS_6 $DESTINATIONS_7 $DESTINATIONS_8 $DESTINATIONS_9 $DESTINATIONS_10)
 
 
 # Define arguments
-# ARGUMENTS_0=("1000" "1000" "1000" "1000" "1000") # belief_propagation
-ARGUMENTS_0=("1e6" "1e6" "1e6" "1e6" "1e6") # cvar
+ARGUMENTS_0=("1000" "1000" "1000" "1000" "1000") # belief_propagation
+# ARGUMENTS_0=("1e6" "1e6" "1e6" "1e6" "1e6") # cvar
+# ARGUMENTS_1=("5000" "5000" "5000" "5000" "5000") # gauss_legendre_quadrature
 # ARGUMENTS_2=("1000000" "2000000" "3000000" "4000000" "5000000") # diversity_sim
 
 #ARGUMENTS_0=("2000000" "5000000" "8000000" "11000000" "13000000") # dnacc_basic_spheres
@@ -66,7 +68,6 @@ ARGUMENTS_0=("1e6" "1e6" "1e6" "1e6" "1e6") # cvar
 #ARGUMENTS_2=("200" "400" "600" "800" "1000") # epr_analyse
 
 #ARGUMENTS_0=("2000" "4000" "6000" "8000" "10000") # fft
-#ARGUMENTS_1=("5000" "7000" "9000" "11000" "13000") # gauss_legendre_quadrature
 #ARGUMENTS_2=("0.1" "0.05" "0.01" "0.005" "0.001") # heat_distribution_lu
 
 #ARGUMENTS_0=("45" "46" "47" "48" "49") # look_and_say
@@ -245,11 +246,12 @@ for round in {1..3}; do
         
         cd "$DEST_DIR"
         
-        if [ $round -eq 1 ]; then
-            echo "Preparando cache para $PYTHON_FILE - Rodada $round"
-            rm -rf "$DEST_DIR/.speedupy" 2>/dev/null
-            python3.12 "speedupy/setup_exp/setup.py" "$PYTHON_FILE"
-        fi
+        
+        echo "Preparando cache para $PYTHON_FILE - Rodada $round"
+        rm -rf "$DEST_DIR/.speedupy" 2>/dev/null
+        rm -f "$HOME/.speedupy/samples.json"
+        python3.12 "speedupy/setup_exp/setup.py" "$PYTHON_FILE"
+
         
         cd "$ROOT_PATH"
     done
@@ -296,11 +298,10 @@ for round in {1..3}; do
         
         cd "$DEST_DIR"
         
-        if [ $round -eq 1 ]; then
-            echo "Preparando cache para $PYTHON_FILE - Rodada $round"
-            rm -rf "$DEST_DIR/.speedupy" 2>/dev/null
-            python3.12 "speedupy/setup_exp/setup.py" "$PYTHON_FILE"
-        fi
+        echo "Preparando cache para $PYTHON_FILE - Rodada $round"
+        rm -rf "$DEST_DIR/.speedupy" 2>/dev/null
+        rm -f "$HOME/.speedupy/samples.json"
+        python3.12 "speedupy/setup_exp/setup.py" "$PYTHON_FILE"
         
         cd "$ROOT_PATH"
     done
@@ -349,11 +350,10 @@ for round in {1..3}; do
         
         cd "$DEST_DIR"
         
-        if [ $round -eq 1 ]; then
-            echo "Preparando cache para $PYTHON_FILE - Rodada $round"
-            rm -rf "$DEST_DIR/.speedupy" 2>/dev/null
-            python3.12 "speedupy/setup_exp/setup.py" "$PYTHON_FILE"
-        fi
+        echo "Preparando cache para $PYTHON_FILE - Rodada $round"
+        rm -rf "$DEST_DIR/.speedupy" 2>/dev/null
+        rm -f "$HOME/.speedupy/samples.json"
+        python3.12 "speedupy/setup_exp/setup.py" "$PYTHON_FILE"
         
         cd "$ROOT_PATH"
     done

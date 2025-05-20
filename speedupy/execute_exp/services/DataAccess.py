@@ -69,6 +69,7 @@ class DataAccess(metaclass=SingletonMeta):
     def close_data_access(self):
         self.__mem_arch.save_new_cache_entries()
         self.__function_calls_prov_table.save_function_calls_prov_entries()
+        
 
 def get_id(fun_source, fun_args=[], fun_kwargs={}):
     data = pickle.dumps(fun_args) + pickle.dumps(fun_kwargs)
