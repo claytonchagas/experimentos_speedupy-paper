@@ -18,6 +18,9 @@ class DataAccess(metaclass=SingletonMeta):
         self.__FUNCTIONS_2_HASHES = {}
         self.__mem_arch :AbstractMemArch
         self.__function_calls_prov_table:FunctionCallsProvTable
+        self.__TEMP_RESULTS = {}
+        print("[DEBUG] DataAccess initialized (singleton check)")
+        print(f"[DEBUG] DataAccess id: {id(self)}")
 
     def init_data_access(self):
         from execute_exp.services.factory import init_mem_arch
@@ -65,6 +68,34 @@ class DataAccess(metaclass=SingletonMeta):
         self.__function_calls_prov_table.add_metadata_collected_to_a_func_call_prov(func_call_hash,
         self.__METADATA[func_call_hash])
         self.__METADATA.pop(func_call_hash)
+
+    ############# SPF LOGIC
+    def add_temp_result(self, func_call_hash: str, result):
+      print(f"[DEBUG] add_temp_result called for {func_call_hash} → {result}")
+      if func_call_hash not in self.__TEMP_RESULTS:
+          self.__TEMP_RESULTS[func_call_hash] = []
+      self.__TEMP_RESULTS[func_call_hash].append(result)
+      print(f"[DEBUG] Updated TEMP_RESULTS: {self.__TEMP_RESULTS[func_call_hash]}")
+
+    # def add_temp_result(self, func_call_hash: str, result):
+    #     if func_call_hash not in self.__TEMP_RESULTS:
+    #         self.__TEMP_RESULTS[func_call_hash] = []
+    #     self.__TEMP_RESULTS[func_call_hash].append(result)
+    
+    def debug_temp_results(self):
+      print("[DEBUG] ===== TEMPORARY RESULT CACHE =====")
+      if not self.__TEMP_RESULTS:
+          print("[DEBUG] No entries in __TEMP_RESULTS.")
+      for func_call_hash, results in self.__TEMP_RESULTS.items():
+          print(f"[DEBUG] {func_call_hash} → {results}")
+
+    def get_temp_results(self, func_call_hash: str):
+        return self.__TEMP_RESULTS.get(func_call_hash, [])
+
+    def clear_temp_results(self, func_call_hash: str):
+        if func_call_hash in self.__TEMP_RESULTS:
+            del self.__TEMP_RESULTS[func_call_hash]
+
 
     def close_data_access(self):
         self.__mem_arch.save_new_cache_entries()

@@ -245,11 +245,11 @@ for round in {1..3}; do
         
         cd "$DEST_DIR"
         
-        if [ $round -eq 1 ]; then
-            echo "Preparando cache para $PYTHON_FILE - Rodada $round"
-            rm -rf "$DEST_DIR/.speedupy" 2>/dev/null
-            python3.12 "speedupy/setup_exp/setup.py" "$PYTHON_FILE"
-        fi
+        
+        echo "Preparando cache para $PYTHON_FILE - Rodada $round"
+        rm -rf "$DEST_DIR/.speedupy" 2>/dev/null
+        python3.12 "speedupy/setup_exp/setup.py" "$PYTHON_FILE"
+        
         
         cd "$ROOT_PATH"
     done
@@ -266,7 +266,8 @@ for round in {1..3}; do
             echo "Executando $PYTHON_FILE com argumento $ARG - Modo accurate"
             python3.12 $PYTHON_FILE $(echo "$ARG") \
                 --exec-mode accurate -s file \
-                | tail -n 1 | cut -d':' -f2 >> "${OUTPUT_FILES["${exp_index}_accurate"]}"
+                # | tail -n 1 | cut -d':' -f2 \
+                >> "${OUTPUT_FILES["${exp_index}_accurate"]}"
             cd "$ROOT_PATH"
         done
     done
@@ -296,11 +297,9 @@ for round in {1..3}; do
         
         cd "$DEST_DIR"
         
-        if [ $round -eq 1 ]; then
-            echo "Preparando cache para $PYTHON_FILE - Rodada $round"
-            rm -rf "$DEST_DIR/.speedupy" 2>/dev/null
-            python3.12 "speedupy/setup_exp/setup.py" "$PYTHON_FILE"
-        fi
+        echo "Preparando cache para $PYTHON_FILE - Rodada $round"
+        rm -rf "$DEST_DIR/.speedupy" 2>/dev/null
+        python3.12 "speedupy/setup_exp/setup.py" "$PYTHON_FILE"
         
         cd "$ROOT_PATH"
     done
@@ -319,7 +318,8 @@ for round in {1..3}; do
             python3.12 $PYTHON_FILE $(echo "$ARG") \
                 --exec-mode probabilistic --strategy counting \
                 --min-mode-occurrence 0.8 -s file \
-                | tail -n 1 | cut -d':' -f2 >> "${OUTPUT_FILES["${exp_index}_prob_count"]}"
+                # | tail -n 1 | cut -d':' -f2 \
+                >> "${OUTPUT_FILES["${exp_index}_prob_count"]}"
             cd "$ROOT_PATH"
         done
     done
@@ -349,11 +349,9 @@ for round in {1..3}; do
         
         cd "$DEST_DIR"
         
-        if [ $round -eq 1 ]; then
-            echo "Preparando cache para $PYTHON_FILE - Rodada $round"
-            rm -rf "$DEST_DIR/.speedupy" 2>/dev/null
-            python3.12 "speedupy/setup_exp/setup.py" "$PYTHON_FILE"
-        fi
+        echo "Preparando cache para $PYTHON_FILE - Rodada $round"
+        rm -rf "$DEST_DIR/.speedupy" 2>/dev/null
+        python3.12 "speedupy/setup_exp/setup.py" "$PYTHON_FILE"
         
         cd "$ROOT_PATH"
     done
@@ -372,7 +370,8 @@ for round in {1..3}; do
             python3.12 $PYTHON_FILE $(echo "$ARG") \
                 --exec-mode probabilistic --strategy error \
                 --max-error-per-function 0.5 -s file \
-                | tail -n 1 | cut -d':' -f2 >> "${OUTPUT_FILES["${exp_index}_prob_err"]}"
+                # | tail -n 1 | cut -d':' -f2 \
+                >> "${OUTPUT_FILES["${exp_index}_prob_err"]}"
             cd "$ROOT_PATH"
         done
     done
