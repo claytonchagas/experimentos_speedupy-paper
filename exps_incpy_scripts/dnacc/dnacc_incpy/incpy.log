@@ -1,0 +1,16 @@
+=== 2024-11-25 18:24:07 START | TIME_LIMIT 1 sec | IGNORE ['/home/joaolopez/IncPy/Lib/']
+MEMOIZED _spawn_posix [/usr/local/lib/python2.6/distutils/spawn.py] | runtime 6934 ms
+MEMOIZED spawn [/usr/local/lib/python2.6/distutils/spawn.py] | runtime 6937 ms
+CANNOT_MEMOIZE CCompiler::spawn [/usr/local/lib/python2.6/distutils/ccompiler.py] | arg 0 of type 'instance' has no comparison method | runtime 6938 ms
+CANNOT_MEMOIZE UnixCCompiler::_compile [/usr/local/lib/python2.6/distutils/unixccompiler.py] | arg 0 of type 'instance' has no comparison method | runtime 6938 ms
+CANNOT_MEMOIZE CCompiler::compile [/usr/local/lib/python2.6/distutils/ccompiler.py] | impure because mutate global var ('/usr/local/lib/python2.6/distutils/dir_util.py', '_path_created') | runtime 6938 ms
+CANNOT_MEMOIZE build_ext::build_extension [/usr/local/lib/python2.6/distutils/command/build_ext.py] | impure because mutate global var ('/usr/local/lib/python2.6/distutils/dir_util.py', '_path_created') | runtime 6992 ms
+CANNOT_MEMOIZE build_ext::build_extension [/home/joaolopez/Área de Trabalho/DNACC-with-speedupy/adapted_for_incpy/dnacc_incpy/build/bdist.linux-x86_64/egg/setuptools/command/build_ext.py] | impure because mutate global var ('/usr/local/lib/python2.6/distutils/dir_util.py', '_path_created') | runtime 6992 ms
+CANNOT_MEMOIZE build_ext::build_extensions [/usr/local/lib/python2.6/distutils/command/build_ext.py] | impure because mutate global var ('/usr/local/lib/python2.6/distutils/dir_util.py', '_path_created') | runtime 6992 ms
+CANNOT_MEMOIZE build_ext::run [/usr/local/lib/python2.6/distutils/command/build_ext.py] | impure because mutate global var ('/usr/local/lib/python2.6/re.py', '_cache') | runtime 6996 ms
+CANNOT_MEMOIZE build_ext::run [/home/joaolopez/Área de Trabalho/DNACC-with-speedupy/adapted_for_incpy/dnacc_incpy/build/bdist.linux-x86_64/egg/setuptools/command/build_ext.py] | impure because build_ext::run [/home/joaolopez/Área de Trabalho/DNACC-with-speedupy/adapted_for_incpy/dnacc_incpy/build/bdist.linux-x86_64/egg/setuptools/command/build_ext.py] mutates its argument | runtime 7001 ms
+CANNOT_MEMOIZE Distribution::run_command [/usr/local/lib/python2.6/distutils/dist.py] | impure because Distribution::run_command [/usr/local/lib/python2.6/distutils/dist.py] mutates its argument | runtime 7002 ms
+CANNOT_MEMOIZE Distribution::run_commands [/usr/local/lib/python2.6/distutils/dist.py] | impure because Distribution::run_commands [/usr/local/lib/python2.6/distutils/dist.py] mutates its argument | runtime 7002 ms
+CANNOT_MEMOIZE setup [/usr/local/lib/python2.6/distutils/core.py] | impure because mutate global var ('build/bdist.linux-x86_64/egg/setuptools/dist.py', 'pkg_resources', 'working_set') | runtime 7013 ms
+=== 2024-11-25 18:24:14 END
+
