@@ -1,5 +1,5 @@
 import sys
-sys.path.append('/home/joaopedrolopez/Downloads/AvaliacaoExperimental/Experimentos/DNACC-with-speedupy/adapted_for_speedupy/examples/walking_colloid')
+#sys.path.append('/home/joaopedrolopez/Downloads/AvaliacaoExperimental/Experimentos/DNACC-with-speedupy/adapted_for_speedupy/examples/walking_colloid')
 import sys, os
 from dnacc.derjaguin import calc_spheres_potential
 import numpy as np
@@ -8,6 +8,7 @@ import operator
 import dnacc
 from dnacc.units import nm
 from functools import cache
+import time
 
 plates = dnacc.PlatesMeanField()
 L = 20 * nm
@@ -47,4 +48,7 @@ def main(n):
         do_it(beta_DeltaG0Mid)
 if __name__ == '__main__':
     n = int(sys.argv[1])
+    rep = int(sys.argv[2])
+    start = time.perf_counter()
     main(n)
+    print(time.perf_counter() - start)

@@ -1,11 +1,12 @@
-from speedupy.speedupy import initialize_speedupy
 from dnacc.derjaguin import calc_spheres_potential
 import dnacc
 from dnacc.units import nm
 import numpy as np
 import sys
 from functools import cache
+import time
 
+@cache
 def main(n):
     plates = dnacc.PlatesMeanField()
     plates.add_tether_type(plate='lower', sticky_end='alpha', L=20 * nm, sigma=1 / (20 * nm) ** 2)
@@ -23,6 +24,8 @@ def main(n):
         print(h / nm, V)
 if __name__ == '__main__':
     n = int(sys.argv[1])
-    rep= int(sys.argv[1])
+    rep= int(sys.argv[2])
     for i in range(rep):
+        start = time.perf_counter()
         main(n)
+        print(time.perf_counter() - start)
