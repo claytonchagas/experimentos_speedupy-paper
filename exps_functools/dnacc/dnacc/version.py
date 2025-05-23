@@ -7,3 +7,4 @@ release = False
 
 if not release:
     version = full_version
+    
