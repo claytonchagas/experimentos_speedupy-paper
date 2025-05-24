@@ -27,7 +27,8 @@
 import sys, os
 PROJECT_FOLDER = os.path.join(os.path.dirname(__file__), '..', '..')
 sys.path.append(PROJECT_FOLDER)
-from speedupy.speedupy import deterministic
+#from speedupy.speedupy import deterministic
+from functools import cache
 
 import numpy as np
 from collections import defaultdict
@@ -985,7 +986,7 @@ class CoverTree(object):
 
         return result
 
-@deterministic
+@cache
 def distance_matrix(x, y, distance):
     """
     Compute the distance matrix.
