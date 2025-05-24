@@ -15,8 +15,8 @@ fi
 # Install requirements
 pip install -r speedupy/requirements.txt
 
-#chmod +x dnacc_prepare.sh
-#./run_before/dnacc_prepare.sh
+chmod +x ./run_before/dnacc_prepare.sh
+./run_before/dnacc_prepare.sh
 
 chmod +x ./run_before/epr_prepare_functools.sh
 ./run_before/epr_prepare_functools.sh
@@ -34,22 +34,22 @@ ROOT_PATH="$(pwd)"
 DESTINATIONS_0="$ROOT_PATH/exps_functools/belief_propagation/belief_propagation_functools.py"
 DESTINATIONS_1="$ROOT_PATH/exps_functools/cvar/cvar_functools.py"
 DESTINATIONS_2="$ROOT_PATH/exps_functools/diversity_sims/vince_sim_functools.py"
-#DESTINATIONS_3="$ROOT_PATH/exps_functools/dnacc/basic_spheres/basic_spheres_functools.py" 
-#DESTINATIONS_4="$ROOT_PATH/exps_functools/dnacc/walking_colloid/walking_colloid_functools.py"
-DESTINATIONS_3="$ROOT_PATH/exps_functools/epr/epr_analyse_functools.py"
-DESTINATIONS_4="$ROOT_PATH/exps_functools/fft/fft_functools.py"  
-DESTINATIONS_5="$ROOT_PATH/exps_functools/gauss_legendre_quadrature/gauss_legendre_quadrature_functools.py" 
+DESTINATIONS_3="$ROOT_PATH/exps_functools/dnacc/basic_spheres/basic_spheres_functools.py" 
+DESTINATIONS_4="$ROOT_PATH/exps_functools/dnacc/walking_colloid/walking_colloid_functools.py"
+DESTINATIONS_5="$ROOT_PATH/exps_functools/epr/epr_analyse_functools.py"
+DESTINATIONS_6="$ROOT_PATH/exps_functools/fft/fft_functools.py"  
+DESTINATIONS_7="$ROOT_PATH/exps_functools/gauss_legendre_quadrature/gauss_legendre_quadrature_functools.py" 
 #DESTINATIONS_8="$ROOT_PATH/exps_functools/heat_distribution_lu/heat_distribution_lu_functools.py"
-DESTINATIONS_6="$ROOT_PATH/exps_functools/look_and_say/look_and_say_functools.py"
-DESTINATIONS_7="$ROOT_PATH/exps_functools/tiny/TINY_GSHCGP_functools.py" 
+DESTINATIONS_8="$ROOT_PATH/exps_functools/look_and_say/look_and_say_functools.py"
+DESTINATIONS_9="$ROOT_PATH/exps_functools/tiny/TINY_GSHCGP_functools.py" 
 
 
 #DESTINATIONS=($DESTINATIONS_0)
 #DESTINATIONS=($DESTINATIONS_0 $DESTINATIONS_1)
 #DESTINATIONS=($DESTINATIONS_0 $DESTINATIONS_1 $DESTINATIONS_2)
-DESTINATIONS=($DESTINATIONS_0 $DESTINATIONS_1 $DESTINATIONS_2 $DESTINATIONS_3 $DESTINATIONS_4 $DESTINATIONS_5 $DESTINATIONS_6 $DESTINATIONS_7)
+#DESTINATIONS=($DESTINATIONS_0 $DESTINATIONS_1 $DESTINATIONS_2 $DESTINATIONS_3 $DESTINATIONS_4 $DESTINATIONS_5 $DESTINATIONS_6 $DESTINATIONS_7)
 
-#DESTINATIONS=($DESTINATIONS_0 $DESTINATIONS_1 $DESTINATIONS_2 $DESTINATIONS_3 $DESTINATIONS_4 $DESTINATIONS_5 $DESTINATIONS_6 $DESTINATIONS_7 $DESTINATIONS_8 $DESTINATIONS_9 $DESTINATIONS_10)
+DESTINATIONS=($DESTINATIONS_0 $DESTINATIONS_1 $DESTINATIONS_2 $DESTINATIONS_3 $DESTINATIONS_4 $DESTINATIONS_5 $DESTINATIONS_6 $DESTINATIONS_7 $DESTINATIONS_8 $DESTINATIONS_9)
 
 
 # Define arguments
@@ -57,16 +57,16 @@ ARGUMENTS_0=("1000" "5500" "10000" "14500" "19000") # belief_propagation
 ARGUMENTS_1=("1e6" "5e6" "10e6" "50e6" "100e6") # cvar
 ARGUMENTS_2=("1000000" "2000000" "3000000" "4000000" "5000000") # diversity_sim
 
-#ARGUMENTS_0=("2000000" "5000000" "8000000" "11000000" "13000000") # dnacc_basic_spheres
-#ARGUMENTS_1=("-20" "-50" "-80" "-110" "-140") # dnacc_walking_colloid
-ARGUMENTS_3=("200" "400" "600" "800" "1000") # epr_analyse
+ARGUMENTS_3=("2000000" "5000000" "8000000" "11000000" "13000000") # dnacc_basic_spheres
+ARGUMENTS_4=("-20" "-50" "-80" "-110" "-140") # dnacc_walking_colloid
+ARGUMENTS_5=("200" "400" "600" "800" "1000") # epr_analyse
 
-ARGUMENTS_4=("2000" "4000" "6000" "8000" "10000") # fft
-ARGUMENTS_5=("5000" "7000" "9000" "11000" "13000") # gauss_legendre_quadrature
+ARGUMENTS_6=("2000" "4000" "6000" "8000" "10000") # fft
+ARGUMENTS_7=("5000" "7000" "9000" "11000" "13000") # gauss_legendre_quadrature
 #ARGUMENTS_2=("0.1" "0.05" "0.01" "0.005" "0.001") # heat_distribution_lu
 
-ARGUMENTS_6=("45" "46" "47" "48" "49") # look_and_say
-ARGUMENTS_7=("12" "13" "14" "15" "16") # TINY_GSHCGP
+ARGUMENTS_8=("45" "46" "47" "48" "49") # look_and_say
+ARGUMENTS_9=("12" "13" "14" "15" "16") # TINY_GSHCGP
 
 
 # Copy speedupy to each destination
@@ -112,7 +112,7 @@ for arg_index in {0..4}; do
         echo "Executando $PYTHON_FILE com argumento $ARG"
             
         # Executa o script Python com o argumento no modo 'manual'
-        python3.12 $PYTHON_FILE $(echo "$ARG") 4 >> ${OUTPUT_FILES["${exp_index}_cache_functools"]}
+        python3.12 $PYTHON_FILE $(echo "$ARG") 1 >> ${OUTPUT_FILES["${exp_index}_cache_functools"]}
             
         cd "$ROOT_PATH"
     done

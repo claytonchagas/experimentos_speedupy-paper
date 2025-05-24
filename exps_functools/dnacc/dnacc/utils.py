@@ -52,7 +52,8 @@ __all__ = ['SymDict',
 import sys, os
 PROJECT_FOLDER = os.path.join(os.path.dirname(__file__), '..', '..')
 sys.path.append(PROJECT_FOLDER)
-from speedupy.speedupy import deterministic
+#from speedupy.speedupy import deterministic
+from functools import cache
 
 import numpy as np
 from math import pi, sin, cos, acos, sqrt
@@ -257,7 +258,7 @@ def csr_matrix_items(mtx, row=None):
         for ind in range(indptr[i], indptr[i + 1]):
             yield (i, indices[ind]), data[ind]
 
-@deterministic
+@cache
 def is_csr_matrix_symmetric(mtx):
     """Test whether or not the matrix mtx is symmetric.
 
@@ -295,7 +296,7 @@ def random_point_sphere(radius, centre=(0.0, 0.0, 0.0)):
     z = centre[2] + radius * cos(theta)
     return (x, y, z)
 
-@deterministic
+@cache
 def pbc_delta(x1, x2, Lx):
     """Find x1 - x2 in a periodic 1D interval of size Lx."""
     dx = (x1 - x2) % Lx

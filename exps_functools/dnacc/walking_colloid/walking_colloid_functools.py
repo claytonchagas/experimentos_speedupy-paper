@@ -21,7 +21,7 @@ ts = plates.tether_types
 
 @cache
 def do_it(beta_DeltaG0Mid):
-    print('Working on beta_DeltaG0Mid = %g' % beta_DeltaG0Mid)
+    #print('Working on beta_DeltaG0Mid = %g' % beta_DeltaG0Mid)
     for beta_Delta in range(0, 10):
         plates.beta_DeltaG0['alpha', 'beta1'] = beta_DeltaG0Mid - 0.5 * beta_Delta
         plates.beta_DeltaG0['alpha', 'beta2'] = beta_DeltaG0Mid + 0.5 * beta_Delta
@@ -37,7 +37,7 @@ def do_it(beta_DeltaG0Mid):
                     hArr = np.linspace(0.05 * L, 2.0 * L, 40)
                     VArr = [plates.at(h).free_energy_density for h in hArr]
                     Rplt = 1000.0 * R
-                    betaF = calc_spheres_potential(hArr, VArr, R, Rplt)
+                    betaF = calc_spheres_potential(tuple(hArr), tuple(VArr), R, Rplt)
                     minH, minBetaF = min(zip(hArr, betaF), key=operator.itemgetter(1))
                     if offset == 0:
                         offset = -minBetaF
@@ -49,6 +49,7 @@ def main(n):
 if __name__ == '__main__':
     n = int(sys.argv[1])
     rep = int(sys.argv[2])
-    start = time.perf_counter()
-    main(n)
-    print(time.perf_counter() - start)
+    for i in range(rep):
+        start = time.perf_counter()
+        main(n)
+        print(time.perf_counter() - start)

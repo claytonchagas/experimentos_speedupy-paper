@@ -147,7 +147,8 @@ __all__ = ['RodsGraftedOnPlates',
 import sys, os
 PROJECT_FOLDER = os.path.join(os.path.dirname(__file__), '..', '..')
 sys.path.append(PROJECT_FOLDER)
-from speedupy.speedupy import deterministic
+#from speedupy.speedupy import deterministic
+from functools import cache
 
 from math import sqrt, pi, asin, acos, atan, sin, cos, tan, exp, floor, ceil
 from . import units
@@ -708,7 +709,7 @@ class RodsGraftedOnPlatesMeanField(object):
 
 ## Rods on spheres (Stefano Angioletti-Uberti)
 ## -------------------------------------------
-@deterministic
+@cache
 def _segment_point_distance2(a, b, r):
     """Minimum squared distance between r and segment joining a and b."""
 
