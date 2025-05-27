@@ -15,14 +15,14 @@ fi
 # Install requirements
 pip install -r speedupy/requirements.txt
 
-chmod +x ./run_before/dnacc_prepare.sh
-./run_before/dnacc_prepare.sh
+chmod +x ./run_before/dnacc_prepare_functools.sh
+./run_before/dnacc_prepare_functools.sh
 
 chmod +x ./run_before/epr_prepare_functools.sh
 ./run_before/epr_prepare_functools.sh
 
-#chmod +x heat_prepare.sh
-#./run_before/heat_prepare.sh
+chmod +x heat_prepare_functools.sh
+./run_before/heat_prepare_functools.sh
 
 # Define paths
 ROOT_PATH="$(pwd)"
@@ -39,9 +39,9 @@ DESTINATIONS_4="$ROOT_PATH/exps_functools/dnacc/walking_colloid/walking_colloid_
 DESTINATIONS_5="$ROOT_PATH/exps_functools/epr/epr_analyse_functools.py"
 DESTINATIONS_6="$ROOT_PATH/exps_functools/fft/fft_functools.py"  
 DESTINATIONS_7="$ROOT_PATH/exps_functools/gauss_legendre_quadrature/gauss_legendre_quadrature_functools.py" 
-#DESTINATIONS_8="$ROOT_PATH/exps_functools/heat_distribution_lu/heat_distribution_lu_functools.py"
-DESTINATIONS_8="$ROOT_PATH/exps_functools/look_and_say/look_and_say_functools.py"
-DESTINATIONS_9="$ROOT_PATH/exps_functools/tiny/TINY_GSHCGP_functools.py" 
+DESTINATIONS_8="$ROOT_PATH/exps_functools/heat_distribution_lu/heat_distribution_lu_functools.py"
+DESTINATIONS_9="$ROOT_PATH/exps_functools/look_and_say/look_and_say_functools.py"
+DESTINATIONS_10="$ROOT_PATH/exps_functools/tiny/TINY_GSHCGP_functools.py" 
 
 
 #DESTINATIONS=($DESTINATIONS_0)
@@ -49,7 +49,7 @@ DESTINATIONS_9="$ROOT_PATH/exps_functools/tiny/TINY_GSHCGP_functools.py"
 #DESTINATIONS=($DESTINATIONS_0 $DESTINATIONS_1 $DESTINATIONS_2)
 #DESTINATIONS=($DESTINATIONS_0 $DESTINATIONS_1 $DESTINATIONS_2 $DESTINATIONS_3 $DESTINATIONS_4 $DESTINATIONS_5 $DESTINATIONS_6 $DESTINATIONS_7)
 
-DESTINATIONS=($DESTINATIONS_0 $DESTINATIONS_1 $DESTINATIONS_2 $DESTINATIONS_3 $DESTINATIONS_4 $DESTINATIONS_5 $DESTINATIONS_6 $DESTINATIONS_7 $DESTINATIONS_8 $DESTINATIONS_9)
+DESTINATIONS=($DESTINATIONS_0 $DESTINATIONS_1 $DESTINATIONS_2 $DESTINATIONS_3 $DESTINATIONS_4 $DESTINATIONS_5 $DESTINATIONS_6 $DESTINATIONS_7 $DESTINATIONS_8 $DESTINATIONS_9 $DESTINATIONS_10)
 
 
 # Define arguments
@@ -63,10 +63,10 @@ ARGUMENTS_5=("200" "400" "600" "800" "1000") # epr_analyse
 
 ARGUMENTS_6=("2000" "4000" "6000" "8000" "10000") # fft
 ARGUMENTS_7=("5000" "7000" "9000" "11000" "13000") # gauss_legendre_quadrature
-#ARGUMENTS_2=("0.1" "0.05" "0.01" "0.005" "0.001") # heat_distribution_lu
+ARGUMENTS_8=("0.1" "0.05" "0.01" "0.005" "0.001") # heat_distribution_lu
 
-ARGUMENTS_8=("45" "46" "47" "48" "49") # look_and_say
-ARGUMENTS_9=("12" "13" "14" "15" "16") # TINY_GSHCGP
+ARGUMENTS_9=("45" "46" "47" "48" "49") # look_and_say
+ARGUMENTS_10=("12" "13" "14" "15" "16") # TINY_GSHCGP
 
 
 # Copy speedupy to each destination
@@ -112,7 +112,7 @@ for arg_index in {0..4}; do
         echo "Executando $PYTHON_FILE com argumento $ARG"
             
         # Executa o script Python com o argumento no modo 'manual'
-        python3.12 $PYTHON_FILE $(echo "$ARG") 1 >> ${OUTPUT_FILES["${exp_index}_cache_functools"]}
+        python3.12 $PYTHON_FILE $(echo "$ARG") 4 >> ${OUTPUT_FILES["${exp_index}_cache_functools"]}
             
         cd "$ROOT_PATH"
     done

@@ -4,13 +4,10 @@ from pathlib import Path
 import sys
 sys.path.append(str(Path(__file__).parent.parent.parent))
 from functools import cache
-from scipy.sparse import csr_matrix
+#from scipy.sparse import csr_matrix, issparse
 
 @cache
 def fatoracao_lu(A):
-    if isinstance(A, tuple):
-        A = [csr_matrix(a) for a in A]
-
     n = len(A)
     L = [[0.0] * n for i in range(n)]
     U = [[0.0] * n for i in range(n)]
@@ -20,16 +17,16 @@ def fatoracao_lu(A):
             soma = 0
             for k in range(i):
                 soma += U[k][j] * L[i][k]
-            a = A[i]
-            dense_a_i = np.array(a.todense())
-            U[i][j] = dense_a_i[0][j] - soma
+            #a = A[i]
+            #dense_a_i = np.array(a.todense())
+            U[i][j] = A[i][j] - soma
         for i in range(j, n):
             soma = 0
             for k in range(j):
                 soma += U[k][j] * L[i][k]
-            a = A[i]
-            dense_a_i = np.array(a.todense())
-            L[i][j] = (dense_a_i[0][j] - soma) / U[j][j]
+            #a = A[i]
+            #dense_a_i = np.array(a.todense())
+            L[i][j] = (A[i][j] - soma) / U[j][j]
     return (L, U)
 
 @cache

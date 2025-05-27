@@ -10,8 +10,7 @@ import imageio
 
 @cache
 def draw(matrix_as_tuple):
-    # Convert the tuple back to a numpy array
-    matrix = np.array(matrix_as_tuple).reshape(-1, 1)  # Adjust the shape as needed
+    matrix = np.array(matrix_as_tuple).reshape(-1, 1) 
     ax = sns.heatmap(matrix, cmap='coolwarm')
     if not os.path.exists('images/tmp'):
         os.makedirs('images/tmp')

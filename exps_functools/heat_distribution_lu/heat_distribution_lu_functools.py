@@ -14,7 +14,7 @@ def main(n):
     solver = Solver(model, delta_t)
     solver.solve()
     end_time = time.perf_counter()
-    print(end_time - start_time)
+    #print(end_time - start_time)
 if __name__ == '__main__':
     n = float(sys.argv[1])
     rep = int(sys.argv[2])

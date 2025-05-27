@@ -18,16 +18,14 @@ class Solver:
         max_difference = 1.0
         heat_map_functools.draw(tuple(self.current_distribution.flatten()))
         system_to_solve = self.get_system()
-        # Convert each sparse row to a tuple of tuples
         system_to_solve_hashable = tuple(tuple(row.toarray().flatten()) for row in system_to_solve)
         while max_difference > 0 and math.log(max_difference, 10) > -7:
             linearized_distribution = self.get_array_from_distribution(self.current_distribution)
-            # Convert linearized_distribution to a tuple
             linearized_distribution_hashable = tuple(linearized_distribution)
             result = np.array(lu.resolve_lu(system_to_solve_hashable, linearized_distribution_hashable))
             max_difference = self.calculate_max_difference(linearized_distribution, result)
             self.current_distribution = result.reshape(self.shape[0], self.shape[1])
-            heat_map_functools.draw(self.current_distribution)
+            heat_map_functools.draw(tuple(self.current_distribution.flatten()))
         heat_map_functools.generateGif()
 
     def calculate_max_difference(self, initial, final):
