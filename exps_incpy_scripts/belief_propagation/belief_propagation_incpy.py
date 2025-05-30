@@ -16,11 +16,10 @@ def belief_propagation(N):
     return x
 
 def main(n):
-    for i in range(100, n + 1, 100):
-        y = belief_propagation(i)
+    y = belief_propagation(n)
 
 if __name__ == '__main__':
-    n = int(sys.argv[1])
+    N = int(sys.argv[1])
     dti = time.time()
-    main(n)
+    main(N)
     print time.time() - dti

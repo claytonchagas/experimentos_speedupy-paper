@@ -1,16 +1,8 @@
-# -*- coding: utf-8 -*-
 import sys
-import os
+from dnacc.derjaguin import calc_spheres_potential
+import dnacc
+from dnacc.units import nm
 import numpy as np
-import time
-
-# Adiciona o diretório pai ao path para encontrar dnacc_incpy
-sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..'))
-
-# Agora importa do dnacc_incpy
-from dnacc_incpy.derjaguin import calc_spheres_potential
-import dnacc_incpy as dnacc
-from dnacc_incpy.units import nm
 
 def main(n):
     #n = int(sys.argv[1])
@@ -24,15 +16,11 @@ def main(n):
     temp2 = [plates.at(h) for h in h_arr]
     V_plate_arr = [t.free_energy_density for t in temp2]
     R = 500 * nm
-    V_sphere_arr = calc_spheres_potential(h_arr, V_plate_arr, R)
+    V_sphere_arr = dnacc.calc_spheres_potential(h_arr, V_plate_arr, R)
     print '# h (nm)     V (kT)'
     for (h, V) in zip(h_arr, V_sphere_arr):
         print h / nm, V
 
 if __name__ == '__main__':
     n = int(sys.argv[1])
-    start_time = time.time()
     main(n)
-    end_time = time.time()
-    print end_time - start_time
-

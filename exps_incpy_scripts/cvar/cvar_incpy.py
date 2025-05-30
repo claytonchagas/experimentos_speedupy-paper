@@ -19,14 +19,13 @@ def get_empirical_CVaR(rewards, alpha=0.9):
         temp = a[:ind + 1]
     return sum(temp) / len(temp)
 
-def main(n):
-    import random
-    random.seed(0)
-    rewards = [random.randint(0, 1000000000.0) for i in range(n)]
+def main(rewards):
     print get_empirical_CVaR(rewards, 0.9)
 
 if __name__ == '__main__':
-    n = int(float(sys.argv[1]))
+    import random
+    random.seed(0)
+    n = [random.randint(0, 1000000000) for i in range(int(float(sys.argv[1])))]
     start = time.time()
     main(n)
     print time.time() - start

@@ -23,7 +23,7 @@ def memoize(f):
             return f.cache[args]
     return decorated_function
 
-def randexpr(dep):
+def randexpr(dep, vars):
     """Create a random Boolean expression.""" # Uses global vars
     if dep == 1 or random.random() < 1.0 / (2 ** dep - 1):
         return random.choice(vars)
@@ -34,7 +34,7 @@ def randexpr(dep):
 
 def randfunct():
     """Create a random Boolean function. Individuals are represented _directly_ as Python functions.""" # Uses global DEPTH, vars
-    re = randexpr(DEPTH)
+    re = randexpr(DEPTH, vars)
     temp1 = ', '
     rf = eval('lambda ' + temp1.join(vars) + ': ' + re)
     rf = memoize(rf)
@@ -45,16 +45,16 @@ def targetfunct(*args):
     """Parity function of any number of input variables"""
     return args.count(True) % 2 == 1
 
-def fitness(individual):
+def fitness(individual, numvars):
     """Determine the fitness (error) of an individual. Lower is better.""" # Uses global NUMVARS
     fit = 0
-    somelists = [[True, False] for i in range(NUMVARS)]
+    somelists = [[True, False] for i in range(numvars)]
     for element in itertools.product(*somelists):
         if individual(*element) != targetfunct(*element):
             fit = fit + 1
     return fit
 
-def mutation(p):
+def mutation(p, vars):
     """The mutation operator is a higher order function. The parent function is called by the offspring function.""" # Uses global vars
     temp2 = ' and '
     mintermexpr = temp2.join([random.choice([x, 'not ' + x]) for x in vars])
@@ -70,13 +70,13 @@ def mutation(p):
         offspring.geno = lambda : '(' + p.geno() + ' and not ' + mintermexpr + ')'
     return offspring
 
-def climb():
+def climb(numvars, vars):
     """Main function. As the landscape is always unimodal the climber can find the optimum.""" # Uses global NUMVARS, GENERATIONS
-    curr = randfunct()
-    curr.fit = fitness(curr)
+    curr = randfunct(vars)
+    curr.fit = fitness(curr, numvars)
     for gen in range(GENERATIONS + 1):
-        off = mutation(curr)
-        off.fit = fitness(off)
+        off = mutation(curr, vars)
+        off.fit = fitness(off, numvars)
         if off.fit < curr.fit:
             curr = off
         if gen % 10 == 0:
@@ -86,12 +86,15 @@ def climb():
     print 'Query best individual with all True inputs:' # Python 2 print
     print curr(*[True] * NUMVARS) # Python 2 print, uses global NUMVARS
 
-def main(n_param):
-    global NUMVARS, vars # Declare modification of global variables
-    NUMVARS = n_param
-    vars = ['x' + str(i) for i in range(NUMVARS)] # Set global vars based on n_param
-    climb()
+def main(numvars, vars):
+    #global NUMVARS, vars # Declare modification of global variables
+    #NUMVARS = n_param
+    #vars = ['x' + str(i) for i in range(NUMVARS)] # Set global vars based on n_param
+    climb(numvars, vars)
 
 if __name__ == '__main__':
-    n_arg = int(sys.argv[1])
-    main(n_arg)
+    #n_arg = int(sys.argv[1])
+    #main(n_arg)
+    numvars = int(sys.argv[1])
+    vars = ['x' + str(i) for i in range(numvars)]
+    main(numvars, vars)

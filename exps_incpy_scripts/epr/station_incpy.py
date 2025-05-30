@@ -71,4 +71,4 @@ if __name__ == '__main__':
         name = {'SrcLeft.npy.gz': 'Alice', 'SrcRight.npy.gz': 'Bob'}[sys.argv[1]]
         station = Station(name, particles)
         station.run(angles)
-        
+

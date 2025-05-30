@@ -1,9 +1,13 @@
+# -*- coding: utf-8 -*-
+
 from __future__ import division
 import numpy
 import sys
 import matplotlib
 import gzip
 import itertools
+import time
+import os
 from mpl_toolkits.mplot3d import Axes3D
 from matplotlib import cm
 from matplotlib import pyplot as plt
@@ -18,8 +22,16 @@ PARTICLE_SPIN = 1.0
 
 def analyse(spin_value_to_use, setting_mode):
     """Perform analysis on saved output files after the simulation is done"""
-    alice_raw = numpy.load(gzip.open('Alice.npy.gz'))
-    bob_raw = numpy.load(gzip.open('Bob.npy.gz'))
+    #alice_raw = numpy.load(gzip.open('Alice.npy.gz'))
+    #bob_raw = numpy.load(gzip.open('Bob.npy.gz'))
+
+    base_path = os.path.dirname(os.path.abspath(__file__))
+    alice_path = os.path.join(base_path, 'Alice.npy.gz')
+    bob_path   = os.path.join(base_path, 'Bob.npy.gz')
+
+    alice_raw = numpy.load(gzip.open(alice_path))
+    bob_raw   = numpy.load(gzip.open(bob_path))
+
     coinc = numpy.abs(alice_raw[:, 1] * bob_raw[:, 1]) == 1.0
     alice = alice_raw[coinc]
     bob = bob_raw[coinc]
@@ -52,12 +64,25 @@ def find_all_settings_used_in_simulation(abdeg, adeg, bdeg, alice, bob):
 
 def display_results(abdeg, adeg, bdeg, alice, bob, angles, o_angles, Eab, Corr, spin_for_calculations, mode):
     setting_pairs = list(itertools.product(numpy.unique(adeg), numpy.unique(bdeg)))
+
     if len(setting_pairs) > 4:
-        if mode == 1:
-            setting_pairs = [(0, 22.5), (0, 67.5), (45, 22.5), (45, 67.5)]
-        elif mode > 1:
-            slice_limit = (mode - 1) * 100
-            setting_pairs = setting_pairs[:slice_limit]
+        #if PARAM == 0:
+        if mode == 0:
+            # quatro pares “canônicos”
+            setting_pairs = [(0, 22.5), (0, 67.5),
+                         (45, 22.5), (45, 67.5)]
+        else:
+            # corta a lista no comprimento = PARAM
+            #setting_pairs = setting_pairs[:PARAM]
+            setting_pairs = setting_pairs[:mode]
+
+    #if len(setting_pairs) > 4:
+        #if mode == 1:
+            #setting_pairs = [(0, 22.5), (0, 67.5), (45, 22.5), (45, 67.5)]
+        #elif mode > 1:
+            #slice_limit = (mode - 1) * 100
+            #setting_pairs = setting_pairs[:slice_limit]
+
     CHSH = []
     QM = []
     print '\nExpectation values'
@@ -116,12 +141,23 @@ def val(x):
     ANGLE_RESOLUTION = 3.75
     return numpy.round(x / ANGLE_RESOLUTION) * ANGLE_RESOLUTION
 
-def main(n_control_arg):
-    global PARTICLE_SPIN
-    if len(sys.argv) >= 3:
-        PARTICLE_SPIN = float(sys.argv[2])
-    analyse(PARTICLE_SPIN, n_control_arg)
+
+def main(PARAM):
+    PARTICLE_SPIN = 0.5
+    analyse(PARTICLE_SPIN, PARAM)
 
 if __name__ == '__main__':
-    mode_from_cli = int(sys.argv[1])
-    main(mode_from_cli)
+    start = time.time()
+    PARAM = int(sys.argv[1])
+    main(PARAM)
+    print time.time() - start
+
+#def main(n_control_arg):
+#    global PARTICLE_SPIN
+#    if len(sys.argv) >= 3:
+#        PARTICLE_SPIN = float(sys.argv[2])
+#    analyse(PARTICLE_SPIN, n_control_arg)
+
+#if __name__ == '__main__':
+#    mode_from_cli = int(sys.argv[1])
+#    main(mode_from_cli)

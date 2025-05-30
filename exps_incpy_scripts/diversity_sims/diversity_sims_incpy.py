@@ -3,6 +3,7 @@ import numpy as np
 from itertools import combinations
 from collections import defaultdict
 import datetime as dt
+import time
 np.random.seed(0)
 
 
@@ -39,13 +40,17 @@ def count_shared_mutations(sims):
 
 def main(n):
     x = repeat_mutation_sim(float(n), 12162, 156)
-    t1 = dt.datetime.now()
+    #t1 = dt.datetime.now()
     shared_counts = count_shared_mutations(x)
-    t2 = dt.datetime.now()
-    temp2 = t2 - t1
-    print 'took', temp2.seconds, 'seconds to do pairwise comparisons'
-    print shared_counts
+    #t2 = dt.datetime.now()
+    #temp2 = t2 - t1
+    #print 'took', temp2.seconds, 'seconds to do pairwise comparisons'
+    #print shared_counts
 
 if __name__ == '__main__':
-    n = int(float(sys.argv[1]))
+    #n = int(float(sys.argv[1]))
+    #main(n)
+    n = int(sys.argv[1])
+    dt1 = time.time()
     main(n)
+    print time.time() - dt1

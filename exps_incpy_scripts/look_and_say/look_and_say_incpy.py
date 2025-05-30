@@ -20,10 +20,11 @@ def look_and_say_sequence(starting_sequence, n):
         i += 1
     return current_sequence
 
+
 def main(n):
     t0 = time.time()
-    for i in range(1, n + 1, 1):
-        seq = look_and_say_sequence('1223334444', i)
+    #for i in range(1, n + 1, 1):
+    seq = look_and_say_sequence('1223334444', n)
     print time.time() - t0
 
 if len(sys.argv) < 2:

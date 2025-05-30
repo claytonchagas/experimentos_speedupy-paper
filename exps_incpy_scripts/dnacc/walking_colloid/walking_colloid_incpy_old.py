@@ -1,19 +1,10 @@
-# -*- coding: utf-8 -*-
-
-import sys
-import os
+import sys, os
+from dnacc.derjaguin import calc_spheres_potential
 import numpy as np
 import subprocess
 import operator
-import time
-
-# Adiciona o diretório pai ao path para encontrar dnacc_incpy
-sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..'))
-
-# Agora importa do dnacc_incpy
-from dnacc_incpy.derjaguin import calc_spheres_potential
-import dnacc_incpy as dnacc
-from dnacc_incpy.units import nm
+import dnacc
+from dnacc.units import nm
 
 plates = dnacc.PlatesMeanField()
 L = 20 * nm
@@ -53,7 +44,4 @@ def main(n):
 
 if __name__ == '__main__':
     n = int(sys.argv[1])
-    start_time = time.time()
     main(n)
-    end_time = time.time()
-    print end_time - start_time
