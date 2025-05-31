@@ -1,0 +1,5 @@
+=== 2025-05-28 23:05:54 START | TIME_LIMIT 1 sec | IGNORE ['/home/joaolopez/IncPy/Lib/']
+SKIPPED calc_spheres_potential [/home/joaolopez/experimentos_speedupy-paper/exps_incpy_scripts/dnacc/dnacc_incpy/derjaguin.py] | lookup time 5757 ms | original runtime 12069 ms
+CANNOT_MEMOIZE main [/home/joaolopez/experimentos_speedupy-paper/exps_incpy_scripts/dnacc/basic_spheres/basic_spheres_incpy.py] | memo table entry unpicklable | runtime 1995922 ms
+=== 2025-05-28 23:39:11 END
+

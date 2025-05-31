@@ -1,0 +1,164 @@
+IncPy Experiment Run - Start time: 00:22:34
+Outputs will be saved in outputs_incpy
+Starting 4 rounds of execution for each experiment and argument...
+--- Round 1 ---
+  Experiment: epr/epr_incpy.py
+    Arg: 200 (Round 1)
+  File "epr/epr_incpy.py", line 68
+SyntaxError: Non-ASCII character '\xe2' in file epr/epr_incpy.py on line 68, but no encoding declared; see http://www.python.org/peps/pep-0263.html for details
+      Execution time: 
+    Arg: 400 (Round 1)
+  File "epr/epr_incpy.py", line 68
+SyntaxError: Non-ASCII character '\xe2' in file epr/epr_incpy.py on line 68, but no encoding declared; see http://www.python.org/peps/pep-0263.html for details
+      Execution time: 
+    Arg: 600 (Round 1)
+  File "epr/epr_incpy.py", line 68
+SyntaxError: Non-ASCII character '\xe2' in file epr/epr_incpy.py on line 68, but no encoding declared; see http://www.python.org/peps/pep-0263.html for details
+      Execution time: 
+    Arg: 800 (Round 1)
+  File "epr/epr_incpy.py", line 68
+SyntaxError: Non-ASCII character '\xe2' in file epr/epr_incpy.py on line 68, but no encoding declared; see http://www.python.org/peps/pep-0263.html for details
+      Execution time: 
+    Arg: 1000 (Round 1)
+  File "epr/epr_incpy.py", line 68
+SyntaxError: Non-ASCII character '\xe2' in file epr/epr_incpy.py on line 68, but no encoding declared; see http://www.python.org/peps/pep-0263.html for details
+      Execution time: 
+  Finished epr/epr_incpy.py for Round 1. Results in outputs_incpy/epr_incpy_times.txt
+--- Finished Round 1 ---
+--- Round 2 ---
+  Experiment: epr/epr_incpy.py
+    Arg: 200 (Round 2)
+  File "epr/epr_incpy.py", line 68
+SyntaxError: Non-ASCII character '\xe2' in file epr/epr_incpy.py on line 68, but no encoding declared; see http://www.python.org/peps/pep-0263.html for details
+      Execution time: 
+    Arg: 400 (Round 2)
+  File "epr/epr_incpy.py", line 68
+SyntaxError: Non-ASCII character '\xe2' in file epr/epr_incpy.py on line 68, but no encoding declared; see http://www.python.org/peps/pep-0263.html for details
+      Execution time: 
+    Arg: 600 (Round 2)
+  File "epr/epr_incpy.py", line 68
+SyntaxError: Non-ASCII character '\xe2' in file epr/epr_incpy.py on line 68, but no encoding declared; see http://www.python.org/peps/pep-0263.html for details
+      Execution time: 
+    Arg: 800 (Round 2)
+  File "epr/epr_incpy.py", line 68
+SyntaxError: Non-ASCII character '\xe2' in file epr/epr_incpy.py on line 68, but no encoding declared; see http://www.python.org/peps/pep-0263.html for details
+      Execution time: 
+    Arg: 1000 (Round 2)
+  File "epr/epr_incpy.py", line 68
+SyntaxError: Non-ASCII character '\xe2' in file epr/epr_incpy.py on line 68, but no encoding declared; see http://www.python.org/peps/pep-0263.html for details
+      Execution time: 
+  Finished epr/epr_incpy.py for Round 2. Results in outputs_incpy/epr_incpy_times.txt
+--- Finished Round 2 ---
+--- Round 3 ---
+  Experiment: epr/epr_incpy.py
+    Arg: 200 (Round 3)
+  File "epr/epr_incpy.py", line 68
+SyntaxError: Non-ASCII character '\xe2' in file epr/epr_incpy.py on line 68, but no encoding declared; see http://www.python.org/peps/pep-0263.html for details
+      Execution time: 
+    Arg: 400 (Round 3)
+  File "epr/epr_incpy.py", line 68
+SyntaxError: Non-ASCII character '\xe2' in file epr/epr_incpy.py on line 68, but no encoding declared; see http://www.python.org/peps/pep-0263.html for details
+      Execution time: 
+    Arg: 600 (Round 3)
+  File "epr/epr_incpy.py", line 68
+SyntaxError: Non-ASCII character '\xe2' in file epr/epr_incpy.py on line 68, but no encoding declared; see http://www.python.org/peps/pep-0263.html for details
+      Execution time: 
+    Arg: 800 (Round 3)
+  File "epr/epr_incpy.py", line 68
+SyntaxError: Non-ASCII character '\xe2' in file epr/epr_incpy.py on line 68, but no encoding declared; see http://www.python.org/peps/pep-0263.html for details
+      Execution time: 
+    Arg: 1000 (Round 3)
+  File "epr/epr_incpy.py", line 68
+SyntaxError: Non-ASCII character '\xe2' in file epr/epr_incpy.py on line 68, but no encoding declared; see http://www.python.org/peps/pep-0263.html for details
+      Execution time: 
+  Finished epr/epr_incpy.py for Round 3. Results in outputs_incpy/epr_incpy_times.txt
+--- Finished Round 3 ---
+--- Round 4 ---
+  Experiment: epr/epr_incpy.py
+    Arg: 200 (Round 4)
+  File "epr/epr_incpy.py", line 68
+SyntaxError: Non-ASCII character '\xe2' in file epr/epr_incpy.py on line 68, but no encoding declared; see http://www.python.org/peps/pep-0263.html for details
+      Execution time: 
+    Arg: 400 (Round 4)
+  File "epr/epr_incpy.py", line 68
+SyntaxError: Non-ASCII character '\xe2' in file epr/epr_incpy.py on line 68, but no encoding declared; see http://www.python.org/peps/pep-0263.html for details
+      Execution time: 
+    Arg: 600 (Round 4)
+  File "epr/epr_incpy.py", line 68
+SyntaxError: Non-ASCII character '\xe2' in file epr/epr_incpy.py on line 68, but no encoding declared; see http://www.python.org/peps/pep-0263.html for details
+      Execution time: 
+    Arg: 800 (Round 4)
+  File "epr/epr_incpy.py", line 68
+SyntaxError: Non-ASCII character '\xe2' in file epr/epr_incpy.py on line 68, but no encoding declared; see http://www.python.org/peps/pep-0263.html for details
+      Execution time: 
+    Arg: 1000 (Round 4)
+  File "epr/epr_incpy.py", line 68
+SyntaxError: Non-ASCII character '\xe2' in file epr/epr_incpy.py on line 68, but no encoding declared; see http://www.python.org/peps/pep-0263.html for details
+      Execution time: 
+  Finished epr/epr_incpy.py for Round 4. Results in outputs_incpy/epr_incpy_times.txt
+--- Finished Round 4 ---
+IncPy Experiment Run - End time: 00:22:34
+Total execution time: 0 seconds
+IncPy execution completed. Outputs saved in './outputs_incpy' directory.
+IncPy Experiment Run - Start time: 00:27:27
+Outputs will be saved in outputs_incpy
+Starting 4 rounds of execution for each experiment and argument...
+--- Round 1 ---
+  Experiment: epr/epr_incpy.py
+    Arg: 200 (Round 1)
+      Execution time: 32.6569709778
+    Arg: 400 (Round 1)
+      Execution time: 53.5232000351
+    Arg: 600 (Round 1)
+      Execution time: 74.1029260159
+    Arg: 800 (Round 1)
+      Execution time: 94.2409181595
+    Arg: 1000 (Round 1)
+      Execution time: 114.684278965
+  Finished epr/epr_incpy.py for Round 1. Results in outputs_incpy/epr_incpy_times.txt
+--- Finished Round 1 ---
+--- Round 2 ---
+  Experiment: epr/epr_incpy.py
+    Arg: 200 (Round 2)
+      Execution time: 32.8828258514
+    Arg: 400 (Round 2)
+      Execution time: 53.5077118874
+    Arg: 600 (Round 2)
+      Execution time: 73.9919729233
+    Arg: 800 (Round 2)
+      Execution time: 94.4432151318
+    Arg: 1000 (Round 2)
+      Execution time: 114.619773149
+  Finished epr/epr_incpy.py for Round 2. Results in outputs_incpy/epr_incpy_times.txt
+--- Finished Round 2 ---
+--- Round 3 ---
+  Experiment: epr/epr_incpy.py
+    Arg: 200 (Round 3)
+      Execution time: 32.5988311768
+    Arg: 400 (Round 3)
+      Execution time: 53.0100250244
+    Arg: 600 (Round 3)
+      Execution time: 73.9300820827
+    Arg: 800 (Round 3)
+      Execution time: 94.3735339642
+    Arg: 1000 (Round 3)
+      Execution time: 114.638707876
+  Finished epr/epr_incpy.py for Round 3. Results in outputs_incpy/epr_incpy_times.txt
+--- Finished Round 3 ---
+--- Round 4 ---
+  Experiment: epr/epr_incpy.py
+    Arg: 200 (Round 4)
+      Execution time: 32.7434589863
+    Arg: 400 (Round 4)
+      Execution time: 53.1782689095
+    Arg: 600 (Round 4)
+      Execution time: 74.1854441166
+    Arg: 800 (Round 4)
+      Execution time: 95.0138301849
+    Arg: 1000 (Round 4)
+      Execution time: 115.67723012
+  Finished epr/epr_incpy.py for Round 4. Results in outputs_incpy/epr_incpy_times.txt
+--- Finished Round 4 ---
+IncPy Experiment Run - End time: 00:52:23
+Total execution time: 24:56 minutes
+IncPy execution completed. Outputs saved in './outputs_incpy' directory.

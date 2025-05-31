@@ -13,38 +13,42 @@ OUTPUT_DIR_REL="outputs_incpy"
 OUTPUT_DIR_ABS="$ROOT_PATH/$OUTPUT_DIR_REL"
 OUTPUT_DIR_HERE="outputs_incpy"
 mkdir -p "$OUTPUT_DIR_HERE"
-rm -f "$OUTPUT_DIR_HERE"/*.txt
+# rm -f "$OUTPUT_DIR_HERE"/*.txt
 echo "Outputs will be saved in $OUTPUT_DIR_HERE"
 
 PYTHON_CMD="python"
 
 EXPERIMENTS_REL=(
-    "belief_propagation/test_belief_propagation_incpy.py"
-    "cvar/cvar_incpy.py"
-    "diversity_sims/vince_sim_incpy.py"
-    "epr/analyse_incpy1.py"
-    "fft/test_compute_FFT_incpy.py"
-    "gauss_legendre_quadrature/test_gauss_legendre_quadrature1_incpy.py"
-    "heat_distribution_lu/heat_distribution_lu_incpy.py"
-    "look_and_say/look_and_say_incpy.py"
-    "tiny_gshcgp/TINY_GSHCGP_1_incpy.py"
-    "dnacc/basic_spheres/basic_spheres_incpy.py"
+    #"belief_propagation/belief_propagation_incpy.py"
+    #"cvar/cvar_incpy.py"
+    #"diversity_sims/diversity_sims_incpy.py"
+    "epr/epr_incpy.py"
+    #"fft/fft_incpy.py"
+    #"gauss_legendre_quadrature/gauss_legendre_quadrature_incpy.py"
+    #"heat_distribution_lu/heat_distribution_lu_incpy.py"
+    #"look_and_say/look_and_say_incpy.py"
+    #"tiny_gshcgp/tiny_gshcgp_incpy.py"
+    #"dnacc/basic_spheres/basic_spheres_incpy.py"
+    #"dnacc/walking_colloid/walking_colloid_incpy.py"
 )
 
 # Define arguments for each experiment
 # These are the 'n' values passed as sys.argv[1]
-ARGS_0=("1000" "5500" "10000" "14500" "19000") # belief_propagation (N for loop) - Matches run_exps.sh
-ARGS_1=("1e6" "5e6" "10e6" "50e6" "100e6") # cvar (number of rewards) - Changed to match run_exps.sh literal strings
-ARGS_2=("1000000" "2000000" "3000000" "4000000" "5000000") # diversity_sims (G value) - Changed to match run_exps.sh literal strings
-ARGS_3=("1" "2" "3" "4" "5") # epr (n for setting_mode: 1=specific, 2=[:100], 3=[:200], etc.) - Specific to incpy script
-ARGS_4=("2000" "4000" "6000" "8000" "10000") # fft (n for matrix size) - Matches commented section in run_exps.sh
-ARGS_5=("5000" "7000" "9000" "11000" "13000") # gauss_legendre_quadrature (order n) - Matches commented section in run_exps.sh
-ARGS_6=("2" "4" "6" "8" "10") # heat_distribution_lu (n for dimensionality (n,n)) - Specific to incpy script needs, changed from decimals
-ARGS_7=("45" "46" "47" "48" "49") # look_and_say (N iterations) - Matches commented section in run_exps.sh
-ARGS_8=("1" "3" "5" "7" "9") # tiny_gshcgp (NUMVARS: 1, 3, 5, 7, 9) - Specific to incpy script needs
-ARGS_9=("2000000" "5000000" "8000000" "11000000" "13000000") # dnacc_basic_spheres (n for linspace points)
+#ARGS_0=("1000" "5500" "10000" "14500" "19000") # belief_propagation (N for loop) - Matches run_exps.sh
+#ARGS_1=("1e6" "5e6" "10e6" "50e6" "100e6") # cvar (number of rewards) - Changed to match run_exps.sh literal strings
+#ARGS_0=("1000000" "2000000" "3000000" "4000000" "5000000") # diversity_sims (G value) - Changed to match run_exps.sh literal strings
+ARGS_0=("200" "400" "600" "800" "1000") # epr (n for setting_mode: 1=specific, 2=[:100], 3=[:200], etc.) - Specific to incpy script
+#ARGS_1=("2000" "4000" "6000" "8000" "10000") # fft (n for matrix size) - Matches commented section in run_exps.sh
+#ARGS_0=("5000" "7000" "9000" "11000" "13000") # gauss_legendre_quadrature (order n) - Matches commented section in run_exps.sh
+#ARGS_0=("0.1" "0.05" "0.01" "0.005" "0.001") # heat_distribution_lu (n for dimensionality (n,n)) - Specific to incpy script needs, changed from decimals
+#ARGS_1=("45" "46" "47" "48" "49") # look_and_say (N iterations) - Matches commented section in run_exps.sh
+#ARGS_0=("12" "13" "14" "15" "16") # tiny_gshcgp (NUMVARS: 1, 3, 5, 7, 9) - Specific to incpy script needs
+#ARGS_0=("2000000" "5000000" "8000000" "11000000" "13000000") # dnacc_basic_spheres (n for linspace points)
+#ARGS_0=("-20" "-50" "-80" "-110" "-140") # dnacc_walking_colloid
 # Array of argument array names
-ARG_LIST_NAMES=("ARGS_0" "ARGS_1" "ARGS_2" "ARGS_3" "ARGS_4" "ARGS_5" "ARGS_6" "ARGS_7" "ARGS_8" "ARGS_9")
+#ARG_LIST_NAMES=("ARGS_0" "ARGS_1" "ARGS_2" "ARGS_3" "ARGS_4" "ARGS_5" "ARGS_6" "ARGS_7" "ARGS_8" "ARGS_9" "ARGS_10")
+#ARG_LIST_NAMES=("ARGS_0" "ARGS_1")
+ARG_LIST_NAMES=("ARGS_0")
 
 NUM_ROUNDS=4
 NUM_ARGS_PER_EXP=5 

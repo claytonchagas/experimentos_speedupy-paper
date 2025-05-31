@@ -6,3 +6,5 @@ venv_test/
 outputs
 *.npy.gz
 .venv/
+exps_incpy_scripts/incpy-cache/
+exps_incpy_scripts/incpy-cache/
