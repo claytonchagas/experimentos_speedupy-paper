@@ -1,0 +1,5 @@
+=== 2025-06-09 13:40:09 START | TIME_LIMIT 1 sec | IGNORE ['/home/joaolopez/IncPy/Lib/']
+CANNOT_MEMOIZE belief_propagation [/home/joaolopez/experimentos_speedupy-paper/exps_incpy_scripts/belief_propagation/belief_propagation_incpy.py] | memo table entry unpicklable | runtime 15559 ms
+CANNOT_MEMOIZE main [/home/joaolopez/experimentos_speedupy-paper/exps_incpy_scripts/belief_propagation/belief_propagation_incpy.py] | memo table entry unpicklable | runtime 15567 ms
+=== 2025-06-09 13:40:25 END
+

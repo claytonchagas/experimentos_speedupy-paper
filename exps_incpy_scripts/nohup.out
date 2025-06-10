@@ -1,164 +1,244 @@
-IncPy Experiment Run - Start time: 00:22:34
+IncPy Experiment Run - Start time: 19:17:42
 Outputs will be saved in outputs_incpy
 Starting 4 rounds of execution for each experiment and argument...
 --- Round 1 ---
-  Experiment: epr/epr_incpy.py
-    Arg: 200 (Round 1)
-  File "epr/epr_incpy.py", line 68
-SyntaxError: Non-ASCII character '\xe2' in file epr/epr_incpy.py on line 68, but no encoding declared; see http://www.python.org/peps/pep-0263.html for details
-      Execution time: 
-    Arg: 400 (Round 1)
-  File "epr/epr_incpy.py", line 68
-SyntaxError: Non-ASCII character '\xe2' in file epr/epr_incpy.py on line 68, but no encoding declared; see http://www.python.org/peps/pep-0263.html for details
-      Execution time: 
-    Arg: 600 (Round 1)
-  File "epr/epr_incpy.py", line 68
-SyntaxError: Non-ASCII character '\xe2' in file epr/epr_incpy.py on line 68, but no encoding declared; see http://www.python.org/peps/pep-0263.html for details
-      Execution time: 
-    Arg: 800 (Round 1)
-  File "epr/epr_incpy.py", line 68
-SyntaxError: Non-ASCII character '\xe2' in file epr/epr_incpy.py on line 68, but no encoding declared; see http://www.python.org/peps/pep-0263.html for details
-      Execution time: 
-    Arg: 1000 (Round 1)
-  File "epr/epr_incpy.py", line 68
-SyntaxError: Non-ASCII character '\xe2' in file epr/epr_incpy.py on line 68, but no encoding declared; see http://www.python.org/peps/pep-0263.html for details
-      Execution time: 
-  Finished epr/epr_incpy.py for Round 1. Results in outputs_incpy/epr_incpy_times.txt
+  Experiment: dnacc/walking_colloid/walking_colloid_incpy.py
+    Arg: -20 (Round 1)
+/usr/local/lib/python2.6/site-packages/numpy/oldnumeric/__init__.py:11: ModuleDeprecationWarning: The oldnumeric module will be dropped in Numpy 1.9
+  warnings.warn(_msg, ModuleDeprecationWarning)
+dnacc/walking_colloid/../dnacc_incpy/plates_meanfield.py:299: RuntimeWarning: invalid value encountered in divide
+  weights)
+      Execution time: 62.0005369186
+    Arg: -50 (Round 1)
+/usr/local/lib/python2.6/site-packages/numpy/oldnumeric/__init__.py:11: ModuleDeprecationWarning: The oldnumeric module will be dropped in Numpy 1.9
+  warnings.warn(_msg, ModuleDeprecationWarning)
+dnacc/walking_colloid/../dnacc_incpy/plates_meanfield.py:299: RuntimeWarning: invalid value encountered in divide
+  weights)
+      Execution time: 150.047429085
+    Arg: -80 (Round 1)
+/usr/local/lib/python2.6/site-packages/numpy/oldnumeric/__init__.py:11: ModuleDeprecationWarning: The oldnumeric module will be dropped in Numpy 1.9
+  warnings.warn(_msg, ModuleDeprecationWarning)
+dnacc/walking_colloid/../dnacc_incpy/plates_meanfield.py:299: RuntimeWarning: invalid value encountered in divide
+  weights)
+      Execution time: 237.131025076
+    Arg: -110 (Round 1)
+/usr/local/lib/python2.6/site-packages/numpy/oldnumeric/__init__.py:11: ModuleDeprecationWarning: The oldnumeric module will be dropped in Numpy 1.9
+  warnings.warn(_msg, ModuleDeprecationWarning)
+dnacc/walking_colloid/../dnacc_incpy/plates_meanfield.py:299: RuntimeWarning: invalid value encountered in divide
+  weights)
+      Execution time: 322.295021057
+    Arg: -140 (Round 1)
+/usr/local/lib/python2.6/site-packages/numpy/oldnumeric/__init__.py:11: ModuleDeprecationWarning: The oldnumeric module will be dropped in Numpy 1.9
+  warnings.warn(_msg, ModuleDeprecationWarning)
+dnacc/walking_colloid/../dnacc_incpy/plates_meanfield.py:299: RuntimeWarning: invalid value encountered in divide
+  weights)
+      Execution time: 410.820613146
+  Finished dnacc/walking_colloid/walking_colloid_incpy.py for Round 1. Results in outputs_incpy/walking_colloid_incpy_times.txt
 --- Finished Round 1 ---
 --- Round 2 ---
-  Experiment: epr/epr_incpy.py
-    Arg: 200 (Round 2)
-  File "epr/epr_incpy.py", line 68
-SyntaxError: Non-ASCII character '\xe2' in file epr/epr_incpy.py on line 68, but no encoding declared; see http://www.python.org/peps/pep-0263.html for details
-      Execution time: 
-    Arg: 400 (Round 2)
-  File "epr/epr_incpy.py", line 68
-SyntaxError: Non-ASCII character '\xe2' in file epr/epr_incpy.py on line 68, but no encoding declared; see http://www.python.org/peps/pep-0263.html for details
-      Execution time: 
-    Arg: 600 (Round 2)
-  File "epr/epr_incpy.py", line 68
-SyntaxError: Non-ASCII character '\xe2' in file epr/epr_incpy.py on line 68, but no encoding declared; see http://www.python.org/peps/pep-0263.html for details
-      Execution time: 
-    Arg: 800 (Round 2)
-  File "epr/epr_incpy.py", line 68
-SyntaxError: Non-ASCII character '\xe2' in file epr/epr_incpy.py on line 68, but no encoding declared; see http://www.python.org/peps/pep-0263.html for details
-      Execution time: 
-    Arg: 1000 (Round 2)
-  File "epr/epr_incpy.py", line 68
-SyntaxError: Non-ASCII character '\xe2' in file epr/epr_incpy.py on line 68, but no encoding declared; see http://www.python.org/peps/pep-0263.html for details
-      Execution time: 
-  Finished epr/epr_incpy.py for Round 2. Results in outputs_incpy/epr_incpy_times.txt
+  Experiment: dnacc/walking_colloid/walking_colloid_incpy.py
+    Arg: -20 (Round 2)
+/usr/local/lib/python2.6/site-packages/numpy/oldnumeric/__init__.py:11: ModuleDeprecationWarning: The oldnumeric module will be dropped in Numpy 1.9
+  warnings.warn(_msg, ModuleDeprecationWarning)
+dnacc/walking_colloid/../dnacc_incpy/plates_meanfield.py:299: RuntimeWarning: invalid value encountered in divide
+  weights)
+      Execution time: 62.1233830452
+    Arg: -50 (Round 2)
+/usr/local/lib/python2.6/site-packages/numpy/oldnumeric/__init__.py:11: ModuleDeprecationWarning: The oldnumeric module will be dropped in Numpy 1.9
+  warnings.warn(_msg, ModuleDeprecationWarning)
+dnacc/walking_colloid/../dnacc_incpy/plates_meanfield.py:299: RuntimeWarning: invalid value encountered in divide
+  weights)
+      Execution time: 149.842828035
+    Arg: -80 (Round 2)
+/usr/local/lib/python2.6/site-packages/numpy/oldnumeric/__init__.py:11: ModuleDeprecationWarning: The oldnumeric module will be dropped in Numpy 1.9
+  warnings.warn(_msg, ModuleDeprecationWarning)
+dnacc/walking_colloid/../dnacc_incpy/plates_meanfield.py:299: RuntimeWarning: invalid value encountered in divide
+  weights)
+      Execution time: 236.054120779
+    Arg: -110 (Round 2)
+/usr/local/lib/python2.6/site-packages/numpy/oldnumeric/__init__.py:11: ModuleDeprecationWarning: The oldnumeric module will be dropped in Numpy 1.9
+  warnings.warn(_msg, ModuleDeprecationWarning)
+dnacc/walking_colloid/../dnacc_incpy/plates_meanfield.py:299: RuntimeWarning: invalid value encountered in divide
+  weights)
+      Execution time: 326.714974165
+    Arg: -140 (Round 2)
+/usr/local/lib/python2.6/site-packages/numpy/oldnumeric/__init__.py:11: ModuleDeprecationWarning: The oldnumeric module will be dropped in Numpy 1.9
+  warnings.warn(_msg, ModuleDeprecationWarning)
+dnacc/walking_colloid/../dnacc_incpy/plates_meanfield.py:299: RuntimeWarning: invalid value encountered in divide
+  weights)
+      Execution time: 410.454118013
+  Finished dnacc/walking_colloid/walking_colloid_incpy.py for Round 2. Results in outputs_incpy/walking_colloid_incpy_times.txt
 --- Finished Round 2 ---
 --- Round 3 ---
-  Experiment: epr/epr_incpy.py
-    Arg: 200 (Round 3)
-  File "epr/epr_incpy.py", line 68
-SyntaxError: Non-ASCII character '\xe2' in file epr/epr_incpy.py on line 68, but no encoding declared; see http://www.python.org/peps/pep-0263.html for details
-      Execution time: 
-    Arg: 400 (Round 3)
-  File "epr/epr_incpy.py", line 68
-SyntaxError: Non-ASCII character '\xe2' in file epr/epr_incpy.py on line 68, but no encoding declared; see http://www.python.org/peps/pep-0263.html for details
-      Execution time: 
-    Arg: 600 (Round 3)
-  File "epr/epr_incpy.py", line 68
-SyntaxError: Non-ASCII character '\xe2' in file epr/epr_incpy.py on line 68, but no encoding declared; see http://www.python.org/peps/pep-0263.html for details
-      Execution time: 
-    Arg: 800 (Round 3)
-  File "epr/epr_incpy.py", line 68
-SyntaxError: Non-ASCII character '\xe2' in file epr/epr_incpy.py on line 68, but no encoding declared; see http://www.python.org/peps/pep-0263.html for details
-      Execution time: 
-    Arg: 1000 (Round 3)
-  File "epr/epr_incpy.py", line 68
-SyntaxError: Non-ASCII character '\xe2' in file epr/epr_incpy.py on line 68, but no encoding declared; see http://www.python.org/peps/pep-0263.html for details
-      Execution time: 
-  Finished epr/epr_incpy.py for Round 3. Results in outputs_incpy/epr_incpy_times.txt
+  Experiment: dnacc/walking_colloid/walking_colloid_incpy.py
+    Arg: -20 (Round 3)
+/usr/local/lib/python2.6/site-packages/numpy/oldnumeric/__init__.py:11: ModuleDeprecationWarning: The oldnumeric module will be dropped in Numpy 1.9
+  warnings.warn(_msg, ModuleDeprecationWarning)
+dnacc/walking_colloid/../dnacc_incpy/plates_meanfield.py:299: RuntimeWarning: invalid value encountered in divide
+  weights)
+      Execution time: 61.2279961109
+    Arg: -50 (Round 3)
+/usr/local/lib/python2.6/site-packages/numpy/oldnumeric/__init__.py:11: ModuleDeprecationWarning: The oldnumeric module will be dropped in Numpy 1.9
+  warnings.warn(_msg, ModuleDeprecationWarning)
+dnacc/walking_colloid/../dnacc_incpy/plates_meanfield.py:299: RuntimeWarning: invalid value encountered in divide
+  weights)
+      Execution time: 150.802761078
+    Arg: -80 (Round 3)
+/usr/local/lib/python2.6/site-packages/numpy/oldnumeric/__init__.py:11: ModuleDeprecationWarning: The oldnumeric module will be dropped in Numpy 1.9
+  warnings.warn(_msg, ModuleDeprecationWarning)
+dnacc/walking_colloid/../dnacc_incpy/plates_meanfield.py:299: RuntimeWarning: invalid value encountered in divide
+  weights)
+      Execution time: 239.631282806
+    Arg: -110 (Round 3)
+/usr/local/lib/python2.6/site-packages/numpy/oldnumeric/__init__.py:11: ModuleDeprecationWarning: The oldnumeric module will be dropped in Numpy 1.9
+  warnings.warn(_msg, ModuleDeprecationWarning)
+dnacc/walking_colloid/../dnacc_incpy/plates_meanfield.py:299: RuntimeWarning: invalid value encountered in divide
+  weights)
+      Execution time: 326.875144958
+    Arg: -140 (Round 3)
+/usr/local/lib/python2.6/site-packages/numpy/oldnumeric/__init__.py:11: ModuleDeprecationWarning: The oldnumeric module will be dropped in Numpy 1.9
+  warnings.warn(_msg, ModuleDeprecationWarning)
+dnacc/walking_colloid/../dnacc_incpy/plates_meanfield.py:299: RuntimeWarning: invalid value encountered in divide
+  weights)
+      Execution time: 412.875693083
+  Finished dnacc/walking_colloid/walking_colloid_incpy.py for Round 3. Results in outputs_incpy/walking_colloid_incpy_times.txt
 --- Finished Round 3 ---
 --- Round 4 ---
-  Experiment: epr/epr_incpy.py
-    Arg: 200 (Round 4)
-  File "epr/epr_incpy.py", line 68
-SyntaxError: Non-ASCII character '\xe2' in file epr/epr_incpy.py on line 68, but no encoding declared; see http://www.python.org/peps/pep-0263.html for details
-      Execution time: 
-    Arg: 400 (Round 4)
-  File "epr/epr_incpy.py", line 68
-SyntaxError: Non-ASCII character '\xe2' in file epr/epr_incpy.py on line 68, but no encoding declared; see http://www.python.org/peps/pep-0263.html for details
-      Execution time: 
-    Arg: 600 (Round 4)
-  File "epr/epr_incpy.py", line 68
-SyntaxError: Non-ASCII character '\xe2' in file epr/epr_incpy.py on line 68, but no encoding declared; see http://www.python.org/peps/pep-0263.html for details
-      Execution time: 
-    Arg: 800 (Round 4)
-  File "epr/epr_incpy.py", line 68
-SyntaxError: Non-ASCII character '\xe2' in file epr/epr_incpy.py on line 68, but no encoding declared; see http://www.python.org/peps/pep-0263.html for details
-      Execution time: 
-    Arg: 1000 (Round 4)
-  File "epr/epr_incpy.py", line 68
-SyntaxError: Non-ASCII character '\xe2' in file epr/epr_incpy.py on line 68, but no encoding declared; see http://www.python.org/peps/pep-0263.html for details
-      Execution time: 
-  Finished epr/epr_incpy.py for Round 4. Results in outputs_incpy/epr_incpy_times.txt
+  Experiment: dnacc/walking_colloid/walking_colloid_incpy.py
+    Arg: -20 (Round 4)
+/usr/local/lib/python2.6/site-packages/numpy/oldnumeric/__init__.py:11: ModuleDeprecationWarning: The oldnumeric module will be dropped in Numpy 1.9
+  warnings.warn(_msg, ModuleDeprecationWarning)
+dnacc/walking_colloid/../dnacc_incpy/plates_meanfield.py:299: RuntimeWarning: invalid value encountered in divide
+  weights)
+      Execution time: 60.8568770885
+    Arg: -50 (Round 4)
+/usr/local/lib/python2.6/site-packages/numpy/oldnumeric/__init__.py:11: ModuleDeprecationWarning: The oldnumeric module will be dropped in Numpy 1.9
+  warnings.warn(_msg, ModuleDeprecationWarning)
+dnacc/walking_colloid/../dnacc_incpy/plates_meanfield.py:299: RuntimeWarning: invalid value encountered in divide
+  weights)
+      Execution time: 150.710577965
+    Arg: -80 (Round 4)
+/usr/local/lib/python2.6/site-packages/numpy/oldnumeric/__init__.py:11: ModuleDeprecationWarning: The oldnumeric module will be dropped in Numpy 1.9
+  warnings.warn(_msg, ModuleDeprecationWarning)
+dnacc/walking_colloid/../dnacc_incpy/plates_meanfield.py:299: RuntimeWarning: invalid value encountered in divide
+  weights)
+      Execution time: 241.102099895
+    Arg: -110 (Round 4)
+/usr/local/lib/python2.6/site-packages/numpy/oldnumeric/__init__.py:11: ModuleDeprecationWarning: The oldnumeric module will be dropped in Numpy 1.9
+  warnings.warn(_msg, ModuleDeprecationWarning)
+dnacc/walking_colloid/../dnacc_incpy/plates_meanfield.py:299: RuntimeWarning: invalid value encountered in divide
+  weights)
+      Execution time: 325.737447977
+    Arg: -140 (Round 4)
+/usr/local/lib/python2.6/site-packages/numpy/oldnumeric/__init__.py:11: ModuleDeprecationWarning: The oldnumeric module will be dropped in Numpy 1.9
+  warnings.warn(_msg, ModuleDeprecationWarning)
+dnacc/walking_colloid/../dnacc_incpy/plates_meanfield.py:299: RuntimeWarning: invalid value encountered in divide
+  weights)
+      Execution time: 416.136935949
+  Finished dnacc/walking_colloid/walking_colloid_incpy.py for Round 4. Results in outputs_incpy/walking_colloid_incpy_times.txt
 --- Finished Round 4 ---
-IncPy Experiment Run - End time: 00:22:34
-Total execution time: 0 seconds
+IncPy Experiment Run - End time: 20:37:00
+Total execution time: 01:19:18 hours
 IncPy execution completed. Outputs saved in './outputs_incpy' directory.
-IncPy Experiment Run - Start time: 00:27:27
+IncPy Experiment Run - Start time: 20:38:12
 Outputs will be saved in outputs_incpy
 Starting 4 rounds of execution for each experiment and argument...
 --- Round 1 ---
-  Experiment: epr/epr_incpy.py
-    Arg: 200 (Round 1)
-      Execution time: 32.6569709778
-    Arg: 400 (Round 1)
-      Execution time: 53.5232000351
-    Arg: 600 (Round 1)
-      Execution time: 74.1029260159
-    Arg: 800 (Round 1)
-      Execution time: 94.2409181595
-    Arg: 1000 (Round 1)
-      Execution time: 114.684278965
-  Finished epr/epr_incpy.py for Round 1. Results in outputs_incpy/epr_incpy_times.txt
+  Experiment: dnacc/basic_spheres/basic_spheres_incpy.py
+    Arg: 2000000 (Round 1)
+/usr/local/lib/python2.6/site-packages/numpy/oldnumeric/__init__.py:11: ModuleDeprecationWarning: The oldnumeric module will be dropped in Numpy 1.9
+  warnings.warn(_msg, ModuleDeprecationWarning)
+      Execution time: 270.520376921
+    Arg: 5000000 (Round 1)
+/usr/local/lib/python2.6/site-packages/numpy/oldnumeric/__init__.py:11: ModuleDeprecationWarning: The oldnumeric module will be dropped in Numpy 1.9
+  warnings.warn(_msg, ModuleDeprecationWarning)
+      Execution time: 702.02144599
+    Arg: 8000000 (Round 1)
+/usr/local/lib/python2.6/site-packages/numpy/oldnumeric/__init__.py:11: ModuleDeprecationWarning: The oldnumeric module will be dropped in Numpy 1.9
+  warnings.warn(_msg, ModuleDeprecationWarning)
+      Execution time: 1156.64806986
+    Arg: 11000000 (Round 1)
+/usr/local/lib/python2.6/site-packages/numpy/oldnumeric/__init__.py:11: ModuleDeprecationWarning: The oldnumeric module will be dropped in Numpy 1.9
+  warnings.warn(_msg, ModuleDeprecationWarning)
+      Execution time: 1643.57612705
+    Arg: 13000000 (Round 1)
+/usr/local/lib/python2.6/site-packages/numpy/oldnumeric/__init__.py:11: ModuleDeprecationWarning: The oldnumeric module will be dropped in Numpy 1.9
+  warnings.warn(_msg, ModuleDeprecationWarning)
+      Execution time: 1983.49003792
+  Finished dnacc/basic_spheres/basic_spheres_incpy.py for Round 1. Results in outputs_incpy/basic_spheres_incpy_times.txt
 --- Finished Round 1 ---
 --- Round 2 ---
-  Experiment: epr/epr_incpy.py
-    Arg: 200 (Round 2)
-      Execution time: 32.8828258514
-    Arg: 400 (Round 2)
-      Execution time: 53.5077118874
-    Arg: 600 (Round 2)
-      Execution time: 73.9919729233
-    Arg: 800 (Round 2)
-      Execution time: 94.4432151318
-    Arg: 1000 (Round 2)
-      Execution time: 114.619773149
-  Finished epr/epr_incpy.py for Round 2. Results in outputs_incpy/epr_incpy_times.txt
+  Experiment: dnacc/basic_spheres/basic_spheres_incpy.py
+    Arg: 2000000 (Round 2)
+/usr/local/lib/python2.6/site-packages/numpy/oldnumeric/__init__.py:11: ModuleDeprecationWarning: The oldnumeric module will be dropped in Numpy 1.9
+  warnings.warn(_msg, ModuleDeprecationWarning)
+      Execution time: 266.415983915
+    Arg: 5000000 (Round 2)
+/usr/local/lib/python2.6/site-packages/numpy/oldnumeric/__init__.py:11: ModuleDeprecationWarning: The oldnumeric module will be dropped in Numpy 1.9
+  warnings.warn(_msg, ModuleDeprecationWarning)
+      Execution time: 709.703855038
+    Arg: 8000000 (Round 2)
+/usr/local/lib/python2.6/site-packages/numpy/oldnumeric/__init__.py:11: ModuleDeprecationWarning: The oldnumeric module will be dropped in Numpy 1.9
+  warnings.warn(_msg, ModuleDeprecationWarning)
+      Execution time: 1169.89662695
+    Arg: 11000000 (Round 2)
+/usr/local/lib/python2.6/site-packages/numpy/oldnumeric/__init__.py:11: ModuleDeprecationWarning: The oldnumeric module will be dropped in Numpy 1.9
+  warnings.warn(_msg, ModuleDeprecationWarning)
+      Execution time: 1654.35454106
+    Arg: 13000000 (Round 2)
+/usr/local/lib/python2.6/site-packages/numpy/oldnumeric/__init__.py:11: ModuleDeprecationWarning: The oldnumeric module will be dropped in Numpy 1.9
+  warnings.warn(_msg, ModuleDeprecationWarning)
+      Execution time: 1993.53987598
+  Finished dnacc/basic_spheres/basic_spheres_incpy.py for Round 2. Results in outputs_incpy/basic_spheres_incpy_times.txt
 --- Finished Round 2 ---
 --- Round 3 ---
-  Experiment: epr/epr_incpy.py
-    Arg: 200 (Round 3)
-      Execution time: 32.5988311768
-    Arg: 400 (Round 3)
-      Execution time: 53.0100250244
-    Arg: 600 (Round 3)
-      Execution time: 73.9300820827
-    Arg: 800 (Round 3)
-      Execution time: 94.3735339642
-    Arg: 1000 (Round 3)
-      Execution time: 114.638707876
-  Finished epr/epr_incpy.py for Round 3. Results in outputs_incpy/epr_incpy_times.txt
+  Experiment: dnacc/basic_spheres/basic_spheres_incpy.py
+    Arg: 2000000 (Round 3)
+/usr/local/lib/python2.6/site-packages/numpy/oldnumeric/__init__.py:11: ModuleDeprecationWarning: The oldnumeric module will be dropped in Numpy 1.9
+  warnings.warn(_msg, ModuleDeprecationWarning)
+      Execution time: 267.946500063
+    Arg: 5000000 (Round 3)
+/usr/local/lib/python2.6/site-packages/numpy/oldnumeric/__init__.py:11: ModuleDeprecationWarning: The oldnumeric module will be dropped in Numpy 1.9
+  warnings.warn(_msg, ModuleDeprecationWarning)
+      Execution time: 705.657666922
+    Arg: 8000000 (Round 3)
+/usr/local/lib/python2.6/site-packages/numpy/oldnumeric/__init__.py:11: ModuleDeprecationWarning: The oldnumeric module will be dropped in Numpy 1.9
+  warnings.warn(_msg, ModuleDeprecationWarning)
+      Execution time: 1163.73491907
+    Arg: 11000000 (Round 3)
+/usr/local/lib/python2.6/site-packages/numpy/oldnumeric/__init__.py:11: ModuleDeprecationWarning: The oldnumeric module will be dropped in Numpy 1.9
+  warnings.warn(_msg, ModuleDeprecationWarning)
+      Execution time: 1673.20331502
+    Arg: 13000000 (Round 3)
+/usr/local/lib/python2.6/site-packages/numpy/oldnumeric/__init__.py:11: ModuleDeprecationWarning: The oldnumeric module will be dropped in Numpy 1.9
+  warnings.warn(_msg, ModuleDeprecationWarning)
+      Execution time: 2031.35630202
+  Finished dnacc/basic_spheres/basic_spheres_incpy.py for Round 3. Results in outputs_incpy/basic_spheres_incpy_times.txt
 --- Finished Round 3 ---
 --- Round 4 ---
-  Experiment: epr/epr_incpy.py
-    Arg: 200 (Round 4)
-      Execution time: 32.7434589863
-    Arg: 400 (Round 4)
-      Execution time: 53.1782689095
-    Arg: 600 (Round 4)
-      Execution time: 74.1854441166
-    Arg: 800 (Round 4)
-      Execution time: 95.0138301849
-    Arg: 1000 (Round 4)
-      Execution time: 115.67723012
-  Finished epr/epr_incpy.py for Round 4. Results in outputs_incpy/epr_incpy_times.txt
+  Experiment: dnacc/basic_spheres/basic_spheres_incpy.py
+    Arg: 2000000 (Round 4)
+/usr/local/lib/python2.6/site-packages/numpy/oldnumeric/__init__.py:11: ModuleDeprecationWarning: The oldnumeric module will be dropped in Numpy 1.9
+  warnings.warn(_msg, ModuleDeprecationWarning)
+      Execution time: 270.157292843
+    Arg: 5000000 (Round 4)
+/usr/local/lib/python2.6/site-packages/numpy/oldnumeric/__init__.py:11: ModuleDeprecationWarning: The oldnumeric module will be dropped in Numpy 1.9
+  warnings.warn(_msg, ModuleDeprecationWarning)
+      Execution time: 700.753885984
+    Arg: 8000000 (Round 4)
+/usr/local/lib/python2.6/site-packages/numpy/oldnumeric/__init__.py:11: ModuleDeprecationWarning: The oldnumeric module will be dropped in Numpy 1.9
+  warnings.warn(_msg, ModuleDeprecationWarning)
+      Execution time: 1164.66414905
+    Arg: 11000000 (Round 4)
+/usr/local/lib/python2.6/site-packages/numpy/oldnumeric/__init__.py:11: ModuleDeprecationWarning: The oldnumeric module will be dropped in Numpy 1.9
+  warnings.warn(_msg, ModuleDeprecationWarning)
+      Execution time: 1674.97985697
+    Arg: 13000000 (Round 4)
+/usr/local/lib/python2.6/site-packages/numpy/oldnumeric/__init__.py:11: ModuleDeprecationWarning: The oldnumeric module will be dropped in Numpy 1.9
+  warnings.warn(_msg, ModuleDeprecationWarning)
+      Execution time: 1974.88512921
+  Finished dnacc/basic_spheres/basic_spheres_incpy.py for Round 4. Results in outputs_incpy/basic_spheres_incpy_times.txt
 --- Finished Round 4 ---
-IncPy Experiment Run - End time: 00:52:23
-Total execution time: 24:56 minutes
+IncPy Experiment Run - End time: 03:04:36
+Total execution time: 06:26:24 hours
 IncPy execution completed. Outputs saved in './outputs_incpy' directory.
